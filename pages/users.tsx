@@ -16,10 +16,10 @@ export async function getServerSideProps(context: any) {
   const apiUrl = `${protocol}://${host}/api/users`;
 
   const response = await fetch(apiUrl);
-  const rawData = await response.json();
+  const data = await response.json();
 
   // Leaving out ID because this info will be available to client, and emails are unique
-  const users: User[] = rawData.map((user: any) => ({
+  const users: User[] = data.map((user: any) => ({
     name: user.name,
     email: user.email,
     image: user.image,
@@ -35,7 +35,7 @@ export async function getServerSideProps(context: any) {
   });
 }
 
-const Users: FC<UsersProps> = ({ users }) => {
+const Users: FC<UsersProps> = ({ users, session }) => {
   const [filterText, setFilterText] = useState("");
 
   const handleFilterTextChange = (text: string) => {

@@ -33,7 +33,7 @@ const NavBar: FC<NavBarProps> = ({}) => {
   } else if (status === "authenticated") {
     userMenu = (
       <Dropdown
-        arrowIcon={false}
+        arrowIcon={true}
         inline={true}
         label={
           <Avatar
@@ -50,10 +50,16 @@ const NavBar: FC<NavBarProps> = ({}) => {
           </span>
         </Dropdown.Header>
         <Dropdown.Item>
-          <Link href={"/app/dashboard"}>Dashboard</Link>
+          <Link href={"/profile"}>My profile</Link>
         </Dropdown.Item>
         <Dropdown.Item>
-          <Link href={"/app/profile/settings"}>Settings</Link>
+          <Link href={"/my-ads"}>My ads</Link>
+        </Dropdown.Item>
+        <Dropdown.Item>
+          <Link href={"/favourites"}>Favourites</Link>
+        </Dropdown.Item>
+        <Dropdown.Item>
+          <Link href={"/profile/settings"}>Settings</Link>
         </Dropdown.Item>
         <Dropdown.Divider />
         <Dropdown.Item onClick={() => signOut()}>Sign out</Dropdown.Item>
@@ -67,7 +73,7 @@ const NavBar: FC<NavBarProps> = ({}) => {
         <img
           src="https://flowbite.com/docs/images/logo.svg"
           className="mr-3 h-6 sm:h-9"
-          alt="Flowbite Logo"
+          alt="Marketplace Logo"
         />
         Marketplace
       </Navbar.Brand>
@@ -76,7 +82,7 @@ const NavBar: FC<NavBarProps> = ({}) => {
         <Navbar.Collapse className="mr-8">
           {user ? (
             <div className="flex items-center">
-              <Navbar.Link className="mr-8" href="/browse">
+              <Navbar.Link className="mr-8" href="/listings">
                 Browse
               </Navbar.Link>
               <Button

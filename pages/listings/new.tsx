@@ -1,8 +1,7 @@
 import { requireAuthentication } from "@/utils/requireAuthentication";
-import { Button } from "flowbite-react";
 import { GetServerSideProps } from "next";
 import { Session } from "next-auth";
-import { getSession, signIn, signOut } from "next-auth/react";
+import { getSession } from "next-auth/react";
 import { FC } from "react";
 
 interface dashboardProps {
@@ -24,6 +23,15 @@ const Dashboard: FC<dashboardProps> = ({ session }) => {
   return (
     <div>
       <p>This is where you create a new listing</p>
+
+      {/* 
+        title
+        category
+          buy and sell
+
+          cars & vehicles
+          real estate
+      */}
     </div>
   );
 };

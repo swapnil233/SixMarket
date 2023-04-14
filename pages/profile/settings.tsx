@@ -5,16 +5,21 @@ import { signIn } from "next-auth/react";
 import { FC } from "react";
 import ProfilePreferencesForm from "@/components/ProfilePreferencesForm";
 import { requireAuthentication } from "@/utils/requireAuthentication";
+import prisma from "@/utils/prisma";
 
 interface userSettingsProps {
   session: Session | null;
 }
 
 export const getServerSideProps: GetServerSideProps = async (context: any) => {
-  return requireAuthentication(context, (session: any) => {
+  return requireAuthentication(context, async (session: any) => {
+    const user = await prisma.user.findUnique({
+      where: { email: session.user.email },
+    });
+
     return {
       props: {
-        session,
+        user,
       },
     };
   });
@@ -23,14 +28,7 @@ export const getServerSideProps: GetServerSideProps = async (context: any) => {
 const UserSettings: FC<userSettingsProps> = ({ session }) => {
   return (
     <>
-      {session ? (
-        <ProfilePreferencesForm />
-      ) : (
-        <div>
-          <p>Not signed in</p>
-          <Button onClick={() => signIn()}>Sign in</Button>
-        </div>
-      )}
+      <ProfilePreferencesForm />
     </>
   );
 };
