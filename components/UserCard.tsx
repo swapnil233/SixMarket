@@ -40,18 +40,16 @@ const UserCard: FC<UserCardProps> = ({ user }) => {
       </div>
       <div className="flex flex-col items-center pb-10">
         <Image
-          src={user.image}
+          src={user.image || "https://flowbite.com/docs/images/logo.svg"}
           width={96}
           height={96}
-          alt={`${user.firstName}'s profile picture`}
+          alt={`${user.name}'s profile picture`}
           className="w-24 h-24 rounded-full mb-3 shadow-lg"
         />
         <h5 className="mb-1 text-xl font-medium text-gray-900 dark:text-white">
-          {`${user.firstName} ${user.lastName}`}
+          {`${user.name}`}
         </h5>
-        <span className="text-sm text-gray-500 dark:text-gray-400">
-          {user.title}
-        </span>
+        <span className="text-sm text-gray-500 dark:text-gray-400">Title</span>
         <div className="mt-4 flex space-x-3 lg:mt-6">
           <a
             href="#"
