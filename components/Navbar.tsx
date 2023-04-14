@@ -44,7 +44,7 @@ const NavBar: FC<NavBarProps> = ({}) => {
           <Link href={"/app/dashboard"}>Dashboard</Link>
         </Dropdown.Item>
         <Dropdown.Item>
-          <Link href={"/app/user/settings"}>Settings</Link>
+          <Link href={"/app/profile/settings"}>Settings</Link>
         </Dropdown.Item>
         <Dropdown.Divider />
         <Dropdown.Item onClick={() => signOut()}>Sign out</Dropdown.Item>
