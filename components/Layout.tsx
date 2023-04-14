@@ -12,7 +12,7 @@ const Layout: FC<LayoutProps> = ({ children }) => {
       <NavBar />
       <main className="max-w-6xl mx-auto px-4">{children}</main>
       <Footer className="max-w-6xl mx-auto px-4" container={true}>
-        <Footer.Copyright href="#" by="Flowbite™" year={2022} />
+        <Footer.Copyright href="#" by="Marketplace™" year={2022} />
         <Footer.LinkGroup>
           <Footer.Link href="#">About</Footer.Link>
           <Footer.Link href="#">Privacy Policy</Footer.Link>

@@ -2,25 +2,34 @@ import { Avatar, Button, Dropdown, Navbar, Spinner } from "flowbite-react";
 import { FC } from "react";
 import Link from "next/link";
 import { useSession, signIn, signOut } from "next-auth/react";
+import { useRouter } from "next/router";
 
 interface NavBarProps {}
 
 const NavBar: FC<NavBarProps> = ({}) => {
   const { data, status } = useSession();
   const user = data?.user;
+  const router = useRouter();
 
   let userMenu;
 
   if (!user) {
     userMenu = (
-      <Button size="sm" onClick={() => signIn()}>
-        Sign in
+      <Button
+        size="sm"
+        onClick={() =>
+          user
+            ? router.push("/listings/new")
+            : signIn(undefined, { callbackUrl: "/listings/new" })
+        }
+      >
+        Post an ad
       </Button>
     );
   }
 
   if (status === "loading") {
-    userMenu = <Spinner aria-label="Default status example" />;
+    userMenu = <Spinner aria-label="Loading" />;
   } else if (status === "authenticated") {
     userMenu = (
       <Dropdown
@@ -60,17 +69,34 @@ const NavBar: FC<NavBarProps> = ({}) => {
           className="mr-3 h-6 sm:h-9"
           alt="Flowbite Logo"
         />
-        App Name
+        Marketplace
       </Navbar.Brand>
-      <div className="flex md:order-2">{userMenu}</div>
-      <div className="lg:none">
-        <Navbar.Toggle />
+      <div className="flex justify-center items-center">
+        <div className="flex md:order-2">{userMenu}</div>
+        <Navbar.Collapse className="mr-8">
+          {user ? (
+            <div className="flex items-center">
+              <Navbar.Link className="mr-8" href="/browse">
+                Browse
+              </Navbar.Link>
+              <Button
+                size="sm"
+                onClick={() =>
+                  user
+                    ? router.push("/listings/new")
+                    : signIn(undefined, { callbackUrl: "/listings/new" })
+                }
+              >
+                Post an ad
+              </Button>
+            </div>
+          ) : (
+            <Navbar.Link href="" onClick={() => signIn()}>
+              Sign up or log in
+            </Navbar.Link>
+          )}
+        </Navbar.Collapse>
       </div>
-      <Navbar.Collapse>
-        <Link href={"/"}>Home</Link>
-        <Link href={"/app/dashboard"}>Dashboard</Link>
-        <Link href={"/app/users"}>Users</Link>
-      </Navbar.Collapse>
     </Navbar>
   );
 };
