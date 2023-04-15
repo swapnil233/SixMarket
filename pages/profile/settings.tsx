@@ -1,20 +1,20 @@
-import { Button } from "flowbite-react";
 import { GetServerSideProps } from "next";
-import { Session } from "next-auth";
-import { signIn } from "next-auth/react";
 import { FC } from "react";
 import ProfilePreferencesForm from "@/components/ProfilePreferencesForm";
 import { requireAuthentication } from "@/utils/requireAuthentication";
 import prisma from "@/utils/prisma";
+import { User } from "@prisma/client";
 
-interface userSettingsProps {
-  session: Session | null;
+interface UserSettingsProps {
+  user: User;
 }
 
-export const getServerSideProps: GetServerSideProps = async (context: any) => {
-  return requireAuthentication(context, async (session: any) => {
+export const getServerSideProps: GetServerSideProps<UserSettingsProps> = async (
+  context
+) => {
+  return requireAuthentication(context, async (session) => {
     const user = await prisma.user.findUnique({
-      where: { email: session.user.email },
+      where: { email: session.user?.email! },
     });
 
     return {
@@ -25,10 +25,10 @@ export const getServerSideProps: GetServerSideProps = async (context: any) => {
   });
 };
 
-const UserSettings: FC<userSettingsProps> = ({ session }) => {
+const UserSettings: FC<UserSettingsProps> = ({ user }) => {
   return (
     <>
-      <ProfilePreferencesForm />
+      <ProfilePreferencesForm user={user} />
     </>
   );
 };

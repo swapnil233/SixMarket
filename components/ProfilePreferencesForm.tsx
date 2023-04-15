@@ -1,20 +1,28 @@
 import { PhotoIcon, UserCircleIcon } from "@heroicons/react/24/solid";
+import { User } from "@prisma/client";
+import Image from "next/image";
 import { FC } from "react";
 
-interface ProfilePreferencesFormProps {}
+interface ProfilePreferencesFormProps {
+  user: User;
+}
 
-const ProfilePreferencesForm: FC<ProfilePreferencesFormProps> = ({}) => {
+const ProfilePreferencesForm: FC<ProfilePreferencesFormProps> = ({ user }) => {
+  const handleProfilePictureChange = () => {
+    console.log("Profile picture changed");
+  };
+
   return (
-    <form className="pt-4 md:pt-16">
+    <form className="pt-4 md:pt-8 pb-4 md:pb-8">
       <div className="space-y-12">
         <div className="border-b border-gray-900/10 pb-12">
-          <h2 className="text-3xl font-semibold leading-7 text-gray-900 mb-4">
-            Profile Settings / Preferences
-          </h2>
-          <p className="text-base leading-6 text-gray-600">
+          <h1 className="text-3xl font-semibold leading-7 text-gray-900 mb-4">
+            Settings
+          </h1>
+          <h2 className="text-base leading-6 text-gray-600">
             This information will be displayed publicly so be careful what you
             share.
-          </p>
+          </h2>
 
           <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
             <div className="sm:col-span-4">
@@ -27,7 +35,7 @@ const ProfilePreferencesForm: FC<ProfilePreferencesFormProps> = ({}) => {
               <div className="mt-2">
                 <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-600 sm:max-w-md">
                   <span className="flex select-none items-center pl-3 text-gray-500 sm:text-sm">
-                    application.com/
+                    marketplace.com/users/
                   </span>
                   <input
                     type="text"
@@ -35,7 +43,7 @@ const ProfilePreferencesForm: FC<ProfilePreferencesFormProps> = ({}) => {
                     id="username"
                     autoComplete="username"
                     className="block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6"
-                    placeholder="janesmith"
+                    placeholder="username"
                   />
                 </div>
               </div>
@@ -70,13 +78,23 @@ const ProfilePreferencesForm: FC<ProfilePreferencesFormProps> = ({}) => {
                 Photo
               </label>
               <div className="mt-2 flex items-center gap-x-3">
-                <UserCircleIcon
+                {/* <UserCircleIcon
                   className="h-12 w-12 text-gray-300"
                   aria-hidden="true"
+                /> */}
+                <Image
+                  src={user.image || ""}
+                  alt={user.name || "Profile picture"}
+                  height={48}
+                  width={48}
+                  className="rounded-full"
                 />
                 <button
                   type="button"
                   className="rounded-md bg-white px-2.5 py-1.5 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
+                  onClick={() => {
+                    handleProfilePictureChange();
+                  }}
                 >
                   Change
                 </button>
@@ -142,6 +160,7 @@ const ProfilePreferencesForm: FC<ProfilePreferencesFormProps> = ({}) => {
                   name="first-name"
                   id="first-name"
                   autoComplete="given-name"
+                  placeholder={user.name?.split(" ")[0] || "First name"}
                   className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                 />
               </div>
@@ -160,6 +179,7 @@ const ProfilePreferencesForm: FC<ProfilePreferencesFormProps> = ({}) => {
                   name="last-name"
                   id="last-name"
                   autoComplete="family-name"
+                  placeholder={user.name?.split(" ")[1] || "Last name"}
                   className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                 />
               </div>
@@ -178,6 +198,7 @@ const ProfilePreferencesForm: FC<ProfilePreferencesFormProps> = ({}) => {
                   name="email"
                   type="email"
                   autoComplete="email"
+                  placeholder={user.email || "First name"}
                   className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                 />
               </div>
@@ -197,9 +218,7 @@ const ProfilePreferencesForm: FC<ProfilePreferencesFormProps> = ({}) => {
                   autoComplete="country-name"
                   className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6"
                 >
-                  <option>United States</option>
                   <option>Canada</option>
-                  <option>Mexico</option>
                 </select>
               </div>
             </div>
@@ -209,7 +228,7 @@ const ProfilePreferencesForm: FC<ProfilePreferencesFormProps> = ({}) => {
                 htmlFor="street-address"
                 className="block text-sm font-medium leading-6 text-gray-900"
               >
-                Street address
+                Street address (optional)
               </label>
               <div className="mt-2">
                 <input
