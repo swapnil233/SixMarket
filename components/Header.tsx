@@ -3,10 +3,11 @@ import { FC } from "react";
 import Link from "next/link";
 import { useSession, signIn, signOut } from "next-auth/react";
 import { useRouter } from "next/router";
+import { Session } from "next-auth";
 
-interface NavBarProps {}
+interface HeaderProps {}
 
-const NavBar: FC<NavBarProps> = ({}) => {
+const Header: FC<HeaderProps> = ({}) => {
   const { data, status } = useSession();
   const user = data?.user;
   const router = useRouter();
@@ -19,8 +20,8 @@ const NavBar: FC<NavBarProps> = ({}) => {
         size="sm"
         onClick={() =>
           user
-            ? router.push("/listings/new")
-            : signIn(undefined, { callbackUrl: "/listings/new" })
+            ? router.push("/ads/new")
+            : signIn(undefined, { callbackUrl: "/ads/new" })
         }
       >
         Post an ad
@@ -35,13 +36,7 @@ const NavBar: FC<NavBarProps> = ({}) => {
       <Dropdown
         arrowIcon={true}
         inline={true}
-        label={
-          <Avatar
-            rounded={true}
-            // statusPosition="top-right"
-            // status={notification ? "busy" : "online"}
-          />
-        }
+        label={<Avatar img={user?.image || ""} rounded={true} />}
       >
         <Dropdown.Header>
           <span className="block text-sm">{user?.name}</span>
@@ -49,14 +44,15 @@ const NavBar: FC<NavBarProps> = ({}) => {
             {user?.email}
           </span>
         </Dropdown.Header>
+
         <Dropdown.Item>
-          <Link href={"/profile"}>My profile</Link>
+          <Link href={"/profile/my-ads"}>My ads</Link>
         </Dropdown.Item>
         <Dropdown.Item>
-          <Link href={"/my-ads"}>My ads</Link>
+          <Link href={"/profile/favourites"}>Favourites</Link>
         </Dropdown.Item>
         <Dropdown.Item>
-          <Link href={"/favourites"}>Favourites</Link>
+          <Link href={"/profile"}>Profile</Link>
         </Dropdown.Item>
         <Dropdown.Item>
           <Link href={"/profile/settings"}>Settings</Link>
@@ -75,22 +71,24 @@ const NavBar: FC<NavBarProps> = ({}) => {
           className="mr-3 h-6 sm:h-9"
           alt="Marketplace Logo"
         />
-        Marketplace
+        <span className="self-center whitespace-nowrap text-xl font-semibold dark:text-white">
+          Marketplace
+        </span>
       </Navbar.Brand>
-      <div className="flex justify-center items-center">
+      <div className="flex justify-between items-center">
         <div className="flex md:order-2">{userMenu}</div>
         <Navbar.Collapse className="mr-8">
           {user ? (
             <div className="flex items-center">
-              <Navbar.Link className="mr-8" href="/listings">
+              <Navbar.Link className="mr-8" href="/ads">
                 Browse
               </Navbar.Link>
               <Button
                 size="sm"
                 onClick={() =>
                   user
-                    ? router.push("/listings/new")
-                    : signIn(undefined, { callbackUrl: "/listings/new" })
+                    ? router.push("ads/new")
+                    : signIn(undefined, { callbackUrl: "ads/new" })
                 }
               >
                 Post an ad
@@ -107,4 +105,4 @@ const NavBar: FC<NavBarProps> = ({}) => {
   );
 };
 
-export default NavBar;
+export default Header;
