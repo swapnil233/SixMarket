@@ -3,9 +3,9 @@ import { GetServerSideProps } from "next";
 import { FC } from "react";
 import prisma from "@/utils/prisma";
 import Image from "next/image";
-import User from "@/models/User";
 import { Button } from "flowbite-react";
 import { HiPencil } from "react-icons/hi";
+import { User } from "@prisma/client";
 
 interface indexProps {
   user: User;

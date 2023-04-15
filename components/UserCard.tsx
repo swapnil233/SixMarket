@@ -1,7 +1,7 @@
 import { Card, Dropdown } from "flowbite-react";
 import { FC } from "react";
 import Image from "next/image";
-import User from "@/models/User";
+import { User } from "@prisma/client";
 
 interface UserCardProps {
   user: User;

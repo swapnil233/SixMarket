@@ -1,41 +1,39 @@
 import { FC, useState } from "react";
-import User from "@/models/User";
 import UserCard from "@/components/UserCard";
 import FilterInput from "@/components/FilterInput";
 import { requireAuthentication } from "@/utils/requireAuthentication";
-import { Session } from "next-auth";
+import { User } from "@prisma/client";
+import { GetServerSideProps } from "next/types";
 
 interface UsersProps {
   users: User[];
-  session: Session | null;
 }
 
-export async function getServerSideProps(context: any) {
-  const protocol = context.req.headers["x-forwarded-proto"] || "http";
-  const host = context.req.headers["host"];
-  const apiUrl = `${protocol}://${host}/api/users`;
+export const getServerSideProps: GetServerSideProps = async (context: any) => {
+  return requireAuthentication(context, async (session: any) => {
+    const protocol = context.req.headers["x-forwarded-proto"] || "http";
+    const host = context.req.headers["host"];
+    const apiUrl = `${protocol}://${host}/api/users`;
 
-  const response = await fetch(apiUrl);
-  const data = await response.json();
+    const response = await fetch(apiUrl);
+    const data = await response.json();
 
-  // Leaving out ID because this info will be available to client, and emails are unique
-  const users: User[] = data.map((user: any) => ({
-    name: user.name,
-    email: user.email,
-    image: user.image,
-  }));
+    // Leaving out ID because this info will be available to client, and emails are unique
+    const users: User[] = data.map((user: any) => ({
+      name: user.name,
+      email: user.email,
+      image: user.image,
+    }));
 
-  return requireAuthentication(context, (session: any) => {
     return {
       props: {
-        session,
         users,
       },
     };
   });
-}
+};
 
-const Users: FC<UsersProps> = ({ users, session }) => {
+const Users: FC<UsersProps> = ({ users }) => {
   const [filterText, setFilterText] = useState("");
 
   const handleFilterTextChange = (text: string) => {
@@ -44,8 +42,8 @@ const Users: FC<UsersProps> = ({ users, session }) => {
 
   const filteredUsers = users.filter(
     (user) =>
-      user.name.toLowerCase().includes(filterText.toLowerCase()) ||
-      user.email.toLowerCase().includes(filterText.toLowerCase())
+      user.name?.toLowerCase().includes(filterText.toLowerCase()) ||
+      user.email?.toLowerCase().includes(filterText.toLowerCase())
   );
 
   const emptyStateMessage =
