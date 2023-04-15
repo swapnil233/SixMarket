@@ -1,25 +1,18 @@
 import { requireAuthentication } from "@/utils/requireAuthentication";
 import { GetServerSideProps } from "next";
-import { Session } from "next-auth";
-import { getSession } from "next-auth/react";
 import { FC } from "react";
 
-interface dashboardProps {
-  session: Session | null;
-}
+interface dashboardProps {}
 
-export const getServerSideProps: GetServerSideProps = async (context) => {
-  const session = await getSession(context);
-  return requireAuthentication(context, (session: any) => {
+export const getServerSideProps: GetServerSideProps = async (context: any) => {
+  return requireAuthentication(context, async (session: any) => {
     return {
-      props: {
-        session,
-      },
+      props: {},
     };
   });
 };
 
-const Dashboard: FC<dashboardProps> = ({ session }) => {
+const Dashboard: FC<dashboardProps> = ({}) => {
   return (
     <div>
       <p>This is where you create a new listing</p>
