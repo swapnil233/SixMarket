@@ -1,6 +1,13 @@
 import { getSession } from "next-auth/react"
+import { GetServerSidePropsContext, GetServerSidePropsResult } from "next"
+import { Session } from "next-auth";
 
-export const requireAuthentication = async (context: any, cb: any) => {
+type AuthenticatedCallback = (session: Session) => Promise<GetServerSidePropsResult<any>>;
+
+export const requireAuthentication = async (
+    context: GetServerSidePropsContext,
+    cb: AuthenticatedCallback
+): Promise<GetServerSidePropsResult<any>> => {
     const session = await getSession(context);
 
     if (!session) {
@@ -13,4 +20,4 @@ export const requireAuthentication = async (context: any, cb: any) => {
     }
 
     return cb(session);
-}
+};
