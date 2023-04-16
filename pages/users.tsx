@@ -20,6 +20,7 @@ export const getServerSideProps: GetServerSideProps = async (context: any) => {
 
     // Leaving out ID because this info will be available to client, and emails are unique
     const users: User[] = data.map((user: any) => ({
+      id: user.id,
       name: user.name,
       email: user.email,
       image: user.image,
