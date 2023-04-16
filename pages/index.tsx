@@ -1,23 +1,23 @@
 import AdCard from "@/components/AdCard";
 import Hero from "@/components/ui/Hero";
-import { Button } from "flowbite-react";
+import { Button } from "@mantine/core";
 import { signIn, useSession } from "next-auth/react";
 
 export default function Home() {
-  const { data, status: Session } = useSession();
+  const { data, status } = useSession();
   const user = data?.user;
 
   let heroButtonsLayout;
 
-  if (!user) {
+  if (status === "unauthenticated") {
     heroButtonsLayout = (
       <>
-        <div>
-          <Button>Create an account</Button>
-        </div>
-        <div className="mt-5 sm:mt-0 sm:ml-5">
-          <Button onClick={() => signIn()} color="light">
-            Log in
+        <div className="mt-5 mx-0 px-0 sm:mt-0">
+          <Button
+            variant="outline"
+            onClick={() => signIn(undefined, { callbackUrl: "/" })}
+          >
+            Create an account
           </Button>
         </div>
       </>
@@ -25,9 +25,7 @@ export default function Home() {
   } else {
     heroButtonsLayout = (
       <>
-        <div>
-          <Button href="/users">Browse</Button>
-        </div>
+        <Button variant="outline">Browse recent listings</Button>
       </>
     );
   }
