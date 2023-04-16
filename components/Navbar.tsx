@@ -28,6 +28,7 @@ import {
   IconLogout,
   IconUser,
   IconTags,
+  IconPlus,
 } from "@tabler/icons-react";
 import { signIn, signOut, useSession } from "next-auth/react";
 import Link from "next/link";
@@ -236,6 +237,7 @@ export function Navbar() {
           <Group className={classes.hiddenMobile}>
             {userMenu}
             <Button
+              leftIcon={<IconPlus size="0.9rem" color={theme.colors.dark[9]} />}
               onClick={
                 status === "authenticated"
                   ? () => {
