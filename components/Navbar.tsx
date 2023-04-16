@@ -35,6 +35,7 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import { useState } from "react";
 import { navbarStyles, dropdownMenuData } from "./data/NavbarData";
+import Image from "next/image";
 
 export function Navbar() {
   const [drawerOpened, { toggle: toggleDrawer, close: closeDrawer }] =
@@ -172,7 +173,12 @@ export function Navbar() {
           sx={{ height: "100%" }}
         >
           <Link href={"/"}>
-            <MantineLogo size={30} />
+            <Image
+              src={"/MarketplaceLogo.svg"}
+              height={30}
+              width={150}
+              alt="Marketpalce logo"
+            />
           </Link>
 
           <Group
