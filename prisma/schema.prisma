@@ -10,28 +10,71 @@ generator client {
 }
 
 model ItemForSale {
-  id          String   @id @default(cuid())
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  id          String    @id @default(cuid())
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @default(now()) @updatedAt
   name        String
-  description String
-  price       Int
-  image       String
-  largeImage  String
-  user        User     @relation(fields: [userId], references: [id])
+  description String?
+  condition   Condition @default(NEW)
+  reported    Boolean   @default(false)
+  price       Int? // Some items may not have a price, e.g. free items
+  image       String[]
+  largeImage  String[]
+  location    String
+  tags        String[]
+  views       Int       @default(0)
+  user        User      @relation(fields: [userId], references: [id])
   userId      String
+  category    Category  @relation(fields: [categoryId], references: [id])
+  categoryId  String
+  messages    Message[]
+}
+
+model Category {
+  id           String        @id @default(cuid())
+  name         String
+  slug         String        @unique
+  itemsForSale ItemForSale[]
+}
+
+model Message {
+  id          String      @id @default(cuid())
+  createdAt   DateTime    @default(now())
+  content     String
+  sender      User        @relation("MessageSender", fields: [senderId], references: [id])
+  senderId    String
+  recipient   User        @relation("MessageRecipient", fields: [recipientId], references: [id])
+  recipientId String
+  itemForSale ItemForSale @relation(fields: [itemId], references: [id])
+  itemId      String
+}
+
+model Review {
+  id         String   @id @default(cuid())
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+  rating     Int
+  comment    String
+  reviewer   User     @relation("ReviewReviewer", fields: [reviewerId], references: [id])
+  reviewerId String
+  reviewee   User     @relation("ReviewReviewee", fields: [revieweeId], references: [id])
+  revieweeId String
 }
 
 // The following User, Account, Session and VerificationToken models are from the NextAuth.js docs
 model User {
-  id            String        @id @default(cuid())
-  name          String?
-  email         String?       @unique
-  emailVerified DateTime?
-  image         String?
-  accounts      Account[]
-  sessions      Session[]
-  itemsForSale  ItemForSale[]
+  id               String        @id @default(cuid())
+  name             String?
+  email            String?       @unique
+  emailVerified    DateTime?
+  image            String?
+  accounts         Account[]
+  sessions         Session[]
+  itemsForSale     ItemForSale[]
+  sentMessages     Message[]     @relation("MessageSender")
+  receivedMessages Message[]     @relation("MessageRecipient")
+  givenReviews     Review[]      @relation("ReviewReviewer")
+  receivedReviews  Review[]      @relation("ReviewReviewee")
 }
 
 model Account {
@@ -66,4 +109,11 @@ model VerificationToken {
   expires    DateTime
 
   @@unique([identifier, token])
+}
+
+enum Condition {
+  NEW
+  USED
+  OPEN_BOX
+  OPEN_BUT_NEVER_USED
 }
