@@ -18,8 +18,7 @@ model ItemForSale {
   condition   Condition @default(NEW)
   reported    Boolean   @default(false)
   price       Int? // Some items may not have a price, e.g. free items
-  image       String[]
-  largeImage  String[]
+  images      String[]
   location    String
   tags        String[]
   views       Int       @default(0)
