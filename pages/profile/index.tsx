@@ -35,9 +35,9 @@ const index: FC<indexProps> = ({ user }) => {
         This is your public profile. You can edit your profile and listings
         information.
       </h2>
-      <div className="grid grid-cols-12 gap-6 pt-10 md:pt-16 pb-10 md:pb-16">
+      <div className="grid grid-cols-12 gap-6 pt-10 md:pt-16 pb-10 md:pb-16 h-screen">
         {/* Profile */}
-        <div className="col-span-12 md:col-span-4">
+        <div className="col-span-12 md:col-span-4 sticky">
           <div className="bg-white rounded-lg shadow-md p-6 text-center">
             <Image
               className="mx-auto mb-4 rounded-full object-cover"
@@ -58,7 +58,7 @@ const index: FC<indexProps> = ({ user }) => {
         </div>
 
         {/* Listings */}
-        <div className="col-span-12 md:col-span-8">
+        <div className="col-span-12 md:col-span-8 h-full">
           <div className="bg-white rounded-lg">
             {/* Grid of cards goes here */}
             <p className="text-gray-500">

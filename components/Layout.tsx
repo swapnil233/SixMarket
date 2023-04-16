@@ -1,6 +1,6 @@
 import { FC, ReactNode } from "react";
 import { Footer } from "flowbite-react";
-import Header from "./Header";
+import { Navbar } from "./Navbar";
 
 interface LayoutProps {
   children: ReactNode;
@@ -9,7 +9,7 @@ interface LayoutProps {
 const Layout: FC<LayoutProps> = ({ children }) => {
   return (
     <>
-      <Header />
+      <Navbar />
       <main className="max-w-6xl mx-auto px-4">{children}</main>
       <Footer className="max-w-6xl mx-auto px-4" container={true}>
         <Footer.Copyright href="#" by="Marketplace™" year={2022} />
