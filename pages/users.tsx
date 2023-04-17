@@ -18,7 +18,6 @@ export const getServerSideProps: GetServerSideProps = async (context: any) => {
     const response = await fetch(apiUrl);
     const data = await response.json();
 
-    // Leaving out ID because this info will be available to client, and emails are unique
     const users: User[] = data.map((user: any) => ({
       id: user.id,
       name: user.name,
