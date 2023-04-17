@@ -1,4 +1,4 @@
-import AdCard from "@/components/AdCard";
+import { AdCard } from "@/components/AdCard";
 import Hero from "@/components/ui/Hero";
 import { Button } from "@mantine/core";
 import { signIn, useSession } from "next-auth/react";
