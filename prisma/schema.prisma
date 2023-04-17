@@ -22,6 +22,7 @@ model ItemForSale {
   location    String
   tags        String[]
   views       Int       @default(0)
+  canDeliver  Boolean   @default(false)
   user        User      @relation(fields: [userId], references: [id])
   userId      String
   category    Category  @relation(fields: [categoryId], references: [id])
@@ -67,6 +68,7 @@ model User {
   email            String?       @unique
   emailVerified    DateTime?
   image            String?
+  phone            String?       @unique
   accounts         Account[]
   sessions         Session[]
   itemsForSale     ItemForSale[]
@@ -112,7 +114,9 @@ model VerificationToken {
 
 enum Condition {
   NEW
-  USED
-  OPEN_BOX
-  OPEN_BUT_NEVER_USED
+  LIKE_NEW
+  EXCELLENT
+  GOOD
+  FAIR
+  SALVAGE
 }
