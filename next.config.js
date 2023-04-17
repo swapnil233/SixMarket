@@ -5,7 +5,7 @@ const nextConfig = {
 
 module.exports = nextConfig;
 
-// next.config.js
+// Images
 module.exports = {
   images: {
     remotePatterns: [
@@ -25,11 +25,12 @@ module.exports = {
   },
 };
 
-// next.config.js
+// CORS
 module.exports = {
   async headers() {
     return [
       {
+        // matching all API routes
         source: "/api/:path*",
         headers: [
           { key: "Access-Control-Allow-Credentials", value: "true" },
