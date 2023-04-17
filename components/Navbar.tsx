@@ -241,10 +241,10 @@ export function Navbar() {
               onClick={
                 status === "authenticated"
                   ? () => {
-                      router.push("/ads/new");
+                      router.push("/listings/new");
                     }
                   : () => {
-                      signIn(undefined, { callbackUrl: "/ads/new" });
+                      signIn(undefined, { callbackUrl: "/listings/new" });
                     }
               }
               variant="default"
