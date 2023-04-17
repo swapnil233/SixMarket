@@ -2,12 +2,12 @@ const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient();
 
 async function main() {
+    console.log("Initiated seeding")
     const categories = [
         { name: 'Electronics', slug: 'electronics' },
         { name: 'Furniture', slug: 'furniture' },
         { name: 'Vehicles', slug: 'vehicles' },
         { name: 'Clothing', slug: 'clothing' },
-        // Add more categories as needed
     ];
 
     // Insert the categories into the database
@@ -15,6 +15,7 @@ async function main() {
         await prisma.category.create({
             data: category,
         });
+        console.log("Successfully inserted " + category)
     }
 }
 
@@ -25,4 +26,5 @@ main()
     })
     .finally(async () => {
         await prisma.$disconnect();
+        console.log("Seed complete. Prisma disconnected.")
     });

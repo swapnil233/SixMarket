@@ -1,6 +1,6 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import prisma from '@/utils/prisma';
-import { ItemForSale, User } from '@prisma/client';
+import { ItemForSale } from '@prisma/client';
 const logger = require('@/utils/logger'); // Import the logger middleware using the 'require' syntax
 
 async function getTenRecentAds(): Promise<ItemForSale[] | null> {
@@ -12,8 +12,8 @@ async function getTenRecentAds(): Promise<ItemForSale[] | null> {
             take: 10,
         });
         return listings;
-    } catch (error) {
-        throw new Error('Failed to fetch data');
+    } catch (error: any) {
+        throw new Error('Failed to fetch data', error);
     }
 }
 
