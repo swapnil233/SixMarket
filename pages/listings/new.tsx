@@ -64,7 +64,7 @@ const CreateNewAd: FC<CreateNewAdProps> = ({ apiUrl }) => {
         router.push("/");
       }
     } catch (error) {
-      console.error("Failed to create ad", error);
+      console.error("Failed to create listing", error);
     }
   };
 
