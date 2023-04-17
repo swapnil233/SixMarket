@@ -5,26 +5,6 @@ const nextConfig = {
 
 module.exports = nextConfig;
 
-// Images
-module.exports = {
-  images: {
-    remotePatterns: [
-      {
-        protocol: "https",
-        hostname: "robohash.org",
-        port: "",
-        pathname: "/**",
-      },
-      {
-        protocol: "https",
-        hostname: "lh3.googleusercontent.com",
-        port: "",
-        pathname: "/**",
-      },
-    ],
-  },
-};
-
 // CORS
 module.exports = {
   async headers() {
@@ -47,5 +27,25 @@ module.exports = {
         ],
       },
     ];
+  },
+};
+
+// Images
+module.exports = {
+  images: {
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "robohash.org",
+        port: "",
+        pathname: "/**",
+      },
+      {
+        protocol: "https",
+        hostname: "lh3.googleusercontent.com",
+        port: "",
+        pathname: "/**",
+      },
+    ],
   },
 };
