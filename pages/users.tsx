@@ -11,7 +11,7 @@ interface UsersProps {
 }
 
 export const getServerSideProps: GetServerSideProps = async (context: any) => {
-  return requireAuthentication(context, async (session: any) => {
+  return requireAuthentication(context, async () => {
     const protocol = context.req.headers["x-forwarded-proto"] || "http";
     const host = context.req.headers["host"];
     const apiUrl = `${protocol}://${host}/api/users`;

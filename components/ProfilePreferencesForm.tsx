@@ -1,4 +1,4 @@
-import { PhotoIcon, UserCircleIcon } from "@heroicons/react/24/solid";
+import { PhotoIcon } from "@heroicons/react/24/solid";
 import { User } from "@prisma/client";
 import Image from "next/image";
 import { FC } from "react";

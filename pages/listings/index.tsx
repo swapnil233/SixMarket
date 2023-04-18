@@ -2,7 +2,7 @@ import { FC } from "react";
 
 interface indexProps {}
 
-const index: FC<indexProps> = ({}) => {
+const index: FC<indexProps> = () => {
   return <div>Listings</div>;
 };
 

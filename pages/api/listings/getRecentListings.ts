@@ -18,8 +18,6 @@ async function getTenRecentAds(): Promise<ItemForSale[] | null> {
 }
 
 export default async function Handler(req: NextApiRequest, res: NextApiResponse) {
-    const id = req.query.id as string;
-
     await logger(req, res, async () => {
         try {
             const recentlyPostedAds = await getTenRecentAds();

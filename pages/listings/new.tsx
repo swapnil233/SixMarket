@@ -1,9 +1,7 @@
-import { useState } from "react";
 import { useRouter } from "next/router";
 import { requireAuthentication } from "@/utils/requireAuthentication";
 import { GetServerSideProps } from "next";
-import { FC } from "react";
-
+import { FC, useState } from "react";
 import { useForm } from "@mantine/form";
 import {
   NumberInput,
@@ -20,6 +18,7 @@ import {
   categoryOptions,
   conditionOptions,
   provinceOptions,
+  tagsOptions,
 } from "../../components/data/formData";
 
 interface CreateNewAdProps {
@@ -27,7 +26,7 @@ interface CreateNewAdProps {
 }
 
 export const getServerSideProps: GetServerSideProps = async (context: any) => {
-  return requireAuthentication(context, async (session: any) => {
+  return requireAuthentication(context, async () => {
     const protocol = context.req.headers["x-forwarded-proto"] || "http";
     const host = context.req.headers["host"];
     const apiUrl = `${protocol}://${host}/api/listings/createNewListing`;
@@ -39,7 +38,6 @@ export const getServerSideProps: GetServerSideProps = async (context: any) => {
 
 const CreateNewAd: FC<CreateNewAdProps> = ({ apiUrl }) => {
   const [tagsSearchValue, onSearchChange] = useState("");
-  const tagsOptions = ["Electronics", "Furniture", "Real estate", "Automotive"];
 
   const router = useRouter();
 
@@ -90,8 +88,7 @@ const CreateNewAd: FC<CreateNewAdProps> = ({ apiUrl }) => {
     // Convert "yes" or "no" to true or false
     newData.canDeliver = newData.canDeliver === "yes";
 
-    console.log("Data from client", newData);
-
+    // Send the data to the API
     try {
       const response = await fetch(apiUrl, {
         method: "POST",
@@ -146,6 +143,8 @@ const CreateNewAd: FC<CreateNewAdProps> = ({ apiUrl }) => {
           {...form.getInputProps("categoryId")}
           maw={400}
           required
+          searchable
+          nothingFound="No options"
           mt="md"
           data={categoryOptions}
         />
@@ -178,6 +177,7 @@ const CreateNewAd: FC<CreateNewAdProps> = ({ apiUrl }) => {
               : "$ "
           }
         />
+        <Radio mt={"xs"} value="free" label="Free" />
 
         {/* Can deliver? */}
         <Radio.Group
@@ -201,10 +201,12 @@ const CreateNewAd: FC<CreateNewAdProps> = ({ apiUrl }) => {
           searchable
           searchValue={tagsSearchValue}
           maxSelectedValues={3}
+          maxDropdownHeight={160}
           maw={400}
           mt="md"
           onSearchChange={onSearchChange}
           nothingFound="Nothing found"
+          limit={5}
         />
 
         <Divider mb={"xl"} mt={"xl"} />

@@ -1,11 +1,10 @@
 import { AdCard } from "@/components/AdCard";
 import Hero from "@/components/ui/Hero";
-import { Button } from "@mantine/core";
+import { Button, Skeleton } from "@mantine/core";
 import { signIn, useSession } from "next-auth/react";
 
 export default function Home() {
-  const { data, status } = useSession();
-  const user = data?.user;
+  const { status } = useSession();
 
   let heroButtonsLayout;
 
@@ -29,7 +28,12 @@ export default function Home() {
         </div>
       </>
     );
-  } else {
+  } else if (status === "loading") {
+    <>
+      <Skeleton height={36} width={140} mr={12} />
+      <Skeleton height={36} width={140} />
+    </>;
+  } else if (status === "authenticated") {
     heroButtonsLayout = (
       <>
         <Button variant="outline">Browse recent listings</Button>

@@ -3,7 +3,6 @@ import prisma from '@/utils/prisma';
 import { ItemForSale } from '@prisma/client';
 import { Session, getServerSession } from "next-auth";
 import { authOptions } from "../auth/[...nextauth]";
-const logger = require('@/utils/logger');
 
 async function CreateNewAd(adData: ItemForSale) {
     try {

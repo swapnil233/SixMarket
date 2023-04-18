@@ -1,4 +1,4 @@
-import { Card, Dropdown } from "flowbite-react";
+import { Card } from "flowbite-react";
 import { FC } from "react";
 import Image from "next/image";
 import { User } from "@prisma/client";
