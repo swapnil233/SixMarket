@@ -1,9 +1,3 @@
-import { useState } from "react";
-import { useRouter } from "next/router";
-import { requireAuthentication } from "@/utils/requireAuthentication";
-import { GetServerSideProps } from "next";
-import { FC } from "react";
-
 import { useForm } from "@mantine/form";
 import {
   NumberInput,
@@ -16,33 +10,14 @@ import {
   Radio,
   Divider,
 } from "@mantine/core";
+import { useState } from "react";
 import {
   categoryOptions,
   conditionOptions,
   provinceOptions,
-} from "../../components/data/formData";
+} from "./data/formData";
 
-interface CreateNewAdProps {
-  apiUrl: string;
-}
-
-export const getServerSideProps: GetServerSideProps = async (context: any) => {
-  return requireAuthentication(context, async (session: any) => {
-    const protocol = context.req.headers["x-forwarded-proto"] || "http";
-    const host = context.req.headers["host"];
-    const apiUrl = `${protocol}://${host}/api/listings/createNewListing`;
-    return {
-      props: { apiUrl },
-    };
-  });
-};
-
-const CreateNewAd: FC<CreateNewAdProps> = ({ apiUrl }) => {
-  const [tagsSearchValue, onSearchChange] = useState("");
-  const tagsOptions = ["Electronics", "Furniture", "Real estate", "Automotive"];
-
-  const router = useRouter();
-
+export default function NewListingFormMantine() {
   const form = useForm({
     initialValues: {
       name: "",
@@ -79,6 +54,10 @@ const CreateNewAd: FC<CreateNewAdProps> = ({ apiUrl }) => {
     },
   });
 
+  const [tagsSearchValue, onSearchChange] = useState("");
+
+  const tagsOptions = ["Electronics", "Furniture", "Real estate", "Automotive"];
+
   const handleFormSubmit = async (data: any, event: React.FormEvent) => {
     event.preventDefault();
 
@@ -91,22 +70,6 @@ const CreateNewAd: FC<CreateNewAdProps> = ({ apiUrl }) => {
     newData.canDeliver = newData.canDeliver === "yes";
 
     console.log("Data from client", newData);
-
-    try {
-      const response = await fetch(apiUrl, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(newData),
-      });
-
-      if (response.status === 201) {
-        router.push("/");
-      }
-    } catch (error) {
-      console.error("Failed to create listing", error);
-    }
   };
 
   return (
@@ -278,6 +241,4 @@ const CreateNewAd: FC<CreateNewAdProps> = ({ apiUrl }) => {
       </form>
     </Box>
   );
-};
-
-export default CreateNewAd;
+}
