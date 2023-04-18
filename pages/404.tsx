@@ -7,6 +7,7 @@ import {
   Group,
   rem,
 } from "@mantine/core";
+import Head from "next/head";
 import Link from "next/link";
 
 const useStyles = createStyles((theme) => ({
@@ -54,24 +55,32 @@ export default function NotFound() {
   const { classes } = useStyles();
 
   return (
-    <Container className={classes.root}>
-      <div className={classes.label}>404</div>
-      <Title className={classes.title}>Error 404: Lost in Cyberspace</Title>
-      <Text
-        color="dimmed"
-        size="lg"
-        align="center"
-        className={classes.description}
-      >
-        We&apos;re sorry, but the page you&apos;re seeking seems to be lost in
-        cyberspace. We invite you to return to the homepage and continue your
-        journey through our website.
-      </Text>
-      <Group position="center">
-        <Button variant="subtle" size="md">
-          <Link href="/">Take me back to home page</Link>
-        </Button>
-      </Group>
-    </Container>
+    <>
+      <Head>
+        <title>Marketplace | 404!</title>
+        <meta name="description" content="404! This page does not exist." />
+      </Head>
+      <Container className={classes.root}>
+        <div className={classes.label}>404</div>
+        <Title className={classes.title}>Error 404: Lost in Cyberspace</Title>
+        <Text
+          color="dimmed"
+          size="lg"
+          align="center"
+          className={classes.description}
+        >
+          We&apos;re sorry, but the page you&apos;re seeking seems to be lost in
+          cyberspace. We invite you to return to the homepage and continue your
+          journey through our website.
+        </Text>
+        <Group position="center">
+          <Link href="/">
+            <Button variant="subtle" size="md">
+              Take me back to home page
+            </Button>
+          </Link>
+        </Group>
+      </Container>
+    </>
   );
 }

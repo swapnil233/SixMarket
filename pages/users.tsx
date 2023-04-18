@@ -4,6 +4,7 @@ import FilterInput from "@/components/FilterInput";
 import { requireAuthentication } from "@/utils/requireAuthentication";
 import { User } from "@prisma/client";
 import { GetServerSideProps } from "next/types";
+import Head from "next/head";
 
 interface UsersProps {
   users: User[];
@@ -50,14 +51,20 @@ const Users: FC<UsersProps> = ({ users }) => {
     "Sorry, we couldn't find what you're looking for...";
 
   return (
-    <div className="grid gap-4 lg:grid-cols-4 md:grid-cols-2 sm:grid-cols-1 mx-auto">
-      <FilterInput onFilterTextChange={handleFilterTextChange} />
-      {filteredUsers.length > 0 ? (
-        filteredUsers.map((user) => <UserCard key={user.email} user={user} />)
-      ) : (
-        <h1 className="col-span-full">{emptyStateMessage}</h1>
-      )}
-    </div>
+    <>
+      <Head>
+        <title>Marketplace | Users</title>
+        <meta name="description" content="List of all users" />
+      </Head>
+      <div className="grid gap-4 lg:grid-cols-4 md:grid-cols-2 sm:grid-cols-1 mx-auto">
+        <FilterInput onFilterTextChange={handleFilterTextChange} />
+        {filteredUsers.length > 0 ? (
+          filteredUsers.map((user) => <UserCard key={user.email} user={user} />)
+        ) : (
+          <h1 className="col-span-full">{emptyStateMessage}</h1>
+        )}
+      </div>
+    </>
   );
 };
 
