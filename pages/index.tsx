@@ -12,12 +12,19 @@ export default function Home() {
   if (status === "unauthenticated") {
     heroButtonsLayout = (
       <>
-        <div className="mt-5 mx-0 px-0 sm:mt-0">
+        <div className="mt-5 flex w-full align-middle justify-center">
           <Button
-            variant="outline"
+            variant="light"
             onClick={() => signIn(undefined, { callbackUrl: "/" })}
+            className="mr-3"
           >
-            Create an account
+            Log in
+          </Button>
+          <Button
+            variant="filled"
+            onClick={() => signIn(undefined, { callbackUrl: "/listings/new" })}
+          >
+            Post an ad
           </Button>
         </div>
       </>
@@ -34,10 +41,11 @@ export default function Home() {
     <main>
       {/* Hero */}
       <Hero heroButtonsLayout={heroButtonsLayout} />
+      {/* <HeroWithBg /> */}
 
       {/* Recently posted ads */}
       <div className="pb-12 pt-10 md:pt-16 container flex flex-col w-full">
-        <div className="max-w-6xl w-full mx-auto px-4 sm:px-6">
+        <div className="max-w-6xl w-full mx-auto px-4">
           <section className="pb-12 md:pb-20">
             <div className="max-w-5xl w-full">
               <h1 className="text-4xl mb-4">Recently posted</h1>

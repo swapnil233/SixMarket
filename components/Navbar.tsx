@@ -406,7 +406,7 @@ export function Navbar() {
             ) : (
               <>
                 <Button
-                  variant="default"
+                  variant="filled"
                   onClick={() => signIn(undefined, { callbackUrl: "/" })}
                 >
                   Log in
