@@ -33,6 +33,7 @@ module.exports = {
 // Images
 module.exports = {
   images: {
+    domains: ["i.pravatar.cc"],
     remotePatterns: [
       {
         protocol: "https",
