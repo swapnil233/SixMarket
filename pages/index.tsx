@@ -1,9 +1,11 @@
 import { AdCard } from "@/components/AdCard";
+import PrimaryLayout from "@/components/layout/primary/PrimaryLayout";
 import Hero from "@/components/ui/Hero";
 import { Button, Skeleton } from "@mantine/core";
 import { signIn, useSession } from "next-auth/react";
+import { NextPageWithLayout } from "./page";
 
-export default function Home() {
+const Home: NextPageWithLayout = () => {
   const { status } = useSession();
 
   let heroButtonsLayout;
@@ -72,4 +74,10 @@ export default function Home() {
       </div>
     </main>
   );
-}
+};
+
+export default Home;
+
+Home.getLayout = (page) => {
+  return <PrimaryLayout>{page}</PrimaryLayout>;
+};

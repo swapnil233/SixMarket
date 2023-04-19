@@ -1,9 +1,10 @@
-import { FC } from "react";
+import PrimaryLayout from "@/components/layout/primary/PrimaryLayout";
+import { NextPageWithLayout } from "../page";
 
-interface favouritesProps {}
-
-const favourites: FC<favouritesProps> = () => {
+const Favourites: NextPageWithLayout = () => {
   return <div>favourites</div>;
 };
 
-export default favourites;
+export default Favourites;
+
+Favourites.getLayout = (page) => <PrimaryLayout>{page}</PrimaryLayout>;

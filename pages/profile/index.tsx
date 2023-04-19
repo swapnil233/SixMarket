@@ -1,11 +1,12 @@
-import { requireAuthentication } from "@/utils/requireAuthentication";
-import { GetServerSideProps } from "next";
-import { FC } from "react";
+import PrimaryLayout from "@/components/layout/primary/PrimaryLayout";
 import prisma from "@/utils/prisma";
-import Image from "next/image";
-import { Button } from "flowbite-react";
-import { HiPencil } from "react-icons/hi";
+import { requireAuthentication } from "@/utils/requireAuthentication";
 import { User } from "@prisma/client";
+import { Button } from "flowbite-react";
+import { GetServerSideProps } from "next";
+import Image from "next/image";
+import { HiPencil } from "react-icons/hi";
+import { NextPageWithLayout } from "../page";
 
 interface indexProps {
   user: User;
@@ -25,7 +26,7 @@ export const getServerSideProps: GetServerSideProps = async (context: any) => {
   });
 };
 
-const index: FC<indexProps> = ({ user }) => {
+const index: NextPageWithLayout<indexProps> = ({ user }) => {
   return (
     <>
       <h1 className="text-3xl font-semibold leading-7 text-gray-900 mb-4 pt-4 md:pt-8">
@@ -72,3 +73,5 @@ const index: FC<indexProps> = ({ user }) => {
 };
 
 export default index;
+
+index.getLayout = (page) => <PrimaryLayout>{page}</PrimaryLayout>;

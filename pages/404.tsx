@@ -1,14 +1,16 @@
+import PrimaryLayout from "@/components/layout/primary/PrimaryLayout";
 import {
-  createStyles,
-  Title,
-  Text,
   Button,
   Container,
   Group,
+  Text,
+  Title,
+  createStyles,
   rem,
 } from "@mantine/core";
 import Head from "next/head";
 import Link from "next/link";
+import { NextPageWithLayout } from "./page";
 
 const useStyles = createStyles((theme) => ({
   root: {
@@ -51,7 +53,7 @@ const useStyles = createStyles((theme) => ({
   },
 }));
 
-export default function NotFound() {
+const NotFound: NextPageWithLayout = () => {
   const { classes } = useStyles();
 
   return (
@@ -83,4 +85,10 @@ export default function NotFound() {
       </Container>
     </>
   );
-}
+};
+
+export default NotFound;
+
+NotFound.getLayout = (page) => {
+  return <PrimaryLayout>{page}</PrimaryLayout>;
+};

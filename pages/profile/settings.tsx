@@ -1,9 +1,10 @@
-import { GetServerSideProps } from "next";
-import { FC } from "react";
 import ProfilePreferencesForm from "@/components/ProfilePreferencesForm";
-import { requireAuthentication } from "@/utils/requireAuthentication";
+import PrimaryLayout from "@/components/layout/primary/PrimaryLayout";
 import prisma from "@/utils/prisma";
+import { requireAuthentication } from "@/utils/requireAuthentication";
 import { User } from "@prisma/client";
+import { GetServerSideProps } from "next";
+import { NextPageWithLayout } from "../page";
 
 interface UserSettingsProps {
   user: User;
@@ -25,7 +26,7 @@ export const getServerSideProps: GetServerSideProps<UserSettingsProps> = async (
   });
 };
 
-const UserSettings: FC<UserSettingsProps> = ({ user }) => {
+const UserSettings: NextPageWithLayout<UserSettingsProps> = ({ user }) => {
   return (
     <>
       <ProfilePreferencesForm user={user} />
@@ -34,3 +35,5 @@ const UserSettings: FC<UserSettingsProps> = ({ user }) => {
 };
 
 export default UserSettings;
+
+UserSettings.getLayout = (page) => <PrimaryLayout>{page}</PrimaryLayout>;

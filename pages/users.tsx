@@ -1,10 +1,12 @@
-import { FC, useState } from "react";
-import UserCard from "@/components/UserCard";
 import FilterInput from "@/components/FilterInput";
+import UserCard from "@/components/UserCard";
+import PrimaryLayout from "@/components/layout/primary/PrimaryLayout";
 import { requireAuthentication } from "@/utils/requireAuthentication";
 import { User } from "@prisma/client";
-import { GetServerSideProps } from "next/types";
 import Head from "next/head";
+import { GetServerSideProps } from "next/types";
+import { useState } from "react";
+import { NextPageWithLayout } from "./page";
 
 interface UsersProps {
   users: User[];
@@ -34,7 +36,7 @@ export const getServerSideProps: GetServerSideProps = async (context: any) => {
   });
 };
 
-const Users: FC<UsersProps> = ({ users }) => {
+const Users: NextPageWithLayout<UsersProps> = ({ users }) => {
   const [filterText, setFilterText] = useState("");
 
   const handleFilterTextChange = (text: string) => {
@@ -69,3 +71,5 @@ const Users: FC<UsersProps> = ({ users }) => {
 };
 
 export default Users;
+
+Users.getLayout = (page) => <PrimaryLayout>{page}</PrimaryLayout>;

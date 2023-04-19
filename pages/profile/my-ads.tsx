@@ -1,9 +1,10 @@
-import { FC } from "react";
+import PrimaryLayout from "@/components/layout/primary/PrimaryLayout";
+import { NextPageWithLayout } from "../page";
 
-interface MyAdsProps {}
-
-const MyAds: FC<MyAdsProps> = () => {
-  return <div>MyAds</div>;
+const MyAds: NextPageWithLayout = () => {
+  return <div>My ads</div>;
 };
 
 export default MyAds;
+
+MyAds.getLayout = (page) => <PrimaryLayout>{page}</PrimaryLayout>;

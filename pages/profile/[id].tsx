@@ -1,9 +1,10 @@
 // pages/profile/[id].tsx
 
-import { FC } from "react";
-import Image from "next/image";
+import PrimaryLayout from "@/components/layout/primary/PrimaryLayout";
 import { User } from "@prisma/client";
 import { GetServerSidePropsContext } from "next";
+import Image from "next/image";
+import { NextPageWithLayout } from "../page";
 
 interface PageProps {
   user: User;
@@ -36,7 +37,7 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
   };
 }
 
-const Page: FC<PageProps> = ({ user }) => {
+const Page: NextPageWithLayout<PageProps> = ({ user }) => {
   return (
     <>
       <h1 className="text-3xl font-semibold leading-7 text-gray-900 mb-4 pt-4 md:pt-8">
@@ -77,3 +78,7 @@ const Page: FC<PageProps> = ({ user }) => {
 };
 
 export default Page;
+
+Page.getLayout = (page) => {
+  return <PrimaryLayout>{page}</PrimaryLayout>;
+};

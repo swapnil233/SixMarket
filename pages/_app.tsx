@@ -1,33 +1,26 @@
-import Layout from "@/components/Layout";
 import "@/styles/globals.css";
-import type { AppProps } from "next/app";
+import { MantineProvider, createEmotionCache } from "@mantine/core";
 import type { Session } from "next-auth";
 import { SessionProvider } from "next-auth/react";
-import Head from "next/head";
-import { MantineProvider, createEmotionCache } from "@mantine/core";
+import type { AppProps } from "next/app";
+import { NextPageWithLayout } from "./page";
 
 // Need this to make Mantine styles override other styles
 const appendCache = createEmotionCache({ key: "mantine", prepend: false });
 
+interface AppPropsWithLayout extends AppProps {
+  Component: NextPageWithLayout;
+}
+
 export default function App({
   Component,
   pageProps: { session, ...pageProps },
-}: AppProps & { session: Session }) {
+}: AppPropsWithLayout & { session: Session }) {
+  // Use the layout defined at the page level if available
+  const getLayout = Component.getLayout || ((page) => page);
+
   return (
     <>
-      <Head>
-        <title>Marketplace</title>
-        <meta
-          name="viewport"
-          content="minimum-scale=1, initial-scale=1, width=device-width"
-        />
-        <meta
-          name="description"
-          content="Marketplace is a new classfields website based in Toronto"
-        />
-        <meta name="keywords" content="Classfields" />
-        <meta name="author" content="Hasan Iqbal" />
-      </Head>
       <MantineProvider
         emotionCache={appendCache}
         withGlobalStyles
@@ -37,9 +30,7 @@ export default function App({
         }}
       >
         <SessionProvider session={session}>
-          <Layout>
-            <Component {...pageProps} />
-          </Layout>
+          {getLayout(<Component {...pageProps} />)}
         </SessionProvider>
       </MantineProvider>
     </>

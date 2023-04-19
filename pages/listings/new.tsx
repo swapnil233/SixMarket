@@ -1,3 +1,4 @@
+import PrimaryLayout from "@/components/layout/primary/PrimaryLayout";
 import { requireAuthentication } from "@/utils/requireAuthentication";
 import {
   Box,
@@ -13,13 +14,14 @@ import {
 import { useForm } from "@mantine/form";
 import { GetServerSideProps } from "next";
 import { useRouter } from "next/router";
-import { FC, useState } from "react";
+import { useState } from "react";
 import {
   categoryOptions,
   conditionOptions,
   provinceOptions,
   tagsOptions,
 } from "../../components/data/formData";
+import { NextPageWithLayout } from "../page";
 
 interface CreateNewAdProps {
   apiUrl: string;
@@ -36,7 +38,7 @@ export const getServerSideProps: GetServerSideProps = async (context: any) => {
   });
 };
 
-const CreateNewAd: FC<CreateNewAdProps> = ({ apiUrl }) => {
+const CreateNewAd: NextPageWithLayout<CreateNewAdProps> = ({ apiUrl }) => {
   const [tagsSearchValue, onSearchChange] = useState("");
 
   const router = useRouter();
@@ -283,3 +285,7 @@ const CreateNewAd: FC<CreateNewAdProps> = ({ apiUrl }) => {
 };
 
 export default CreateNewAd;
+
+CreateNewAd.getLayout = (page) => {
+  return <PrimaryLayout>{page}</PrimaryLayout>;
+};
