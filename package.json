@@ -12,7 +12,9 @@
     "lint": "next lint",
     "prettier": "prettier --write .",
     "seed": "ts-node seedCategories.ts",
-    "prepack": "husky install"
+    "prepack": "husky install",
+    "storybook": "storybook dev -p 6006",
+    "build-storybook": "storybook build"
   },
   "dependencies": {
     "@emotion/react": "^11.10.6",
@@ -49,12 +51,22 @@
   "devDependencies": {
     "@commitlint/cli": "^17.6.1",
     "@commitlint/config-conventional": "^17.6.1",
+    "@storybook/addon-essentials": "^7.0.6",
+    "@storybook/addon-interactions": "^7.0.6",
+    "@storybook/addon-links": "^7.0.6",
+    "@storybook/addon-mdx-gfm": "^7.0.6",
+    "@storybook/blocks": "^7.0.6",
+    "@storybook/nextjs": "^7.0.6",
+    "@storybook/react": "^7.0.6",
+    "@storybook/testing-library": "^0.0.14-next.2",
     "@tailwindcss/typography": "^0.5.9",
     "@types/next-auth": "^3.15.0",
     "cross-env": "^7.0.3",
+    "eslint-plugin-storybook": "^0.6.11",
     "husky": "^8.0.3",
     "prettier": "^2.8.7",
     "prisma": "^4.12.0",
+    "storybook": "^7.0.6",
     "ts-node": "^10.9.1"
   }
 }
