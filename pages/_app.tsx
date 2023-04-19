@@ -1,5 +1,6 @@
 import "@/styles/globals.css";
 import { MantineProvider, createEmotionCache } from "@mantine/core";
+import { Analytics } from "@vercel/analytics/react";
 import type { Session } from "next-auth";
 import { SessionProvider } from "next-auth/react";
 import type { AppProps } from "next/app";
@@ -33,6 +34,7 @@ export default function App({
           {getLayout(<Component {...pageProps} />)}
         </SessionProvider>
       </MantineProvider>
+      <Analytics />
     </>
   );
 }
