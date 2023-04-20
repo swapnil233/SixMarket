@@ -6,6 +6,7 @@
     "node": ">14.0.0"
   },
   "scripts": {
+    "postinstall": "prisma generate",
     "dev": "cross-env NODE_OPTIONS='--inspect' next dev -p 3003",
     "build": "next build",
     "start": "next start",
