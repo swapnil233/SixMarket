@@ -1,8 +1,7 @@
-import { Footer } from "@/components/Footer";
-import { Navbar } from "@/components/Navbar";
-import { footerData } from "@/components/data/footerData";
 import Head from "next/head";
 import { FC, ReactNode } from "react";
+import { Navbar } from "../../Navbar";
+import Footer from "../../footer/primary/Footer";
 
 export interface IPrimaryLayout {
   children: ReactNode;
@@ -23,7 +22,7 @@ const PrimaryLayout: FC<IPrimaryLayout> = ({ children }) => {
       </Head>
       <Navbar />
       <main className="max-w-6xl mx-auto px-4">{children}</main>
-      <Footer data={footerData} />
+      <Footer />
     </>
   );
 };

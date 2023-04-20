@@ -1,41 +1,41 @@
 import {
-  Header,
-  HoverCard,
-  Group,
-  Button,
-  UnstyledButton,
-  Text,
-  SimpleGrid,
-  ThemeIcon,
   Anchor,
-  Divider,
-  Center,
+  Avatar,
   Box,
   Burger,
-  Drawer,
+  Button,
+  Center,
   Collapse,
-  ScrollArea,
-  rem,
-  Menu,
-  Avatar,
+  Divider,
+  Drawer,
+  Group,
+  Header,
+  HoverCard,
   Loader,
+  Menu,
+  ScrollArea,
+  SimpleGrid,
+  Text,
+  ThemeIcon,
+  UnstyledButton,
+  rem,
 } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import {
   IconChevronDown,
   IconHeart,
-  IconSettings,
   IconLogout,
-  IconUser,
-  IconTags,
   IconPlus,
+  IconSettings,
+  IconTags,
+  IconUser,
 } from "@tabler/icons-react";
 import { signIn, signOut, useSession } from "next-auth/react";
+import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useState } from "react";
-import { navbarStyles, dropdownMenuData } from "./data/NavbarData";
-import Image from "next/image";
+import { dropdownMenuData, navbarStyles } from "./data/NavbarData";
 
 export function Navbar() {
   const [drawerOpened, { toggle: toggleDrawer, close: closeDrawer }] =
