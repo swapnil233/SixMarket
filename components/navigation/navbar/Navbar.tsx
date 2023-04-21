@@ -34,10 +34,13 @@ import { signIn, signOut, useSession } from "next-auth/react";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { useState } from "react";
-import { dropdownMenuData, navbarStyles } from "./data/NavbarData";
+import { FC, useState } from "react";
+import { dropdownMenuData } from "./Navbar.data";
+import { navbarStyles } from "./Navbar.styles";
 
-export function Navbar() {
+export interface INavbar {}
+
+const Navbar: FC<INavbar> = () => {
   const [drawerOpened, { toggle: toggleDrawer, close: closeDrawer }] =
     useDisclosure(false);
   const [linksOpened, { toggle: toggleLinks }] = useDisclosure(false);
@@ -418,4 +421,6 @@ export function Navbar() {
       </Drawer>
     </Box>
   );
-}
+};
+
+export default Navbar;

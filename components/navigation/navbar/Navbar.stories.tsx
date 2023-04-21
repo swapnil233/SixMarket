@@ -1,20 +1,20 @@
 import { Meta, StoryFn } from "@storybook/react";
-import Footer, { IFooter } from "./Footer";
-import { mockFooterProps } from "./Footer.mocks";
+import Navbar, { INavbar } from "./Navbar";
+import { mockNavbarProps } from "./Navbar.mocks";
 
 export default {
-  title: "footer/Primary",
-  component: Footer,
+  title: "navigation/Navbar",
+  component: Navbar,
   // More on argTypes: https://storybook.js.org/docs/react/api/argtypes
   argTypes: {},
-} as Meta<typeof Footer>;
+} as Meta<typeof Navbar>;
 
 // More on component templates: https://storybook.js.org/docs/react/writing-stories/introduction#using-args
-const Template: StoryFn<typeof Footer> = (args) => <Footer {...args} />;
+const Template: StoryFn<typeof Navbar> = (args) => <Navbar {...args} />;
 
 export const Base = Template.bind({});
 // More on args: https://storybook.js.org/docs/react/writing-stories/args
 
 Base.args = {
-  ...mockFooterProps.base,
-} as IFooter;
+  ...mockNavbarProps.base,
+} as INavbar;
