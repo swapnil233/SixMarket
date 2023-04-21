@@ -11,6 +11,7 @@ const base: IListingCard = {
     title: "TV Media stand, about 100 years old (custom solid wood)",
     description: "Solid wood custom built TV media console.",
     price: 150,
+    listingId: "sadfasdf234q5qkj"
 }
 
 export const mockListingCardProps = {
