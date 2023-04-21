@@ -77,7 +77,7 @@ const Home: NextPageWithLayout = () => {
             </div>
             {/* Subtitle */}
             <div className="max-w-3xl mx-auto">
-              <p className="sm:text-base md:text-lg text-slate-600">
+              <p className="text-xl text-slate-600">
                 Your one-stop destination for buying, selling, and trading goods
                 within your community. Connect with local sellers and buyers to
                 find unique items, hidden treasures, and amazing deals!
