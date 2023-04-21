@@ -1,7 +1,7 @@
 import ListingCard from "@/components/cards/listing/ListingCard";
 import PrimaryLayout from "@/components/layout/primary/PrimaryLayout";
 import Hero from "@/components/ui/Hero";
-import { Button, Loader, Skeleton } from "@mantine/core";
+import { Button, Skeleton } from "@mantine/core";
 import { ItemForSale } from "@prisma/client";
 import { signIn, useSession } from "next-auth/react";
 import { useEffect, useState } from "react";
@@ -95,7 +95,13 @@ const Home: NextPageWithLayout = () => {
                   />
                 ))
               ) : (
-                <Loader size={"sm"} />
+                <>
+                  <Skeleton w={340} h={375} />
+                  <Skeleton w={340} h={375} />
+                  <Skeleton w={340} h={375} />
+                  <Skeleton w={340} h={375} />
+                  <Skeleton w={340} h={375} />
+                </>
               )}
             </div>
           </section>
