@@ -4,6 +4,7 @@ import {
   Box,
   Button,
   Divider,
+  FileInput,
   MultiSelect,
   NumberInput,
   Radio,
@@ -117,9 +118,18 @@ const CreateNewAd: NextPageWithLayout<CreateNewAdProps> = ({ apiUrl }) => {
         <p className="mt-1 mb-4 text-sm leading-6 text-gray-600">
           Please provide your listing/ad details
         </p>
+        {/* File input for pics */}
+        <FileInput
+          label="Upload photos"
+          maw={400}
+          multiple
+          placeholder="Upload .png or .jpg images, max 5mb each"
+          accept="image/png, image/jpeg"
+        />
         {/* Name */}
         <TextInput
           label="Title"
+          mt="md"
           placeholder="Used Nike shoes"
           name="title"
           {...form.getInputProps("name")}
@@ -136,7 +146,6 @@ const CreateNewAd: NextPageWithLayout<CreateNewAdProps> = ({ apiUrl }) => {
           minRows={4}
           required
         />
-
         {/* Category */}
         <Select
           label="Category"
@@ -150,7 +159,6 @@ const CreateNewAd: NextPageWithLayout<CreateNewAdProps> = ({ apiUrl }) => {
           mt="md"
           data={categoryOptions}
         />
-
         {/* Condition */}
         <Select
           label="Condition"
@@ -162,7 +170,6 @@ const CreateNewAd: NextPageWithLayout<CreateNewAdProps> = ({ apiUrl }) => {
           mt="md"
           data={conditionOptions}
         />
-
         {/* Price */}
         <NumberInput
           label="Price"
@@ -180,7 +187,6 @@ const CreateNewAd: NextPageWithLayout<CreateNewAdProps> = ({ apiUrl }) => {
           }
         />
         <Radio mt={"xs"} value="free" label="Free" />
-
         {/* Can deliver? */}
         <Radio.Group
           label="Can you deliver this item?"
@@ -192,7 +198,6 @@ const CreateNewAd: NextPageWithLayout<CreateNewAdProps> = ({ apiUrl }) => {
           <Radio mt={"xs"} value="yes" label="Yes" />
           <Radio mt={"xs"} value="no" label="No" />
         </Radio.Group>
-
         {/* Tags */}
         <MultiSelect
           label="Tags"
@@ -210,7 +215,6 @@ const CreateNewAd: NextPageWithLayout<CreateNewAdProps> = ({ apiUrl }) => {
           nothingFound="Nothing found"
           limit={5}
         />
-
         <Divider mb={"xl"} mt={"xl"} />
         <h2 className="text-xl font-semibold leading-7 text-gray-900">
           Pickup / meeting address
@@ -229,7 +233,6 @@ const CreateNewAd: NextPageWithLayout<CreateNewAdProps> = ({ apiUrl }) => {
           required
           mt="md"
         />
-
         <Box
           sx={{
             display: "flex",
@@ -262,7 +265,6 @@ const CreateNewAd: NextPageWithLayout<CreateNewAdProps> = ({ apiUrl }) => {
             data={provinceOptions}
           />
         </Box>
-
         {/* Postal code */}
         <TextInput
           label="Postal Code"

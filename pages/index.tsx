@@ -70,7 +70,7 @@ const Home: NextPageWithLayout = () => {
           <section className="text-center pb-4">
             {/* Title */}
             <div className="md:max-w-5xl mx-auto">
-              <h1 className="sm:text-3xl md:text-5xl lg:text-6xl mb-4 font-normal">
+              <h1 className="text-5xl lg:text-6xl mb-4 font-normal">
                 Welcome to{" "}
                 <span className="text-blue-800 font-medium">Marketplace</span>
               </h1>
@@ -78,9 +78,9 @@ const Home: NextPageWithLayout = () => {
             {/* Subtitle */}
             <div className="max-w-3xl mx-auto">
               <p className="text-xl text-slate-600">
-                Your one-stop destination for buying, selling, and trading goods
-                within your community. Connect with local sellers and buyers to
-                find unique items, hidden treasures, and amazing deals!
+                Discover your local marketplace for buying, selling, and trading
+                goods. Connect with nearby sellers and buyers to uncover
+                distinctive finds, hidden gems, and fantastic deals!
               </p>
             </div>
             <div className="max-w-[220px] mx-auto sm:max-w-none flex flex-col sm:flex-row sm:justify-center mt-6">
