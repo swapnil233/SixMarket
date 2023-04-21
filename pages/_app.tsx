@@ -1,13 +1,10 @@
 import "@/styles/globals.css";
-import { MantineProvider, createEmotionCache } from "@mantine/core";
+import { MantineProvider } from "@mantine/core";
 import { Analytics } from "@vercel/analytics/react";
 import type { Session } from "next-auth";
 import { SessionProvider } from "next-auth/react";
 import type { AppProps } from "next/app";
 import { NextPageWithLayout } from "./page";
-
-// Need this to make Mantine styles override other styles
-const appendCache = createEmotionCache({ key: "mantine", prepend: false });
 
 interface AppPropsWithLayout extends AppProps {
   Component: NextPageWithLayout;
@@ -23,7 +20,6 @@ export default function App({
   return (
     <>
       <MantineProvider
-        emotionCache={appendCache}
         withGlobalStyles
         withNormalizeCSS
         theme={{
