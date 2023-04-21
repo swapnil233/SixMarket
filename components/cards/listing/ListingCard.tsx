@@ -9,6 +9,7 @@ import {
   getStylesRef,
   rem,
 } from "@mantine/core";
+import Link from "next/link";
 import { FC } from "react";
 
 const useStyles = createStyles((theme) => ({
@@ -46,6 +47,7 @@ export interface IListingCard {
   title: string;
   description: string;
   price: number;
+  listingId: string;
 }
 
 const ListingCard: FC<IListingCard> = ({
@@ -53,6 +55,7 @@ const ListingCard: FC<IListingCard> = ({
   description,
   images,
   price,
+  listingId,
 }) => {
   const { classes } = useStyles();
 
@@ -84,7 +87,7 @@ const ListingCard: FC<IListingCard> = ({
         </Text>
       </Group>
 
-      <Text fz="sm" c="dimmed" mt="sm">
+      <Text fz="sm" c="dimmed" mt="sm" lineClamp={1}>
         {description}
       </Text>
 
@@ -95,9 +98,11 @@ const ListingCard: FC<IListingCard> = ({
           </Text>
         </div>
 
-        <Button radius="md" variant="subtle">
-          View
-        </Button>
+        <Link href={`/listings/${listingId}`}>
+          <Button radius="md" variant="subtle">
+            View
+          </Button>
+        </Link>
       </Group>
     </Card>
   );

@@ -1,19 +1,20 @@
-import { NextApiRequest, NextApiResponse } from "next";
 import prisma from "@/utils/prisma";
 import { ItemForSale } from "@prisma/client";
+import { NextApiRequest, NextApiResponse } from "next";
 const logger = require("@/utils/logger"); // Import the logger middleware using the 'require' syntax
 
-async function getTenRecentAds(): Promise<ItemForSale[] | null> {
+async function getRecentlyPostedListings(): Promise<ItemForSale[] | null> {
   try {
     const listings = await prisma.itemForSale.findMany({
       orderBy: {
         createdAt: "desc",
       },
-      take: 10,
+      take: 5,
     });
     return listings;
   } catch (error: any) {
-    throw new Error("Failed to fetch data", error);
+    console.error("Failed to fetch data", error);
+    return null;
   }
 }
 
@@ -23,10 +24,10 @@ export default async function Handler(
 ) {
   await logger(req, res, async () => {
     try {
-      const recentlyPostedAds = await getTenRecentAds();
+      const recentlyPostedAds = await getRecentlyPostedListings();
 
       if (!recentlyPostedAds || recentlyPostedAds.length === 0) {
-        res.status(404).send({ error: "No listings found" });
+        res.status(200).send([]);
         return;
       }
 
@@ -38,8 +39,14 @@ export default async function Handler(
 
       // If the request method is not HEAD, send the user data
       res.status(200).json(recentlyPostedAds);
-    } catch (error: any) {
-      res.status(500).send({ error: error.message });
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        res.status(500).send({ error: error.message });
+      } else {
+        res.status(500).send({
+          error: "500 - An unexpected error occured."
+        })
+      }
     }
   });
 }

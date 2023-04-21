@@ -1,12 +1,32 @@
-import { AdCard } from "@/components/AdCard";
+import ListingCard from "@/components/cards/listing/ListingCard";
 import PrimaryLayout from "@/components/layout/primary/PrimaryLayout";
 import Hero from "@/components/ui/Hero";
-import { Button, Skeleton } from "@mantine/core";
+import { Button, Loader, Skeleton } from "@mantine/core";
+import { ItemForSale } from "@prisma/client";
 import { signIn, useSession } from "next-auth/react";
+import { useEffect, useState } from "react";
 import { NextPageWithLayout } from "./page";
 
 const Home: NextPageWithLayout = () => {
   const { status } = useSession();
+  const [recentListings, setRecentListings] = useState<ItemForSale[] | null>(
+    null
+  );
+
+  // Fetch the 5 recent listings
+  useEffect(() => {
+    const fetchRecentListings = async () => {
+      try {
+        const response = await fetch("/api/listings/recentlyPosted");
+        const data = await response.json();
+        setRecentListings(data);
+      } catch (error) {
+        console.error("Error fetching recent listings:", error);
+      }
+    };
+
+    fetchRecentListings();
+  }, []);
 
   let heroButtonsLayout;
 
@@ -54,7 +74,7 @@ const Home: NextPageWithLayout = () => {
         <div className="max-w-6xl w-full mx-auto px-4">
           <section className="pb-12 md:pb-20">
             <div className="max-w-5xl w-full">
-              <h1 className="text-4xl mb-4">Recently posted</h1>
+              <h1 className="text-4xl mb-1 font-normal">Recently posted</h1>
             </div>
             <div className="mb-10">
               <p className="text-xl text-slate-600">
@@ -62,12 +82,21 @@ const Home: NextPageWithLayout = () => {
               </p>
             </div>
             <div className="grid lg:grid-cols-3 md:grid-cols-2 sm:grid-cols-1 gap-8">
-              <AdCard />
-              <AdCard />
-              <AdCard />
-              <AdCard />
-              <AdCard />
-              <AdCard />
+              {/* Recently posted listings */}
+              {recentListings ? (
+                recentListings.map((listing, index) => (
+                  <ListingCard
+                    key={index}
+                    listingId={listing.id}
+                    images={["norway.jpg"]}
+                    title={listing.name}
+                    description={listing.description || ""}
+                    price={listing.price || 0}
+                  />
+                ))
+              ) : (
+                <Loader size={"sm"} />
+              )}
             </div>
           </section>
         </div>
