@@ -1,6 +1,5 @@
 import ListingCard from "@/components/cards/listing/ListingCard";
 import PrimaryLayout from "@/components/layout/primary/PrimaryLayout";
-import Hero from "@/components/ui/Hero";
 import { Button, Skeleton } from "@mantine/core";
 import { ItemForSale } from "@prisma/client";
 import { signIn, useSession } from "next-auth/react";
@@ -55,33 +54,57 @@ const Home: NextPageWithLayout = () => {
       <Skeleton height={36} width={140} mr={12} />
       <Skeleton height={36} width={140} />
     </>;
-  } else if (status === "authenticated") {
+  } else {
     heroButtonsLayout = (
       <>
-        <Button variant="outline">Browse recent listings</Button>
+        <Button variant="filled">Browse recent listings</Button>
       </>
     );
   }
 
   return (
-    <main>
+    <div>
       {/* Hero */}
-      <Hero heroButtonsLayout={heroButtonsLayout} />
-      {/* <HeroWithBg /> */}
+      <div className="pt-14 pb-14 flex flex-col w-full">
+        <div className="max-w-6xl mx-auto sm:px-4 px-6">
+          <section className="text-center pb-4">
+            {/* Title */}
+            <div className="md:max-w-5xl mx-auto">
+              <h1 className="sm:text-3xl md:text-5xl lg:text-6xl mb-4 font-normal">
+                Welcome to{" "}
+                <span className="text-blue-800 font-medium">Marketplace</span>
+              </h1>
+            </div>
+            {/* Subtitle */}
+            <div className="max-w-3xl mx-auto">
+              <p className="sm:text-base md:text-lg text-slate-600">
+                Your one-stop destination for buying, selling, and trading goods
+                within your community. Connect with local sellers and buyers to
+                find unique items, hidden treasures, and amazing deals!
+              </p>
+            </div>
+            <div className="max-w-[220px] mx-auto sm:max-w-none flex flex-col sm:flex-row sm:justify-center mt-6">
+              {heroButtonsLayout}
+            </div>
+          </section>
+        </div>
+      </div>
 
       {/* Recently posted ads */}
-      <div className="pb-12 pt-10 md:pt-16 container flex flex-col w-full">
-        <div className="max-w-6xl w-full mx-auto px-4">
-          <section className="pb-12 md:pb-20">
-            <div className="max-w-5xl w-full">
-              <h1 className="text-4xl mb-1 font-normal">Recently posted</h1>
+      <div className="pb-12 pt-10 flex flex-col w-full">
+        <div className="max-w-6xl w-full mx-auto sm:px-4 px-6">
+          <section className="md:pb-12 pb-20">
+            <div className="w-full">
+              <h1 className="sm:text-3xl md:text-4xl font-normal">
+                Recently posted
+              </h1>
             </div>
             <div className="mb-10">
               <p className="text-xl text-slate-600">
                 See what your neighbours are selling
               </p>
             </div>
-            <div className="grid lg:grid-cols-3 md:grid-cols-2 sm:grid-cols-1 gap-8">
+            <div className="grid lg:grid-cols-3 md:grid-cols-2 sm:grid-cols-1 col-span-full gap-8">
               {/* Recently posted listings */}
               {recentListings ? (
                 recentListings.map((listing, index) => (
@@ -107,7 +130,7 @@ const Home: NextPageWithLayout = () => {
           </section>
         </div>
       </div>
-    </main>
+    </div>
   );
 };
 

@@ -21,7 +21,7 @@ const PrimaryLayout: FC<IPrimaryLayout> = ({ children }) => {
         <meta name="author" content="Hasan Iqbal" />
       </Head>
       <Navbar />
-      <main className="max-w-6xl mx-auto px-4">{children}</main>
+      <main className="max-w-6xl mx-auto">{children}</main>
       <Footer />
     </>
   );

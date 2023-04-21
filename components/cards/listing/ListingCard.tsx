@@ -71,7 +71,7 @@ const ListingCard: FC<IListingCard> = ({
   }).format(price);
 
   return (
-    <Card radius="md" withBorder padding="xl" maw={350}>
+    <Card radius="md" withBorder padding="xl">
       <Card.Section>
         <Carousel
           withIndicators
