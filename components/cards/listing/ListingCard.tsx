@@ -65,6 +65,11 @@ const ListingCard: FC<IListingCard> = ({
     </Carousel.Slide>
   ));
 
+  const formattedPrice = new Intl.NumberFormat("en-US", {
+    style: "currency",
+    currency: "USD",
+  }).format(price);
+
   return (
     <Card radius="md" withBorder padding="xl" maw={350}>
       <Card.Section>
@@ -81,8 +86,8 @@ const ListingCard: FC<IListingCard> = ({
         </Carousel>
       </Card.Section>
 
-      <Group position="apart" mt="lg">
-        <Text fw={500} fz="lg">
+      <Group position="apart" mt="md" mb="xs" fz={"lg"}>
+        <Text weight={500} lineClamp={1}>
           {title}
         </Text>
       </Group>
@@ -94,7 +99,7 @@ const ListingCard: FC<IListingCard> = ({
       <Group position="apart" mt="md">
         <div>
           <Text fz="xl" span fw={500} className={classes.price}>
-            ${price}
+            {formattedPrice}
           </Text>
         </div>
 
