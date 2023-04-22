@@ -28,7 +28,7 @@ export default function App({
         }}
       >
         <SessionProvider session={session}>
-          <NextNProgress height={5} options={{ showSpinner: false }} />
+          <NextNProgress height={3} options={{ showSpinner: false }} />
           {getLayout(<Component {...pageProps} />)}
         </SessionProvider>
       </MantineProvider>
