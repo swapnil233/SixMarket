@@ -1,11 +1,11 @@
 import prisma from "@/utils/prisma";
-import { ItemForSale } from "@prisma/client";
+import { Listing } from "@prisma/client";
 import { NextApiRequest, NextApiResponse } from "next";
 const logger = require("@/utils/logger"); // Import the logger middleware using the 'require' syntax
 
-async function getRecentlyPostedListings(): Promise<ItemForSale[] | null> {
+async function getRecentlyPostedListings(): Promise<Listing[] | null> {
   try {
-    const listings = await prisma.itemForSale.findMany({
+    const listings = await prisma.listing.findMany({
       orderBy: {
         createdAt: "desc",
       },

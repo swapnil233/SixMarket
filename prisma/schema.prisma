@@ -9,45 +9,82 @@ generator client {
   provider = "prisma-client-js"
 }
 
-model ItemForSale {
-  id          String    @id @default(cuid())
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @default(now()) @updatedAt
+model Listing {
+  id          String     @id @default(cuid())
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @default(now()) @updatedAt
   name        String
   description String?
-  condition   Condition @default(NEW)
-  reported    Boolean   @default(false)
+  condition   Condition  @default(NEW)
+  reported    Boolean    @default(false)
   price       Int? // Some items may not have a price, e.g. free items
-  images      String[]
+  images      Image[]
   location    String
-  tags        String[]
-  views       Int       @default(0)
-  featured    Boolean   @default(false)
-  canDeliver  Boolean   @default(false)
-  user        User      @relation(fields: [userId], references: [id])
+  tags        Tag[]      @relation("ListingTags")
+  views       Int        @default(0)
+  featured    Boolean    @default(false)
+  canDeliver  Boolean    @default(false)
+  user        User       @relation(fields: [userId], references: [id])
   userId      String
-  category    Category  @relation(fields: [categoryId], references: [id])
+  category    Category   @relation(fields: [categoryId], references: [id])
   categoryId  String
   messages    Message[]
+  favorites   Favorite[]
+}
+
+model Image {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  url       String   @db.VarChar(2083)
+  listing   Listing  @relation(fields: [listingId], references: [id])
+  listingId String
+}
+
+model Tag {
+  id       String    @id @default(cuid())
+  name     String    @unique
+  listings Listing[] @relation("ListingTags")
 }
 
 model Category {
-  id           String        @id @default(cuid())
-  name         String
-  slug         String        @unique
-  itemsForSale ItemForSale[]
+  id           String    @id @default(cuid())
+  name         String    @unique
+  slug         String    @unique
+  itemsForSale Listing[]
+}
+
+model Favorite {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  listing   Listing  @relation(fields: [listingId], references: [id])
+  listingId String
+  user      User     @relation(fields: [userId], references: [id])
+  userId    String
 }
 
 model Message {
-  id          String      @id @default(cuid())
-  createdAt   DateTime    @default(now())
-  content     String
-  sender      User        @relation("MessageSender", fields: [senderId], references: [id])
+  id          String   @id @default(cuid())
+  createdAt   DateTime @default(now())
+  content     String   @db.VarChar(5000)
+  sender      User     @relation("MessageSender", fields: [senderId], references: [id])
   senderId    String
-  recipient   User        @relation("MessageRecipient", fields: [recipientId], references: [id])
+  recipient   User     @relation("MessageRecipient", fields: [recipientId], references: [id])
   recipientId String
-  itemForSale ItemForSale @relation(fields: [itemId], references: [id])
+  itemForSale Listing  @relation(fields: [itemId], references: [id])
   itemId      String
+}
+
+model Notification {
+  id        String           @id @default(cuid())
+  createdAt DateTime         @default(now())
+  updatedAt DateTime         @updatedAt
+  type      NotificationType
+  content   String
+  read      Boolean          @default(false)
+  user      User             @relation(fields: [userId], references: [id])
+  userId    String
 }
 
 model Review {
@@ -64,19 +101,35 @@ model Review {
 
 // The following User, Account, Session and VerificationToken models are from the NextAuth.js docs
 model User {
-  id               String        @id @default(cuid())
+  id               String         @id @default(cuid())
   name             String?
-  email            String?       @unique
+  email            String?        @unique
   emailVerified    DateTime?
   image            String?
-  phone            String?       @unique
+  phone            String?        @unique
   accounts         Account[]
   sessions         Session[]
-  itemsForSale     ItemForSale[]
-  sentMessages     Message[]     @relation("MessageSender")
-  receivedMessages Message[]     @relation("MessageRecipient")
-  givenReviews     Review[]      @relation("ReviewReviewer")
-  receivedReviews  Review[]      @relation("ReviewReviewee")
+  itemsForSale     Listing[]
+  sentMessages     Message[]      @relation("MessageSender")
+  receivedMessages Message[]      @relation("MessageRecipient")
+  givenReviews     Review[]       @relation("ReviewReviewer")
+  receivedReviews  Review[]       @relation("ReviewReviewee")
+  favorites        Favorite[]
+  address          Address?
+  Notification     Notification[]
+}
+
+model Address {
+  id         String   @id @default(cuid())
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+  street     String
+  city       String
+  province   String
+  postalCode String
+  country    String
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId     String   @unique
 }
 
 model Account {
@@ -120,4 +173,11 @@ enum Condition {
   GOOD
   FAIR
   SALVAGE
+}
+
+enum NotificationType {
+  MESSAGE
+  TRANSACTION
+  LISTING_UPDATE
+  FOLLOW
 }

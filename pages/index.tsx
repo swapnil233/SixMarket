@@ -1,16 +1,14 @@
 import ListingCard from "@/components/cards/listing/ListingCard";
 import PrimaryLayout from "@/components/layout/primary/PrimaryLayout";
 import { Button, Skeleton } from "@mantine/core";
-import { ItemForSale } from "@prisma/client";
+import { Listing } from "@prisma/client";
 import { signIn, useSession } from "next-auth/react";
 import { useEffect, useState } from "react";
 import { NextPageWithLayout } from "./page";
 
 const Home: NextPageWithLayout = () => {
   const { status } = useSession();
-  const [recentListings, setRecentListings] = useState<ItemForSale[] | null>(
-    null
-  );
+  const [recentListings, setRecentListings] = useState<Listing[] | null>(null);
 
   // Fetch the 5 recent listings
   useEffect(() => {

@@ -1,12 +1,12 @@
-import { NextApiRequest, NextApiResponse } from "next";
 import prisma from "@/utils/prisma";
-import { ItemForSale } from "@prisma/client";
+import { Listing } from "@prisma/client";
+import { NextApiRequest, NextApiResponse } from "next";
 import { Session, getServerSession } from "next-auth";
 import { authOptions } from "../auth/[...nextauth]";
 
-async function CreateNewAd(adData: ItemForSale) {
+async function CreateNewAd(adData: Listing) {
   try {
-    const newAd = await prisma.itemForSale.create({
+    const newAd = await prisma.listing.create({
       data: adData,
     });
     return newAd;
