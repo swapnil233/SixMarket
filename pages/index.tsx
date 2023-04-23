@@ -14,7 +14,7 @@ const Home: NextPageWithLayout = () => {
   useEffect(() => {
     const fetchRecentListings = async () => {
       try {
-        const response = await fetch("/api/listings/recentlyPosted");
+        const response = await fetch("/api/listings/recent");
         const data = await response.json();
         setRecentListings(data);
       } catch (error) {
