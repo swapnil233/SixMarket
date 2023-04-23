@@ -13,14 +13,14 @@ import {
   Textarea,
 } from "@mantine/core";
 import { useForm } from "@mantine/form";
+import { Category, Tag } from "@prisma/client";
+import axios, { AxiosResponse } from "axios";
 import { GetServerSideProps } from "next";
 import { useRouter } from "next/router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
-  categoryOptions,
   conditionOptions,
   provinceOptions,
-  tagsOptions,
 } from "../../components/data/formData";
 import { NextPageWithLayout } from "../page";
 
@@ -41,11 +41,46 @@ export const getServerSideProps: GetServerSideProps = async (context: any) => {
 
 const CreateNewAd: NextPageWithLayout<CreateNewAdProps> = ({ apiUrl }) => {
   const [tagsSearchValue, onSearchChange] = useState("");
+  const [categoryOptions, setCategoryOptions] = useState<
+    { value: string; label: string }[]
+  >([]);
+  const [tagsOptions, setTagsOptions] = useState<
+    { value: string; label: string }[]
+  >([]);
+
+  useEffect(() => {
+    // [{ value: "clgkvsrx40000jlggjffuj71v", label: "Electronics" }, ...],
+    const getCategoriesAndTags = async () => {
+      const categoriesRes: AxiosResponse = await axios.get("/api/categories");
+      const categories: Category[] = await categoriesRes.data;
+
+      const tagsRes: AxiosResponse = await axios.get("/api/tags");
+      const tags: Tag[] = await tagsRes.data;
+
+      const newCategoryOptions = categories.map((category) => ({
+        value: category.id,
+        label: category.name,
+      }));
+
+      const newTagsOptions = tags.map((tag) => ({
+        value: tag.id,
+        label: tag.name,
+      }));
+
+      setCategoryOptions(newCategoryOptions);
+      setTagsOptions(newTagsOptions);
+    };
+
+    getCategoriesAndTags();
+
+    // Get all tags
+  }, []);
 
   const router = useRouter();
 
   const form = useForm({
     initialValues: {
+      files: [],
       name: "",
       description: "",
       condition: "",
@@ -77,6 +112,7 @@ const CreateNewAd: NextPageWithLayout<CreateNewAdProps> = ({ apiUrl }) => {
       province: (value) => (!value ? "Province is required" : null),
       postalCode: (value) =>
         value.length !== 6 ? "Postal code must be exactly 6 characters" : null,
+      categoryId: (value) => (!value ? "Category is required" : null),
     },
   });
 
@@ -111,7 +147,7 @@ const CreateNewAd: NextPageWithLayout<CreateNewAdProps> = ({ apiUrl }) => {
 
   return (
     <Box mx="auto">
-      <form onSubmit={form.onSubmit(handleFormSubmit)}>
+      <form onSubmit={form.onSubmit((values) => console.log(values))}>
         <h2 className="text-xl font-semibold leading-7 text-gray-900 mt-8 md:mt-16 sm:mt-16">
           Listing Details
         </h2>
@@ -125,6 +161,7 @@ const CreateNewAd: NextPageWithLayout<CreateNewAdProps> = ({ apiUrl }) => {
           multiple
           placeholder="Upload .png or .jpg images, max 5mb each"
           accept="image/png, image/jpeg"
+          {...form.getInputProps("files")}
         />
         {/* Name */}
         <TextInput
@@ -213,7 +250,6 @@ const CreateNewAd: NextPageWithLayout<CreateNewAdProps> = ({ apiUrl }) => {
           mt="md"
           onSearchChange={onSearchChange}
           nothingFound="Nothing found"
-          limit={5}
         />
         <Divider mb={"xl"} mt={"xl"} />
         <h2 className="text-xl font-semibold leading-7 text-gray-900">
