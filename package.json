@@ -12,7 +12,7 @@
     "start": "next start",
     "lint": "next lint",
     "prettier": "prettier --write .",
-    "seed": "ts-node seedCategories.ts",
+    "seed": "ts-node seed.ts",
     "prepack": "husky install",
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build"
