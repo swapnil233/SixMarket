@@ -1,10 +1,15 @@
 import ListingCard from "@/components/cards/listing/ListingCard";
 import PrimaryLayout from "@/components/layout/primary/PrimaryLayout";
 import { Button, Skeleton } from "@mantine/core";
-import { Listing } from "@prisma/client";
+import { Image as PrismaImage, Listing as PrismaListing } from "@prisma/client";
 import { signIn, useSession } from "next-auth/react";
 import { useEffect, useState } from "react";
 import { NextPageWithLayout } from "./page";
+
+interface Image extends PrismaImage {}
+interface Listing extends PrismaListing {
+  images: Image[];
+}
 
 const Home: NextPageWithLayout = () => {
   const { status } = useSession();
@@ -48,10 +53,12 @@ const Home: NextPageWithLayout = () => {
       </>
     );
   } else if (status === "loading") {
-    <>
-      <Skeleton height={36} width={140} mr={12} />
-      <Skeleton height={36} width={140} />
-    </>;
+    heroButtonsLayout = (
+      <>
+        <Skeleton height={36} width={80} mr={12} />
+        <Skeleton height={36} width={140} />
+      </>
+    );
   } else {
     heroButtonsLayout = (
       <>
@@ -109,7 +116,7 @@ const Home: NextPageWithLayout = () => {
                   <ListingCard
                     key={index}
                     listingId={listing.id}
-                    images={["norway.jpg"]}
+                    images={listing.images.map((image) => image.url)}
                     title={listing.name}
                     description={listing.description || ""}
                     price={listing.price || 0}

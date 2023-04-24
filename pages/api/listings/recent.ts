@@ -1,13 +1,21 @@
 import prisma from "@/utils/prisma";
-import { Listing } from "@prisma/client";
+import { Image as PrismaImage, Listing as PrismaListing } from "@prisma/client";
 import { NextApiRequest, NextApiResponse } from "next";
 const logger = require("@/utils/logger"); // Import the logger middleware using the 'require' syntax
 
-async function getRecentListings(): Promise<Listing[] | null> {
+interface Image extends PrismaImage { }
+interface ListingWithImages extends PrismaListing {
+  images: Image[];
+}
+
+async function getRecentListings(): Promise<ListingWithImages[] | null> {
   try {
     const listings = await prisma.listing.findMany({
       orderBy: {
         createdAt: "desc",
+      },
+      include: {
+        images: true,
       },
       take: 5,
     });
