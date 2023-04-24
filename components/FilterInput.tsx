@@ -1,3 +1,5 @@
+import { Input } from "@mantine/core";
+import { IconFilter } from "@tabler/icons-react";
 import { ChangeEvent, FC } from "react";
 
 interface FilterInputProps {
@@ -11,12 +13,15 @@ const FilterInput: FC<FilterInputProps> = ({ onFilterTextChange }) => {
 
   return (
     <form className="flex flex-col col-span-full">
-      <label className="text-lg mb-2">Filter by name</label>
-      <input
-        placeholder="Start searching..."
-        className="rounded border-slate-700 border-solid border-2 px-2 py-1 mb-4"
+      <label className="text-base mb-2 text-slate-600">Filter</label>
+      <Input
+        icon={<IconFilter size="1rem" />}
+        className="mb-8"
+        variant="default"
+        size="sm"
         onChange={handleChange}
-      ></input>
+        placeholder="Start typing..."
+      />
     </form>
   );
 };

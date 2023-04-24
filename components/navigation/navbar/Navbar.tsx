@@ -35,8 +35,59 @@ import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { FC, useState } from "react";
-import { dropdownMenuData } from "./Navbar.data";
 import { navbarStyles } from "./Navbar.styles";
+
+import {
+  IconBriefcase,
+  IconCar,
+  IconHome,
+  IconTag,
+  IconTools,
+  IconUsers,
+} from "@tabler/icons-react";
+
+export const dropdownMenuData = [
+  {
+    icon: IconTag,
+    title: "Buy and sell",
+    description: "Browse and purchase from a wide range of products",
+    slug: "electronics",
+  },
+  {
+    icon: IconCar,
+    title: "Cars and vehicles",
+    description: "Discover new and used cars, motorcycles, and other vehicles",
+    slug: "electronics",
+  },
+  {
+    icon: IconHome,
+    title: "Real estate",
+    description:
+      "Explore properties for sale or rent, including houses, apartments, and commercial spaces",
+    slug: "real-estate",
+  },
+  {
+    icon: IconBriefcase,
+    title: "Jobs",
+    description:
+      "Find job listings, part-time opportunities, and freelance work",
+    slug: "jobs",
+  },
+  {
+    icon: IconTools,
+    title: "Services",
+    description:
+      "Browse professional services, including repairs, cleaning, and tutoring",
+    slug: "services",
+  },
+  {
+    icon: IconUsers,
+    title: "Community",
+    description:
+      "Browse professional services, including repairs, cleaning, and tutoring",
+    slug: "community",
+  },
+];
 
 export interface INavbar {}
 
@@ -57,14 +108,17 @@ const Navbar: FC<INavbar> = () => {
         <ThemeIcon size={34} variant="default" radius="md">
           <item.icon size={rem(22)} color={theme.fn.primaryColor()} />
         </ThemeIcon>
-        <div>
-          <Text size="sm" fw={500}>
+        <Link
+          href={`categories/${item.slug}`}
+          className="text-decoration-none no-underline"
+        >
+          <Text size="sm" fw={500} className="text-slate-900">
             {item.title}
           </Text>
           <Text size="xs" color="dimmed">
             {item.description}
           </Text>
-        </div>
+        </Link>
       </Group>
     </UnstyledButton>
   ));
@@ -105,7 +159,7 @@ const Navbar: FC<INavbar> = () => {
           </UnstyledButton>
         </Menu.Target>
         <Menu.Dropdown>
-          <Link href="/profile/my-ads">
+          <Link href="/profile/my-ads" className="no-underline">
             <Menu.Item
               icon={
                 <IconTags
@@ -119,7 +173,7 @@ const Navbar: FC<INavbar> = () => {
             </Menu.Item>
           </Link>
 
-          <Link href="/profile/favourites">
+          <Link href="/profile/favourites" className="no-underline">
             <Menu.Item
               icon={
                 <IconHeart
@@ -134,12 +188,12 @@ const Navbar: FC<INavbar> = () => {
           </Link>
 
           <Menu.Label>Settings</Menu.Label>
-          <Link href="/profile/">
+          <Link href="/profile/" className="no-underline">
             <Menu.Item icon={<IconUser size="0.9rem" stroke={1.5} />}>
               My profile
             </Menu.Item>
           </Link>
-          <Link href="/profile/settings">
+          <Link href="/profile/settings" className="no-underline">
             <Menu.Item icon={<IconSettings size="0.9rem" stroke={1.5} />}>
               Account settings
             </Menu.Item>
@@ -178,7 +232,7 @@ const Navbar: FC<INavbar> = () => {
           <Link href={"/"}>
             <Image
               src={"/MarketplaceLogo.svg"}
-              height={30}
+              height={35}
               width={150}
               alt="Marketpalce logo"
             />
@@ -215,8 +269,8 @@ const Navbar: FC<INavbar> = () => {
 
               <HoverCard.Dropdown sx={{ overflow: "hidden" }}>
                 <Group position="apart" px="md">
-                  <Text fw={500}>Features</Text>
-                  <Anchor href="#" fz="xs">
+                  <Text fw={500}>Categories</Text>
+                  <Anchor component={Link} fz={"xs"} href="/categories">
                     View all
                   </Anchor>
                 </Group>
@@ -297,7 +351,11 @@ const Navbar: FC<INavbar> = () => {
               </Group>
               <Menu>
                 <Menu.Label>Profile</Menu.Label>
-                <Link href="/profile/" onClick={toggleDrawer}>
+                <Link
+                  href="/profile/"
+                  onClick={toggleDrawer}
+                  className="no-underline"
+                >
                   <Menu.Item
                     className={classes.link}
                     icon={
@@ -311,7 +369,11 @@ const Navbar: FC<INavbar> = () => {
                     My profile
                   </Menu.Item>
                 </Link>
-                <Link href="/profile/my-ads" onClick={toggleDrawer}>
+                <Link
+                  href="/profile/my-ads"
+                  onClick={toggleDrawer}
+                  className="no-underline"
+                >
                   <Menu.Item
                     className={classes.link}
                     icon={
@@ -325,7 +387,11 @@ const Navbar: FC<INavbar> = () => {
                     My ads
                   </Menu.Item>
                 </Link>
-                <Link href="/profile/favourites" onClick={toggleDrawer}>
+                <Link
+                  href="/profile/favourites"
+                  onClick={toggleDrawer}
+                  className="no-underline"
+                >
                   <Menu.Item
                     className={classes.link}
                     icon={
@@ -347,7 +413,11 @@ const Navbar: FC<INavbar> = () => {
               />
               <Menu>
                 <Menu.Label>Settings</Menu.Label>
-                <Link href="/profile/settings" onClick={toggleDrawer}>
+                <Link
+                  href="/profile/settings"
+                  onClick={toggleDrawer}
+                  className="no-underline"
+                >
                   <Menu.Item
                     className={classes.link}
                     icon={
