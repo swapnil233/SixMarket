@@ -3,7 +3,7 @@ import { IconFilter } from "@tabler/icons-react";
 import { ChangeEvent, FC } from "react";
 
 interface FilterInputProps {
-  onFilterTextChange: (text: string) => void;
+  onFilterTextChange: (_text: string) => void;
 }
 
 const FilterInput: FC<FilterInputProps> = ({ onFilterTextChange }) => {
