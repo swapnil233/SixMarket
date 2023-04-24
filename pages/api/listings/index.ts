@@ -26,6 +26,7 @@ export default async function Handler(
         // POST '/api/listings/'
         if (req.method === "POST") {
             console.log("sdfs")
+            // @ts-expect-error - By default, session.user doesn't have ID. I added it using callbacks in `pages/api/auth/[...nextauth.ts]`
             const userId = session.user?.id;
             console.log(userId)
             try {
