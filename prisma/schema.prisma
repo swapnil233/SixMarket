@@ -51,6 +51,7 @@ model Category {
   id           String    @id @default(cuid())
   name         String    @unique
   slug         String    @unique
+  thumbnail    String?   @default("https://via.placeholder.com/150x150.png?text=Thumbnail")
   itemsForSale Listing[]
 }
 
