@@ -37,5 +37,8 @@
     "Vercel",
     "Viewports",
     "WEBP"
-  ]
+  ],
+  "[prisma]": {
+    "editor.defaultFormatter": "Prisma.prisma"
+  }
 }
