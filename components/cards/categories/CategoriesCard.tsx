@@ -11,7 +11,10 @@ export interface ICategoriesCard {
 
 const CategoriesCard: FC<ICategoriesCard> = ({ title, thumbnail, slug }) => {
   return (
-    <Link href={`/${slug}`} className="text-decoration-none no-underline">
+    <Link
+      href={`/categories/${slug}`}
+      className="text-decoration-none no-underline"
+    >
       <Card radius="md" withBorder padding="sm" h={"100%"}>
         <Card.Section>
           <Image
