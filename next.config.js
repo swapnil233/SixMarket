@@ -33,7 +33,7 @@ module.exports = {
 // Images
 module.exports = {
   images: {
-    domains: ["i.pravatar.cc", "images.pexels.com"],
+    domains: ["i.pravatar.cc", "images.pexels.com", "cdn.pixabay.com"],
     remotePatterns: [
       {
         protocol: "https",
@@ -43,7 +43,7 @@ module.exports = {
       },
       {
         protocol: "https",
-        hostname: "lh3.googleusercontent.com",
+        hostname: "googleusercontent.com",
         port: "",
         pathname: "/**",
       },
