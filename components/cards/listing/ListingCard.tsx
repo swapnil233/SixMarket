@@ -46,7 +46,7 @@ export interface IListingCard {
   images: string[];
   title: string;
   description: string;
-  price: number;
+  price?: number;
   listingId: string;
 }
 
@@ -65,10 +65,12 @@ const ListingCard: FC<IListingCard> = ({
     </Carousel.Slide>
   ));
 
-  const formattedPrice = new Intl.NumberFormat("en-US", {
-    style: "currency",
-    currency: "USD",
-  }).format(price);
+  const formattedPrice = price
+    ? new Intl.NumberFormat("en-US", {
+        style: "currency",
+        currency: "USD",
+      }).format(price)
+    : "Free";
 
   return (
     <Card radius="md" withBorder padding="xl">
