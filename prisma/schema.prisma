@@ -10,44 +10,32 @@ generator client {
 }
 
 model Listing {
-  id          String           @id @default(cuid())
-  createdAt   DateTime         @default(now())
-  updatedAt   DateTime         @default(now()) @updatedAt
+  id          String     @id @default(cuid())
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @default(now()) @updatedAt
   name        String
   description String?
-  condition   Condition        @default(NEW)
-  reported    Boolean          @default(false)
+  condition   Condition  @default(NEW)
+  reported    Boolean    @default(false)
   price       Int? // Some items may not have a price, e.g. free items
   images      Image[]
   location    String
-  tags        TagsOnListings[]
-  views       Int              @default(0)
-  featured    Boolean          @default(false)
-  canDeliver  Boolean          @default(false)
-  user        User             @relation(fields: [userId], references: [id])
+  tags        Tag[]
+  views       Int        @default(0)
+  featured    Boolean    @default(false)
+  canDeliver  Boolean    @default(false)
+  user        User       @relation(fields: [userId], references: [id])
   userId      String
-  category    Category         @relation(fields: [categoryId], references: [id])
+  category    Category   @relation(fields: [categoryId], references: [id])
   categoryId  String
   messages    Message[]
   favorites   Favorite[]
 }
 
 model Tag {
-  id       String           @id @default(cuid())
-  name     String           @unique
-  listings TagsOnListings[]
-}
-
-model TagsOnListings {
-  listing     Listing  @relation(fields: [listingId], references: [id])
-  listingId   String
-  tag         Tag      @relation(fields: [tagId], references: [id])
-  tagId       String
-  createdAt   DateTime @default(now())
-  createdBy   User?    @relation(fields: [createdById], references: [id])
-  createdById String?
-
-  @@unique([listingId, tagId])
+  id       String    @id @default(cuid())
+  name     String    @unique
+  listings Listing[]
 }
 
 model Image {
@@ -114,23 +102,22 @@ model Review {
 
 // The following User, Account, Session and VerificationToken models are from the NextAuth.js docs
 model User {
-  id               String           @id @default(cuid())
+  id               String         @id @default(cuid())
   name             String?
-  email            String?          @unique
+  email            String?        @unique
   emailVerified    DateTime?
   image            String?
-  phone            String?          @unique
+  phone            String?        @unique
   accounts         Account[]
   sessions         Session[]
   itemsForSale     Listing[]
-  sentMessages     Message[]        @relation("MessageSender")
-  receivedMessages Message[]        @relation("MessageRecipient")
-  givenReviews     Review[]         @relation("ReviewReviewer")
-  receivedReviews  Review[]         @relation("ReviewReviewee")
+  sentMessages     Message[]      @relation("MessageSender")
+  receivedMessages Message[]      @relation("MessageRecipient")
+  givenReviews     Review[]       @relation("ReviewReviewer")
+  receivedReviews  Review[]       @relation("ReviewReviewee")
   favorites        Favorite[]
   address          Address?
   Notification     Notification[]
-  TagsOnListings   TagsOnListings[]
 }
 
 model Address {
