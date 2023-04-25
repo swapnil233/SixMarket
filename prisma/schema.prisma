@@ -7,6 +7,10 @@ datasource db {
 // Using Postgres
 generator client {
   provider = "prisma-client-js"
+
+  // The new JSON Protocol is supposed to make cold starts much faster
+  // https://github.com/prisma/prisma/issues/18095
+  previewFeatures = ["jsonProtocol"]
 }
 
 model Listing {
