@@ -37,6 +37,25 @@ const ListingMetaDataCard: FC<IListingMetaDataCard> = ({
     [listing.createdAt]
   );
 
+  const renderForm = () => (
+    <form onSubmit={(event) => handleMessageFormSubmit(session, event)}>
+      <Textarea
+        placeholder={`Hey ${
+          user.name?.split(" ")[0]
+        }, is this still available?`}
+        label="Contact"
+        autosize
+        minRows={4}
+        {...form.getInputProps("message")}
+      />
+      <Group position="right" mt="sm">
+        <Button type="submit" rightIcon={<IconSend size={"1rem"} />}>
+          Send
+        </Button>
+      </Group>
+    </form>
+  );
+
   return (
     <div className="bg-slate-100 rounded-md p-4 flex flex-col justify-between w-full md:col-span-4">
       <div className="flex gap-4">
@@ -74,30 +93,21 @@ const ListingMetaDataCard: FC<IListingMetaDataCard> = ({
         </div>
       </div>
       <div className="h-full my-4">
-        {session.data && session.data.user.id !== user.id ? (
-          <form onSubmit={(event) => handleMessageFormSubmit(session, event)}>
-            <Textarea
-              placeholder={`Hey ${
-                user.name?.split(" ")[0]
-              }, is this still available?`}
-              label="Contact"
-              autosize
-              minRows={4}
-              {...form.getInputProps("message")}
-            />
-            <Group position="right" mt="sm">
-              <Button type="submit" rightIcon={<IconSend size={"1rem"} />}>
-                Send
-              </Button>
-            </Group>
-          </form>
+        {session.data &&
+        session.data.user &&
+        session.status === "authenticated" ? (
+          session.data.user.id !== user.id ? (
+            renderForm()
+          ) : (
+            <>
+              <p>This is your listing.</p>
+              <Link href={`/profile/my-listings/${listing.id}`}>
+                Click here to view listing statistics
+              </Link>
+            </>
+          )
         ) : (
-          <>
-            <p>This is your listing.</p>
-            <Link href={`/profile/my-listings/${listing.id}`}>
-              Click here to view listing statistics
-            </Link>
-          </>
+          renderForm()
         )}
       </div>
       <div>
