@@ -38,6 +38,7 @@ module.exports = {
       "images.pexels.com",
       "cdn.pixabay.com",
       "lh3.googleusercontent.com",
+      "media.kijiji.ca",
     ],
     remotePatterns: [
       {
