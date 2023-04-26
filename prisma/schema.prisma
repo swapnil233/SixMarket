@@ -178,6 +178,7 @@ enum Condition {
   GOOD
   FAIR
   SALVAGE
+  NOT_APPLICABLE
 }
 
 enum NotificationType {
