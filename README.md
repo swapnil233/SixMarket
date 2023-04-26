@@ -1,7 +1,7 @@
 <h1> Marketplace is an open source classfields website.
 <br>
-
-![prisma-erd](https://user-images.githubusercontent.com/36313876/233464611-61a3aa4b-0393-4b26-8da1-dec491354a81.svg)
+  
+![prisma-erd](https://user-images.githubusercontent.com/36313876/234670589-11a8721a-1621-4cc0-897b-4ee1291ee2dd.svg)
 
 #### How to run on your machine:
 
