@@ -55,8 +55,10 @@ const Home: NextPageWithLayout = () => {
   } else if (status === "loading") {
     heroButtonsLayout = (
       <>
-        <Skeleton height={36} width={80} mr={12} />
-        <Skeleton height={36} width={140} />
+        <div className="mt-5 flex w-full align-middle justify-center">
+          <Skeleton height={36} width={80} mr={12} />
+          <Skeleton height={36} width={140} />
+        </div>
       </>
     );
   } else {
