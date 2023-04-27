@@ -77,8 +77,9 @@ model Message {
   senderId    String
   recipient   User     @relation("MessageRecipient", fields: [recipientId], references: [id])
   recipientId String
-  itemForSale Listing  @relation(fields: [itemId], references: [id])
-  itemId      String
+  read        Boolean  @default(false)
+  listing     Listing  @relation(fields: [listingId], references: [id])
+  listingId   String
 }
 
 model Notification {
@@ -90,6 +91,7 @@ model Notification {
   read      Boolean          @default(false)
   user      User             @relation(fields: [userId], references: [id])
   userId    String
+  listingId String?
 }
 
 model Review {
@@ -121,7 +123,7 @@ model User {
   receivedReviews  Review[]       @relation("ReviewReviewee")
   favorites        Favorite[]
   address          Address?
-  Notification     Notification[]
+  notifications    Notification[]
 }
 
 model Address {
