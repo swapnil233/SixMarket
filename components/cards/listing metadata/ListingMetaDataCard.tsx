@@ -3,23 +3,25 @@ import { Button, Flex, Group, Rating, Text, Textarea } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { Listing, User } from "@prisma/client";
 import { IconClock, IconEye, IconMapPin, IconSend } from "@tabler/icons-react";
+import axios from "axios";
+import { signIn } from "next-auth/react";
 import Image from "next/image";
 import Link from "next/link";
-import { FC, FormEvent, useMemo } from "react";
+import { FC, FormEvent, useCallback, useMemo } from "react";
 
 export interface IListingMetaDataCard {
   user: User;
   listing: Listing;
   session: any;
-  handleMessageFormSubmit: (_session: any, _event: FormEvent) => void;
 }
 
 const ListingMetaDataCard: FC<IListingMetaDataCard> = ({
   user,
   listing,
-  handleMessageFormSubmit,
   session,
 }) => {
+  const userFirstName = user.name?.split(" ")[0];
+
   const form = useForm({
     initialValues: {
       message: "",
@@ -40,10 +42,9 @@ const ListingMetaDataCard: FC<IListingMetaDataCard> = ({
   const renderForm = () => (
     <form onSubmit={(event) => handleMessageFormSubmit(session, event)}>
       <Textarea
-        placeholder={`Hey ${
-          user.name?.split(" ")[0]
-        }, is this still available?`}
+        placeholder={`Hey ${userFirstName}, is this still available?`}
         label="Contact"
+        name="content"
         autosize
         minRows={4}
         {...form.getInputProps("message")}
@@ -54,6 +55,62 @@ const ListingMetaDataCard: FC<IListingMetaDataCard> = ({
         </Button>
       </Group>
     </form>
+  );
+
+  // Send user a message
+  const sendUserMessage = async (
+    content: string,
+    senderId: string,
+    senderName: string,
+    recipientId: string,
+    listingId: string,
+    listingName: string
+  ) => {
+    try {
+      const response = await axios.post("/api/messages/", {
+        content,
+        senderId,
+        senderName,
+        recipientId,
+        listingId,
+        listingName,
+      });
+
+      const message = response.data;
+      console.log("Message sent:", message);
+    } catch (error: any) {
+      console.error("Failed to send message:", error.message);
+    }
+  };
+
+  // useCallback to avoid unnecessary re-renders
+  const handleMessageFormSubmit = useCallback(
+    async (session: any, event: FormEvent) => {
+      event.preventDefault();
+
+      if (session.status === "authenticated") {
+        const content = form.values.message;
+        const senderId = session.data.user.id;
+        const senderName = session.data.user.name;
+        const recipientId = user.id;
+        const listingId = listing.id;
+        const listingName = listing.name;
+
+        await sendUserMessage(
+          content,
+          senderId,
+          senderName,
+          recipientId,
+          listingId,
+          listingName
+        );
+      } else {
+        signIn(undefined, {
+          callbackUrl: `/listings/${listing.id}`,
+        });
+      }
+    },
+    [sendUserMessage, signIn, form, listing.id, user.id]
   );
 
   return (
@@ -67,7 +124,7 @@ const ListingMetaDataCard: FC<IListingMetaDataCard> = ({
           width={80}
           height={80}
           className="rounded"
-          alt="sdf"
+          alt="User profile picture"
         />
         <div className="flex flex-col justify-between">
           <div>

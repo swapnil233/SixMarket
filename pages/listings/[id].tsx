@@ -14,10 +14,9 @@ import {
 import { IconHeart } from "@tabler/icons-react";
 import axios from "axios";
 import { GetServerSidePropsContext } from "next";
-import { signIn, useSession } from "next-auth/react";
+import { useSession } from "next-auth/react";
 import Head from "next/head";
 import Image from "next/image";
-import { FormEvent, useCallback } from "react";
 import { NextPageWithLayout } from "../page";
 
 interface ListingWithAllInfo extends Listing {
@@ -72,22 +71,6 @@ const IndividualListing: NextPageWithLayout<IndividualListingProps> = ({
   listingInfo,
 }) => {
   const session = useSession();
-
-  // useCallback to avoid unnecessary re-renders
-  const handleMessageFormSubmit = useCallback(
-    async (session: any, event: FormEvent) => {
-      event.preventDefault();
-
-      if (session.status === "authenticated") {
-        console.log("Auth");
-      } else {
-        signIn(undefined, {
-          callbackUrl: `/listings/${listingInfo.id}`,
-        });
-      }
-    },
-    [listingInfo.id]
-  );
 
   return (
     <>
@@ -152,7 +135,6 @@ const IndividualListing: NextPageWithLayout<IndividualListingProps> = ({
               <ListingMetaDataCard
                 listing={listingInfo}
                 user={listingInfo.user}
-                handleMessageFormSubmit={handleMessageFormSubmit}
                 session={session}
               />
             </section>
