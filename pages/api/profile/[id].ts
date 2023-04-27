@@ -1,6 +1,6 @@
-import { NextApiRequest, NextApiResponse } from "next";
 import prisma from "@/utils/prisma";
 import { User } from "@prisma/client";
+import { NextApiRequest, NextApiResponse } from "next";
 const logger = require("@/utils/logger"); // Import the logger middleware using the 'require' syntax
 
 async function getUserById(id: string): Promise<User | null> {
@@ -9,6 +9,9 @@ async function getUserById(id: string): Promise<User | null> {
       where: {
         id: id,
       },
+      include: {
+        notifications: true
+      }
     });
     return user;
   } catch (error) {
