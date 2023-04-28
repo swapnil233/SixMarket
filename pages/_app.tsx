@@ -1,5 +1,6 @@
 import "@/styles/globals.css";
 import { MantineProvider } from "@mantine/core";
+import { Notifications } from "@mantine/notifications";
 import { Analytics } from "@vercel/analytics/react";
 import type { Session } from "next-auth";
 import { SessionProvider } from "next-auth/react";
@@ -30,6 +31,7 @@ export default function App({
         <SessionProvider session={session}>
           <NextNProgress height={3} options={{ showSpinner: false }} />
           {getLayout(<Component {...pageProps} />)}
+          <Notifications />
         </SessionProvider>
       </MantineProvider>
       <Analytics />

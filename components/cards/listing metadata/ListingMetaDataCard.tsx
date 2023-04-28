@@ -1,13 +1,20 @@
 import timeAgo from "@/utils/timeAgo";
 import { Button, Flex, Group, Rating, Text, Textarea } from "@mantine/core";
 import { useForm } from "@mantine/form";
+import { notifications } from "@mantine/notifications";
 import { Listing, User } from "@prisma/client";
-import { IconClock, IconEye, IconMapPin, IconSend } from "@tabler/icons-react";
+import {
+  IconClock,
+  IconEye,
+  IconMapPin,
+  IconSend,
+  IconX,
+} from "@tabler/icons-react";
 import axios from "axios";
 import { signIn } from "next-auth/react";
 import Image from "next/image";
 import Link from "next/link";
-import { FC, FormEvent, useCallback, useMemo } from "react";
+import { FC, FormEvent, useCallback, useMemo, useState } from "react";
 
 export interface IListingMetaDataCard {
   user: User;
@@ -20,6 +27,7 @@ const ListingMetaDataCard: FC<IListingMetaDataCard> = ({
   listing,
   session,
 }) => {
+  const [buttonLoading, setButtonLoading] = useState(false);
   const userFirstName = user.name?.split(" ")[0];
 
   const form = useForm({
@@ -50,7 +58,11 @@ const ListingMetaDataCard: FC<IListingMetaDataCard> = ({
         {...form.getInputProps("message")}
       />
       <Group position="right" mt="sm">
-        <Button type="submit" rightIcon={<IconSend size={"1rem"} />}>
+        <Button
+          loading={buttonLoading}
+          type="submit"
+          rightIcon={<IconSend size={"1rem"} />}
+        >
           Send
         </Button>
       </Group>
@@ -88,22 +100,51 @@ const ListingMetaDataCard: FC<IListingMetaDataCard> = ({
     async (session: any, event: FormEvent) => {
       event.preventDefault();
 
-      if (session.status === "authenticated") {
-        const content = form.values.message;
-        const senderId = session.data.user.id;
-        const senderName = session.data.user.name;
-        const recipientId = user.id;
-        const listingId = listing.id;
-        const listingName = listing.name;
+      const recipientName = user.name;
 
-        await sendUserMessage(
-          content,
-          senderId,
-          senderName,
-          recipientId,
-          listingId,
-          listingName
-        );
+      if (session.status === "authenticated") {
+        try {
+          const content = form.values.message;
+          const senderId = session.data.user.id;
+          const senderName = session.data.user.name;
+          const recipientId = user.id;
+          const listingId = listing.id;
+          const listingName = listing.name;
+
+          // Set button to loading state
+          setButtonLoading(true);
+
+          await sendUserMessage(
+            content,
+            senderId,
+            senderName,
+            recipientId,
+            listingId,
+            listingName
+          );
+
+          notifications.show({
+            title: "Message sent",
+            message: `Your message has been sent to ${recipientName}`,
+            withCloseButton: true,
+            autoClose: 5000,
+          });
+
+          setButtonLoading(false);
+        } catch (error) {
+          console.log(error);
+          setButtonLoading(false);
+          notifications.hide("sending");
+          notifications.show({
+            title: "Couldn't send the message",
+            message: `We couldn't send your message to ${recipientName}. This is a problem on our end. Please try again later.`,
+            loading: true,
+            withCloseButton: true,
+            autoClose: 5000,
+            color: "red",
+            icon: <IconX />,
+          });
+        }
       } else {
         signIn(undefined, {
           callbackUrl: `/listings/${listing.id}`,
