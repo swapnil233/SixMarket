@@ -55,6 +55,7 @@ const ListingMetaDataCard: FC<IListingMetaDataCard> = ({
         name="content"
         autosize
         minRows={4}
+        required
         {...form.getInputProps("message")}
       />
       <Group position="right" mt="sm">
