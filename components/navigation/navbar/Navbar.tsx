@@ -1,6 +1,7 @@
 import {
   Anchor,
   Avatar,
+  Badge,
   Box,
   Burger,
   Button,
@@ -11,6 +12,7 @@ import {
   Group,
   Header,
   HoverCard,
+  Indicator,
   Loader,
   Menu,
   ScrollArea,
@@ -25,6 +27,7 @@ import {
   IconChevronDown,
   IconHeart,
   IconLogout,
+  IconNotification,
   IconPlus,
   IconSettings,
   IconTags,
@@ -34,9 +37,10 @@ import { signIn, signOut, useSession } from "next-auth/react";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { FC, useState } from "react";
+import { FC, useEffect, useState } from "react";
 import { navbarStyles } from "./Navbar.styles";
 
+import { Notification } from "@prisma/client";
 import {
   IconBriefcase,
   IconCar,
@@ -45,6 +49,7 @@ import {
   IconTools,
   IconUsers,
 } from "@tabler/icons-react";
+import axios from "axios";
 
 export const dropdownMenuData = [
   {
@@ -97,10 +102,35 @@ const Navbar: FC<INavbar> = () => {
   const [linksOpened, { toggle: toggleLinks }] = useDisclosure(false);
   const { classes, theme, cx } = navbarStyles();
   const [userMenuOpened, setUserMenuOpened] = useState(false);
+  const [unreadNotifications, setUnreadNotifications] = useState<
+    Notification[]
+  >([]);
+  const [unreadNotificationsCount, setUnreadNotificationsCount] =
+    useState<number>();
 
   const { data, status } = useSession();
   const user = data?.user;
   const router = useRouter();
+
+  // GET notifications from '/api/notifications/getUnreadNotifications'
+  useEffect(() => {
+    async function getUnreadNotifications() {
+      const unreadNotifications: Notification[] = (
+        await axios.get(
+          // @ts-expect-error
+          `/api/notifications/getUnreadNotifications?userId=${user.id}`
+        )
+      ).data;
+
+      setUnreadNotifications(unreadNotifications);
+      setUnreadNotificationsCount(unreadNotifications.length);
+    }
+
+    // Only run if there's a user
+    if (status === "authenticated") {
+      getUnreadNotifications();
+    }
+  }, [status]);
 
   const links = dropdownMenuData.map((item) => (
     <UnstyledButton className={classes.subLink} key={item.title}>
@@ -143,14 +173,36 @@ const Navbar: FC<INavbar> = () => {
             })}
           >
             <Group spacing={7}>
-              <Avatar
-                src={user?.image || ""}
-                alt={
-                  `${user?.name}'s profile picture` || "Default profile picture"
-                }
-                radius="xl"
-                size={20}
-              />
+              {/* If there's unread notifications, show an indicator */}
+              {unreadNotificationsCount! > 0 ? (
+                <Indicator
+                  inline
+                  label={unreadNotificationsCount}
+                  size={18}
+                  withBorder
+                >
+                  <Avatar
+                    src={user?.image || ""}
+                    alt={
+                      `${user?.name}'s profile picture` ||
+                      "Default profile picture"
+                    }
+                    radius="xl"
+                    size={32}
+                  />
+                </Indicator>
+              ) : (
+                <Avatar
+                  src={user?.image || ""}
+                  alt={
+                    `${user?.name}'s profile picture` ||
+                    "Default profile picture"
+                  }
+                  radius="xl"
+                  size={32}
+                />
+              )}
+
               <Text weight={500} size="sm" sx={{ lineHeight: 1 }} mr={3}>
                 {user?.name}
               </Text>
@@ -184,6 +236,24 @@ const Navbar: FC<INavbar> = () => {
               }
             >
               Favourites
+            </Menu.Item>
+          </Link>
+
+          <Link href="/profile/notifications" className="no-underline">
+            <Menu.Item
+              className="flex"
+              icon={
+                <IconNotification
+                  size="0.9rem"
+                  // color={theme.colors.red[6]}
+                  stroke={1.5}
+                />
+              }
+            >
+              Notifications
+              <Badge color="red" size="xs" variant="filled" className="ml-2">
+                {unreadNotificationsCount}
+              </Badge>
             </Menu.Item>
           </Link>
 
@@ -337,7 +407,9 @@ const Navbar: FC<INavbar> = () => {
                 color={theme.colorScheme === "dark" ? "dark.5" : "gray.1"}
               />
               <Group p={"sm"}>
-                <Avatar src={user?.image} radius="xl" />
+                <Indicator label="12" size={16} withBorder>
+                  <Avatar src={user?.image} radius="xl" />
+                </Indicator>
 
                 <div style={{ flex: 1 }}>
                   <Text size="sm" weight={500}>
