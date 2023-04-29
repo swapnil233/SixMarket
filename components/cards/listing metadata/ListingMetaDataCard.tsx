@@ -1,8 +1,9 @@
+import { ListingWithAllInfo } from "@/pages/listings/[id]";
 import timeAgo from "@/utils/timeAgo";
 import { Button, Flex, Group, Rating, Text, Textarea } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { notifications } from "@mantine/notifications";
-import { Listing, User } from "@prisma/client";
+import { User } from "@prisma/client";
 import {
   IconClock,
   IconEye,
@@ -18,18 +19,24 @@ import { FC, FormEvent, useCallback, useMemo, useState } from "react";
 
 export interface IListingMetaDataCard {
   user: User;
-  listing: Listing;
+  listing: ListingWithAllInfo;
   session: any;
+  userAlreadySentMessage: boolean;
 }
 
 const ListingMetaDataCard: FC<IListingMetaDataCard> = ({
   user,
   listing,
   session,
+  userAlreadySentMessage,
 }) => {
   const [buttonLoading, setButtonLoading] = useState(false);
   const userFirstName = user.name?.split(" ")[0];
+  const [alreadySent, setAlreadySent] = useState<boolean>(
+    userAlreadySentMessage
+  );
 
+  // Mantine form validation
   const form = useForm({
     initialValues: {
       message: "",
@@ -47,59 +54,68 @@ const ListingMetaDataCard: FC<IListingMetaDataCard> = ({
     [listing.createdAt]
   );
 
+  // Form depends on if user has already sent a message to the poster
   const renderForm = () => (
     <form onSubmit={(event) => handleMessageFormSubmit(session, event)}>
-      <Textarea
-        placeholder={`Hey ${userFirstName}, is this still available?`}
-        label="Contact"
-        name="content"
-        autosize
-        minRows={4}
-        required
-        {...form.getInputProps("message")}
-      />
-      <Group position="right" mt="sm">
-        <Button
-          loading={buttonLoading}
-          type="submit"
-          rightIcon={<IconSend size={"1rem"} />}
-        >
-          Send
-        </Button>
-      </Group>
+      {alreadySent ? (
+        <>
+          <p className="mb-4">
+            You&apos;ve sent a message to <b>{listing.user.name}</b> about this
+            listing. We will notify you when they respond.
+          </p>
+          <Link href="/messages">View my messages</Link>
+        </>
+      ) : (
+        <>
+          <Textarea
+            placeholder={`Hey ${userFirstName}, is this still available?`}
+            label="Contact"
+            name="content"
+            autosize
+            minRows={4}
+            required
+            {...form.getInputProps("message")}
+          />
+          <Group position="right" mt="sm">
+            <Button
+              loading={buttonLoading}
+              type="submit"
+              rightIcon={<IconSend size={"1rem"} />}
+            >
+              Send
+            </Button>
+          </Group>
+        </>
+      )}
     </form>
   );
-
-  // Send user a message
-  const sendUserMessage = async (
-    content: string,
-    senderId: string,
-    senderName: string,
-    recipientId: string,
-    listingId: string,
-    listingName: string
-  ) => {
-    try {
-      const response = await axios.post("/api/messages/", {
-        content,
-        senderId,
-        senderName,
-        recipientId,
-        listingId,
-        listingName,
-      });
-
-      const message = response.data;
-      console.log("Message sent:", message);
-    } catch (error: any) {
-      console.error("Failed to send message:", error.message);
-    }
-  };
 
   // useCallback to avoid unnecessary re-renders
   const handleMessageFormSubmit = useCallback(
     async (session: any, event: FormEvent) => {
       event.preventDefault();
+
+      const sendUserMessage = async (
+        content: string,
+        senderId: string,
+        senderName: string,
+        recipientId: string,
+        listingId: string,
+        listingName: string
+      ) => {
+        try {
+          await axios.post("/api/messages/", {
+            content,
+            senderId,
+            senderName,
+            recipientId,
+            listingId,
+            listingName,
+          });
+        } catch (error: any) {
+          console.error("Failed to send message:", error.message);
+        }
+      };
 
       const recipientName = user.name;
 
@@ -132,6 +148,7 @@ const ListingMetaDataCard: FC<IListingMetaDataCard> = ({
           });
 
           setButtonLoading(false);
+          setAlreadySent(true);
         } catch (error) {
           console.log(error);
           setButtonLoading(false);
@@ -152,7 +169,7 @@ const ListingMetaDataCard: FC<IListingMetaDataCard> = ({
         });
       }
     },
-    [sendUserMessage, signIn, form, listing.id, user.id]
+    [form, listing.id, user.id, user.name, listing.name]
   );
 
   return (
@@ -199,9 +216,9 @@ const ListingMetaDataCard: FC<IListingMetaDataCard> = ({
             renderForm()
           ) : (
             <>
-              <p>This is your listing.</p>
+              <p className="mb-4">This is your listing.</p>
               <Link href={`/profile/my-listings/${listing.id}`}>
-                Click here to view listing statistics
+                View listing insights
               </Link>
             </>
           )

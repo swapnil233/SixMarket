@@ -11,7 +11,8 @@ async function getListing(id: string) {
             images: true,
             category: true,
             favorites: true,
-            tags: true
+            tags: true,
+            messages: true
         }
     });
 }

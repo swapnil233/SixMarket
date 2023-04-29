@@ -8,32 +8,38 @@ import {
   Favorite,
   Image as ImageFromSchema,
   Listing,
+  Message,
   Tag,
   User,
 } from "@prisma/client";
 import { IconHeart } from "@tabler/icons-react";
 import axios from "axios";
 import { GetServerSidePropsContext } from "next";
-import { useSession } from "next-auth/react";
+import { Session } from "next-auth";
+import { getSession, useSession } from "next-auth/react";
 import Head from "next/head";
 import Image from "next/image";
 import { NextPageWithLayout } from "../page";
 
-interface ListingWithAllInfo extends Listing {
+export interface ListingWithAllInfo extends Listing {
   images: ImageFromSchema[];
   user: User;
   category: Category;
   favorites: Favorite[];
   tags: Tag[];
+  messages: Message[];
 }
 
 interface IndividualListingProps {
   listingInfo: ListingWithAllInfo;
+  userAlreadySentMessage: boolean;
 }
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
   const { id } = context.query;
+  const session: Session | null = await getSession(context);
 
+  // Get the API endpoint
   const protocol = context.req.headers["x-forwarded-proto"] || "http";
   const host = context.req.headers["host"];
   const apiUrl = `${protocol}://${host}/api/listings/${id}`;
@@ -42,6 +48,7 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
     const res = await axios.get(apiUrl);
     const listingInfo = res.data;
 
+    // Update listing's view by +1
     await prisma.listing.update({
       where: {
         id: id as string,
@@ -53,9 +60,17 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
       },
     });
 
+    // Check if the session user has already sent a message to this listing
+    // @ts-expect-error
+    const userId = session?.user.id;
+    const userAlreadySentMessage = listingInfo.messages.some(
+      (message: Message) => message.senderId === userId
+    );
+
     return {
       props: {
         listingInfo,
+        userAlreadySentMessage,
       },
     };
   } catch (error: any) {
@@ -69,9 +84,9 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
 
 const IndividualListing: NextPageWithLayout<IndividualListingProps> = ({
   listingInfo,
+  userAlreadySentMessage,
 }) => {
   const session = useSession();
-
   return (
     <>
       <Head>
@@ -90,11 +105,9 @@ const IndividualListing: NextPageWithLayout<IndividualListingProps> = ({
                   {listingInfo?.name}{" "}
                   <span className="text-green-700">{`$${listingInfo?.price}`}</span>
                 </h1>
-                {/* {listingInfo.condition !== "NOT_APPLICABLE" && (
-                  <p>{conditionToEnglish(listingInfo.condition)}</p>
-                )} */}
               </div>
-              {/* Can add to favorites if not the poster */}
+
+              {/* Allow adding to favorites if the user isn't the poster of the listing */}
               {/* @ts-expect-error - user ID has been added to the session inside `/pages/api/auth/[...nextauth].ts as a callback. It's not there by default`*/}
               {session.data?.user?.id !== listingInfo.user.id && (
                 <UnstyledButton>
@@ -136,6 +149,7 @@ const IndividualListing: NextPageWithLayout<IndividualListingProps> = ({
                 listing={listingInfo}
                 user={listingInfo.user}
                 session={session}
+                userAlreadySentMessage={userAlreadySentMessage}
               />
             </section>
           </div>
