@@ -44,7 +44,9 @@ const ListingMetaDataCard: FC<IListingMetaDataCard> = ({
 
     validate: {
       message: (value) =>
-        value.length < 10 ? "First name must have at least 10 letters" : null,
+        value.length < 10 || value.length > 200
+          ? "Message must be between 10 and 200 characters"
+          : null,
     },
   });
 
@@ -56,7 +58,11 @@ const ListingMetaDataCard: FC<IListingMetaDataCard> = ({
 
   // Form depends on if user has already sent a message to the poster
   const renderForm = () => (
-    <form onSubmit={(event) => handleMessageFormSubmit(session, event)}>
+    <form
+      onSubmit={form.onSubmit((values, event) =>
+        handleMessageFormSubmit(session, event)
+      )}
+    >
       {alreadySent ? (
         <>
           <p className="mb-4">
