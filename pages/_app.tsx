@@ -1,3 +1,4 @@
+import { RouterTransition } from "@/components/RouterTransition";
 import "@/styles/globals.css";
 import { MantineProvider } from "@mantine/core";
 import { Notifications } from "@mantine/notifications";
@@ -5,7 +6,6 @@ import { Analytics } from "@vercel/analytics/react";
 import type { Session } from "next-auth";
 import { SessionProvider } from "next-auth/react";
 import type { AppProps } from "next/app";
-import NextNProgress from "nextjs-progressbar";
 import { NextPageWithLayout } from "./page";
 
 interface AppPropsWithLayout extends AppProps {
@@ -29,7 +29,7 @@ export default function App({
         }}
       >
         <SessionProvider session={session}>
-          <NextNProgress height={3} options={{ showSpinner: false }} />
+          <RouterTransition />
           {getLayout(<Component {...pageProps} />)}
           <Notifications />
         </SessionProvider>
