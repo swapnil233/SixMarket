@@ -12,13 +12,14 @@ import {
   Tag,
   User,
 } from "@prisma/client";
-import { IconHeart } from "@tabler/icons-react";
+import { IconHeart, IconHeartFilled } from "@tabler/icons-react";
 import axios from "axios";
 import { GetServerSidePropsContext } from "next";
 import { Session } from "next-auth";
 import { getSession, useSession } from "next-auth/react";
 import Head from "next/head";
 import Image from "next/image";
+import { useState } from "react";
 import { NextPageWithLayout } from "../page";
 
 export interface ListingWithAllInfo extends Listing {
@@ -33,6 +34,7 @@ export interface ListingWithAllInfo extends Listing {
 interface IndividualListingProps {
   listingInfo: ListingWithAllInfo;
   userAlreadySentMessage: boolean;
+  listingAlreadyInFavourites: boolean;
 }
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
@@ -46,7 +48,7 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
 
   try {
     const res = await axios.get(apiUrl);
-    const listingInfo = res.data;
+    const listingInfo: ListingWithAllInfo = res.data;
 
     // Update listing's view by +1
     await prisma.listing.update({
@@ -60,17 +62,24 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
       },
     });
 
-    // Check if the session user has already sent a message to this listing
     // @ts-expect-error
     const userId = session?.user.id;
+
+    // Check if the session user has already sent a message to this listing
     const userAlreadySentMessage = listingInfo.messages.some(
       (message: Message) => message.senderId === userId
+    );
+
+    // Check if the listing is already in user's favourites
+    const listingAlreadyInFavourites = listingInfo.favorites.some(
+      (favourite: Favorite) => favourite.userId === userId
     );
 
     return {
       props: {
         listingInfo,
         userAlreadySentMessage,
+        listingAlreadyInFavourites,
       },
     };
   } catch (error: any) {
@@ -85,8 +94,41 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
 const IndividualListing: NextPageWithLayout<IndividualListingProps> = ({
   listingInfo,
   userAlreadySentMessage,
+  listingAlreadyInFavourites,
 }) => {
+  const [isFavourited, setIsFavourited] = useState<boolean>(
+    listingAlreadyInFavourites
+  );
   const session = useSession();
+
+  async function addToFavourites() {
+    setIsFavourited(true);
+    try {
+      await axios.post("/api/favourites", {
+        listingId: listingInfo.id,
+      });
+    } catch (error) {
+      console.log(error);
+      setIsFavourited(false);
+    }
+  }
+
+  async function removeFromFavourites() {
+    console.log("removing");
+    setIsFavourited(false);
+
+    try {
+      await axios.delete("/api/favourites", {
+        params: {
+          listingId: listingInfo.id,
+        },
+      });
+    } catch (error) {
+      setIsFavourited(true);
+      console.log(error);
+    }
+  }
+
   return (
     <>
       <Head>
@@ -109,15 +151,24 @@ const IndividualListing: NextPageWithLayout<IndividualListingProps> = ({
 
               {/* Allow adding to favorites if the user isn't the poster of the listing */}
               {/* @ts-expect-error - user ID has been added to the session inside `/pages/api/auth/[...nextauth].ts as a callback. It's not there by default`*/}
-              {session.data?.user?.id !== listingInfo.user.id && (
-                <UnstyledButton>
-                  <Tooltip label="Click to add to my favourites">
-                    <Avatar size={40} color="red">
-                      <IconHeart />
-                    </Avatar>
-                  </Tooltip>
-                </UnstyledButton>
-              )}
+              {session.data?.user?.id !== listingInfo.user.id &&
+                (isFavourited ? (
+                  <UnstyledButton onClick={removeFromFavourites}>
+                    <Tooltip label="Click to remove from favourites.">
+                      <Avatar size={40} color="red">
+                        <IconHeartFilled />
+                      </Avatar>
+                    </Tooltip>
+                  </UnstyledButton>
+                ) : (
+                  <UnstyledButton onClick={addToFavourites}>
+                    <Tooltip label="Click to add to favourites">
+                      <Avatar size={40} color="red">
+                        <IconHeart />
+                      </Avatar>
+                    </Tooltip>
+                  </UnstyledButton>
+                ))}
             </section>
 
             {/* Carousel and Listing Info */}
