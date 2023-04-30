@@ -16,7 +16,7 @@ import { IconHeart, IconHeartFilled } from "@tabler/icons-react";
 import axios from "axios";
 import { GetServerSidePropsContext } from "next";
 import { Session } from "next-auth";
-import { getSession, useSession } from "next-auth/react";
+import { getSession, signIn, useSession } from "next-auth/react";
 import Head from "next/head";
 import Image from "next/image";
 import { useState } from "react";
@@ -150,8 +150,9 @@ const IndividualListing: NextPageWithLayout<IndividualListingProps> = ({
               </div>
 
               {/* Allow adding to favorites if the user isn't the poster of the listing */}
-              {/* @ts-expect-error - user ID has been added to the session inside `/pages/api/auth/[...nextauth].ts as a callback. It's not there by default`*/}
-              {session.data?.user?.id !== listingInfo.user.id &&
+              {session.status === "authenticated" ? (
+                // @ts-expect-error
+                session.data?.user?.id !== listingInfo.user.id &&
                 (isFavourited ? (
                   <UnstyledButton onClick={removeFromFavourites}>
                     <Tooltip label="Click to remove from favourites.">
@@ -168,7 +169,22 @@ const IndividualListing: NextPageWithLayout<IndividualListingProps> = ({
                       </Avatar>
                     </Tooltip>
                   </UnstyledButton>
-                ))}
+                ))
+              ) : (
+                <UnstyledButton
+                  onClick={() =>
+                    signIn(undefined, {
+                      callbackUrl: `/listings/${listingInfo.id}`,
+                    })
+                  }
+                >
+                  <Tooltip label="Click to add to favourites">
+                    <Avatar size={40} color="red">
+                      <IconHeart />
+                    </Avatar>
+                  </Tooltip>
+                </UnstyledButton>
+              )}
             </section>
 
             {/* Carousel and Listing Info */}
