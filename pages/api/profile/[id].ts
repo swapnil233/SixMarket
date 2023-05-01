@@ -10,8 +10,8 @@ async function getUserById(id: string): Promise<User | null> {
         id: id,
       },
       include: {
-        notifications: true
-      }
+        notifications: true,
+      },
     });
     return user;
   } catch (error) {

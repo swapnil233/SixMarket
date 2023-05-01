@@ -34,13 +34,13 @@ export const authOptions: NextAuthOptions = {
           ...session,
           user: {
             ...session.user,
-            id: user.id
+            id: user.id,
           },
         };
       }
-      return session
+      return session;
     },
-  }
+  },
 };
 
 export default NextAuth(authOptions);

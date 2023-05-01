@@ -3,7 +3,7 @@ import { Image as PrismaImage, Listing as PrismaListing } from "@prisma/client";
 import { NextApiRequest, NextApiResponse } from "next";
 const logger = require("@/utils/logger"); // Import the logger middleware using the 'require' syntax
 
-interface Image extends PrismaImage { }
+interface Image extends PrismaImage {}
 interface ListingWithImages extends PrismaListing {
   images: Image[];
 }
@@ -53,8 +53,8 @@ export default async function Handler(
           res.status(500).send({ error: error.message });
         } else {
           res.status(500).send({
-            error: "500 - An unexpected error occured."
-          })
+            error: "500 - An unexpected error occured.",
+          });
         }
       }
     }
