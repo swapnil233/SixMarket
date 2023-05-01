@@ -407,9 +407,34 @@ const Navbar: FC<INavbar> = () => {
                 color={theme.colorScheme === "dark" ? "dark.5" : "gray.1"}
               />
               <Group p={"sm"}>
-                <Indicator label="12" size={16} withBorder>
-                  <Avatar src={user?.image} radius="xl" />
-                </Indicator>
+                {unreadNotificationsCount! > 0 ? (
+                  <Indicator
+                    inline
+                    label={unreadNotificationsCount}
+                    size={16}
+                    withBorder
+                  >
+                    <Avatar
+                      src={user?.image || ""}
+                      alt={
+                        `${user?.name}'s profile picture` ||
+                        "Default profile picture"
+                      }
+                      radius="xl"
+                      size={32}
+                    />
+                  </Indicator>
+                ) : (
+                  <Avatar
+                    src={user?.image || ""}
+                    alt={
+                      `${user?.name}'s profile picture` ||
+                      "Default profile picture"
+                    }
+                    radius="xl"
+                    size={32}
+                  />
+                )}
 
                 <div style={{ flex: 1 }}>
                   <Text size="sm" weight={500}>
@@ -475,6 +500,28 @@ const Navbar: FC<INavbar> = () => {
                     }
                   >
                     Favourites
+                  </Menu.Item>
+                </Link>
+                <Link href="/profile/notifications" className="no-underline">
+                  <Menu.Item
+                    className="flex"
+                    icon={
+                      <IconNotification
+                        size="0.9rem"
+                        // color={theme.colors.red[6]}
+                        stroke={1.5}
+                      />
+                    }
+                  >
+                    Notifications
+                    <Badge
+                      color="red"
+                      size="xs"
+                      variant="filled"
+                      className="ml-2"
+                    >
+                      {unreadNotificationsCount}
+                    </Badge>
                   </Menu.Item>
                 </Link>
               </Menu>
