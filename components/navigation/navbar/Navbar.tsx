@@ -211,7 +211,7 @@ const Navbar: FC<INavbar> = () => {
           </UnstyledButton>
         </Menu.Target>
         <Menu.Dropdown>
-          <Link href="/profile/my-ads" className="no-underline">
+          <Link href="/profile/my-listings" className="no-underline">
             <Menu.Item
               icon={
                 <IconTags
@@ -221,7 +221,7 @@ const Navbar: FC<INavbar> = () => {
                 />
               }
             >
-              My ads
+              My listings
             </Menu.Item>
           </Link>
 
@@ -293,9 +293,9 @@ const Navbar: FC<INavbar> = () => {
 
   return (
     <Box>
-      <Header height={60} className="px-4 sm:px-6">
+      <Header height={60}>
         <Group
-          className="max-w-6xl w-full mx-auto"
+          className="max-w-6xl w-full mx-auto sm:px-4 px-6"
           position="apart"
           sx={{ height: "100%" }}
         >
@@ -467,7 +467,7 @@ const Navbar: FC<INavbar> = () => {
                   </Menu.Item>
                 </Link>
                 <Link
-                  href="/profile/my-ads"
+                  href="/profile/my-listings"
                   onClick={toggleDrawer}
                   className="no-underline"
                 >
@@ -481,7 +481,7 @@ const Navbar: FC<INavbar> = () => {
                       />
                     }
                   >
-                    My ads
+                    My listings
                   </Menu.Item>
                 </Link>
                 <Link

@@ -136,92 +136,82 @@ const IndividualListing: NextPageWithLayout<IndividualListingProps> = ({
         <meta name="viewport" content="initial-scale=1, width=device-width" />
         <meta name="description" content={listingInfo?.description!} />
       </Head>
-      <div>
-        {/* Hero */}
-        <div className="pt-8 md:pt-14 pb-14 w-full">
-          <div className="max-w-6xl mx-auto sm:px-4 px-6">
-            {/* Header */}
-            <section className="w-full flex justify-between mb-8">
-              <div className="flex w-full justify-between">
-                <h1 className="text-3xl font-normal flex flex-col ">
-                  {listingInfo?.name}{" "}
-                  <span className="text-green-700">{`$${listingInfo?.price}`}</span>
-                </h1>
-              </div>
 
-              {/* Allow adding to favorites if the user isn't the poster of the listing */}
-              {session.status === "authenticated" ? (
-                // @ts-expect-error
-                session.data?.user?.id !== listingInfo.user.id &&
-                (isFavourited ? (
-                  <UnstyledButton onClick={removeFromFavourites}>
-                    <Tooltip label="Click to remove from favourites.">
-                      <Avatar size={40} color="red">
-                        <IconHeartFilled />
-                      </Avatar>
-                    </Tooltip>
-                  </UnstyledButton>
-                ) : (
-                  <UnstyledButton onClick={addToFavourites}>
-                    <Tooltip label="Click to add to favourites">
-                      <Avatar size={40} color="red">
-                        <IconHeart />
-                      </Avatar>
-                    </Tooltip>
-                  </UnstyledButton>
-                ))
-              ) : (
-                <UnstyledButton
-                  onClick={() =>
-                    signIn(undefined, {
-                      callbackUrl: `/listings/${listingInfo.id}`,
-                    })
-                  }
-                >
-                  <Tooltip label="Click to add to favourites">
-                    <Avatar size={40} color="red">
-                      <IconHeart />
-                    </Avatar>
-                  </Tooltip>
-                </UnstyledButton>
-              )}
-            </section>
+      {/* Title, price & fav button */}
+      <section className="w-full flex justify-between pb-8">
+        <h1 className="text-3xl font-normal flex flex-col ">
+          {listingInfo?.name}{" "}
+          <span className="text-green-700 pt-2">{`$${listingInfo?.price}`}</span>
+        </h1>
 
-            {/* Carousel and Listing Info */}
-            <section className="mb-4 grid md:grid-cols-10 lg:grid-cols-12 w-full gap-4">
-              <Carousel
-                mx="auto"
-                w="100%"
-                height={400}
-                withIndicators
-                loop
-                className="md:col-span-6 lg:col-span-8"
-              >
-                {listingInfo?.images.map(
-                  (image: ImageFromSchema, index: number) => (
-                    <Carousel.Slide key={index} bg={"#f3f3f3"}>
-                      <Image
-                        src={image.url}
-                        alt="d"
-                        className="w-full h-full object-contain"
-                        fill
-                      />
-                    </Carousel.Slide>
-                  )
-                )}
-              </Carousel>
+        {/* Allow adding to favorites if the user isn't the poster of the listing */}
+        {session.status === "authenticated" ? (
+          // @ts-expect-error
+          session.data?.user?.id !== listingInfo.user.id &&
+          (isFavourited ? (
+            <UnstyledButton onClick={removeFromFavourites}>
+              <Tooltip label="Click to remove from favourites.">
+                <Avatar size={40} color="red">
+                  <IconHeartFilled />
+                </Avatar>
+              </Tooltip>
+            </UnstyledButton>
+          ) : (
+            <UnstyledButton onClick={addToFavourites}>
+              <Tooltip label="Click to add to favourites">
+                <Avatar size={40} color="red">
+                  <IconHeart />
+                </Avatar>
+              </Tooltip>
+            </UnstyledButton>
+          ))
+        ) : (
+          <UnstyledButton
+            onClick={() =>
+              signIn(undefined, {
+                callbackUrl: `/listings/${listingInfo.id}`,
+              })
+            }
+          >
+            <Tooltip label="Click to add to favourites">
+              <Avatar size={40} color="red">
+                <IconHeart />
+              </Avatar>
+            </Tooltip>
+          </UnstyledButton>
+        )}
+      </section>
 
-              {/* Info and message card */}
-              <ListingMetaDataCard
-                listing={listingInfo}
-                user={listingInfo.user}
-                session={session}
-                userAlreadySentMessage={userAlreadySentMessage}
+      {/* Carousel and Listing Info */}
+      <section className="mb-4 grid md:grid-cols-10 lg:grid-cols-12 w-full gap-2">
+        <Carousel
+          mx="auto"
+          w="100%"
+          height={400}
+          withIndicators
+          loop
+          className="md:col-span-6 lg:col-span-8"
+        >
+          {listingInfo?.images.map((image: ImageFromSchema, index: number) => (
+            <Carousel.Slide key={index} bg={"#f3f3f3"}>
+              <Image
+                src={image.url}
+                alt="d"
+                className="w-full h-full object-contain"
+                fill
               />
-            </section>
-          </div>
-        </div>
-      </div>
+            </Carousel.Slide>
+          ))}
+        </Carousel>
+
+        {/* Info and message card */}
+        <ListingMetaDataCard
+          listing={listingInfo}
+          user={listingInfo.user}
+          session={session}
+          userAlreadySentMessage={userAlreadySentMessage}
+        />
+      </section>
     </>
   );
 };

@@ -39,21 +39,15 @@ const Home: NextPageWithLayout = () => {
   }, [slug]);
 
   return (
-    <div>
+    <>
       {/* Hero */}
-      <div className="pt-14 pb-14 flex flex-col w-full">
-        <div className="max-w-6xl mx-auto sm:px-4 px-6">
-          <section className="text-center pb-4">
-            {/* Title */}
-            <div className="md:max-w-5xl mx-auto">
-              <h1 className="text-5xl lg:text-6xl mb-4 font-normal">
-                {categoryInfo.name}
-              </h1>
-            </div>
-          </section>
-        </div>
-      </div>
-    </div>
+      <section className="flex flex-col w-full text-center pb-4">
+        {/* Title */}
+        <h1 className="text-5xl lg:text-6xl mb-4 font-normal">
+          {categoryInfo.name}
+        </h1>
+      </section>
+    </>
   );
 };
 

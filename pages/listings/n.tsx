@@ -129,7 +129,7 @@ const NewListing: NextPageWithLayout = () => {
   });
 
   return (
-    <div className="mt-8 max-w-6xl w-full mx-auto sm:px-4 px-6">
+    <>
       <Stepper
         active={active}
         onStepClick={setActive}
@@ -268,7 +268,7 @@ const NewListing: NextPageWithLayout = () => {
         </Button>
         <Button onClick={() => handleStepChange(active + 1)}>Next step</Button>
       </Group>
-    </div>
+    </>
   );
 };
 

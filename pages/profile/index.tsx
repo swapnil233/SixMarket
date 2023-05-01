@@ -1,11 +1,12 @@
 import PrimaryLayout from "@/components/layout/primary/PrimaryLayout";
 import prisma from "@/utils/prisma";
 import { requireAuthentication } from "@/utils/requireAuthentication";
+import { Button } from "@mantine/core";
 import { User } from "@prisma/client";
-import { Button } from "flowbite-react";
+import { IconEdit } from "@tabler/icons-react";
 import { GetServerSideProps } from "next";
 import Image from "next/image";
-import { HiPencil } from "react-icons/hi";
+import Link from "next/link";
 import { NextPageWithLayout } from "../page";
 
 interface indexProps {
@@ -29,14 +30,15 @@ export const getServerSideProps: GetServerSideProps = async (context: any) => {
 const index: NextPageWithLayout<indexProps> = ({ user }) => {
   return (
     <>
-      <h1 className="text-3xl font-semibold leading-7 text-gray-900 mb-4 pt-4 md:pt-8">
-        Profile
-      </h1>
-      <h2 className="text-base leading-6 text-gray-600">
-        This is your public profile. You can edit your profile and listings
-        information.
-      </h2>
-      <div className="grid grid-cols-12 gap-6 pt-10 md:pt-16 pb-10 md:pb-16 h-screen">
+      <section className="w-full pb-8">
+        <h1 className="text-3xl font-normal flex flex-col mb-4">Profile</h1>
+        <h2 className="text-base leading-6 text-gray-600">
+          This is your public profile. You can edit your profile and listings
+          information.
+        </h2>
+      </section>
+
+      <section className="grid grid-cols-12 gap-6">
         {/* Profile */}
         <div className="col-span-12 md:col-span-4 sticky">
           <div className="bg-white rounded-lg shadow-md p-6 text-center">
@@ -50,8 +52,12 @@ const index: NextPageWithLayout<indexProps> = ({ user }) => {
             <h2 className="text-xl font-semibold">{user.name}</h2>
             <p className="text-gray-500">{user.email}</p>
             <div className="mt-4">
-              <Button href="/profile/settings" color="gray">
-                <HiPencil className="mr-2 h-5 w-5" />
+              <Button
+                variant="subtle"
+                leftIcon={<IconEdit />}
+                component={Link}
+                href="/profile/settings"
+              >
                 Edit profile
               </Button>
             </div>
@@ -67,7 +73,7 @@ const index: NextPageWithLayout<indexProps> = ({ user }) => {
             </p>
           </div>
         </div>
-      </div>
+      </section>
     </>
   );
 };

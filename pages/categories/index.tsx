@@ -43,67 +43,55 @@ const Home: NextPageWithLayout = () => {
   );
 
   return (
-    <div>
-      {/* Hero */}
-      <div className="pt-14 pb-14 flex flex-col w-full">
-        <div className="max-w-6xl mx-auto sm:px-4 px-6">
-          <section className="text-center pb-4">
-            {/* Title */}
-            <div className="md:max-w-5xl mx-auto">
-              <h1 className="text-5xl lg:text-6xl mb-4 font-normal">
-                Find the{" "}
-                <span className="text-blue-800 font-medium">perfect</span> item
-              </h1>
-            </div>
-            {/* Subtitle */}
-            <div className="max-w-3xl mx-auto">
-              <p className="text-xl text-slate-600">
-                Narrow down your search by looking at one of our 30+ categories
-              </p>
-            </div>
-          </section>
-        </div>
-      </div>
+    <>
+      {/* Heading & subheading */}
+      <section className="text-center pb-4">
+        {/* Title */}
+        <h1 className="text-5xl lg:text-6xl mb-4 font-normal">
+          Find the <span className="text-blue-800 font-medium">perfect</span>{" "}
+          item
+        </h1>
+        {/* Subtitle */}
+        <p className="text-xl text-slate-600 max-w-3xl mx-auto">
+          Narrow down your search by looking at one of our 30+ categories
+        </p>
+      </section>
 
       {/* Categories */}
-      <div className="pb-12 flex flex-col w-full">
-        <div className="max-w-6xl w-full mx-auto sm:px-4 px-6">
-          <section className="md:pb-12 pb-20">
-            <FilterInput onFilterTextChange={handleFilterTextChange} />
-            <div className="grid grid-cols-2 lg:grid-cols-5 md:grid-cols-4 sm:grid-cols-3 col-span-full gap-4">
-              {/* Recently posted listings */}
-              {categories ? (
-                filteredCategories!.length > 0 ? (
-                  filteredCategories!.map((category, index) => (
-                    <CategoriesCard
-                      key={index}
-                      slug={category.slug}
-                      thumbnail={category.thumbnail!}
-                      title={category.name}
-                    />
-                  ))
-                ) : (
-                  <h1 className="col-span-full">{emptyStateMessage}</h1>
-                )
-              ) : (
-                <>
-                  <Skeleton w={210} h={190} />
-                  <Skeleton w={210} h={190} />
-                  <Skeleton w={210} h={190} />
-                  <Skeleton w={210} h={190} />
-                  <Skeleton w={210} h={190} />
-                  <Skeleton w={210} h={190} />
-                  <Skeleton w={210} h={190} />
-                  <Skeleton w={210} h={190} />
-                  <Skeleton w={210} h={190} />
-                  <Skeleton w={210} h={190} />
-                </>
-              )}
-            </div>
-          </section>
+      <section>
+        <FilterInput onFilterTextChange={handleFilterTextChange} />
+        <div className="grid grid-cols-2 lg:grid-cols-5 md:grid-cols-4 sm:grid-cols-3 gap-4">
+          {/* Recently posted listings */}
+          {categories ? (
+            filteredCategories!.length > 0 ? (
+              filteredCategories!.map((category, index) => (
+                <CategoriesCard
+                  key={index}
+                  slug={category.slug}
+                  thumbnail={category.thumbnail!}
+                  title={category.name}
+                />
+              ))
+            ) : (
+              <h1 className="col-span-full">{emptyStateMessage}</h1>
+            )
+          ) : (
+            <>
+              <Skeleton w={210} h={190} />
+              <Skeleton w={210} h={190} />
+              <Skeleton w={210} h={190} />
+              <Skeleton w={210} h={190} />
+              <Skeleton w={210} h={190} />
+              <Skeleton w={210} h={190} />
+              <Skeleton w={210} h={190} />
+              <Skeleton w={210} h={190} />
+              <Skeleton w={210} h={190} />
+              <Skeleton w={210} h={190} />
+            </>
+          )}
         </div>
-      </div>
-    </div>
+      </section>
+    </>
   );
 };
 
