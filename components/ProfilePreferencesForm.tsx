@@ -1,4 +1,4 @@
-import { PhotoIcon } from "@heroicons/react/24/solid";
+// import { PhotoIcon } from "@heroicons/react/24/solid";
 import { User } from "@prisma/client";
 import Image from "next/image";
 import { FC } from "react";
@@ -110,10 +110,10 @@ const ProfilePreferencesForm: FC<ProfilePreferencesFormProps> = ({ user }) => {
               </label>
               <div className="mt-2 flex justify-center rounded-lg border border-dashed border-gray-900/25 px-6 py-10">
                 <div className="text-center">
-                  <PhotoIcon
+                  {/* <PhotoIcon
                     className="mx-auto h-12 w-12 text-gray-300"
                     aria-hidden="true"
-                  />
+                  /> */}
                   <div className="mt-4 flex text-sm leading-6 text-gray-600">
                     <label
                       htmlFor="file-upload"
