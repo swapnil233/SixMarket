@@ -20,7 +20,6 @@
   "dependencies": {
     "@emotion/react": "^11.10.6",
     "@emotion/server": "^11.10.0",
-    "@heroicons/react": "^2.0.17",
     "@mantine/carousel": "^6.0.8",
     "@mantine/core": "^6.0.7",
     "@mantine/dropzone": "^6.0.7",
@@ -46,8 +45,6 @@
     "embla-carousel-react": "^7.1.0",
     "eslint": "8.38.0",
     "eslint-config-next": "13.3.0",
-    "flowbite": "^1.6.4",
-    "flowbite-react": "^0.4.3",
     "joi": "^17.9.1",
     "morgan": "^1.10.0",
     "next": "13.3.0",
