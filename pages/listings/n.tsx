@@ -32,6 +32,8 @@ export const getServerSideProps: GetServerSideProps = async (context: any) => {
     const protocol = context.req.headers["x-forwarded-proto"] || "http";
     const host = context.req.headers["host"];
     const apiUrl = `${protocol}://${host}/api/listings/createNewListing`;
+
+    console.log(apiUrl);
     return {
       props: { apiUrl },
     };
