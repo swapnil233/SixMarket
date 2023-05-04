@@ -1,8 +1,9 @@
+import ListingCard from "@/components/cards/listing/ListingCard";
 import PrimaryLayout from "@/components/layout/primary/PrimaryLayout";
 import prisma from "@/utils/prisma";
 import { requireAuthentication } from "@/utils/requireAuthentication";
 import { Button } from "@mantine/core";
-import { User } from "@prisma/client";
+import { Listing, User } from "@prisma/client";
 import { IconEdit } from "@tabler/icons-react";
 import { GetServerSideProps } from "next";
 import Image from "next/image";
@@ -11,23 +12,34 @@ import { NextPageWithLayout } from "../page";
 
 interface indexProps {
   user: User;
+  listings: Listing[];
 }
 
 export const getServerSideProps: GetServerSideProps = async (context: any) => {
   return requireAuthentication(context, async (session: any) => {
-    const user = await prisma.user.findUnique({
-      where: { email: session.user.email },
+    const user: User | null = await prisma.user.findUnique({
+      where: { id: session.user.id },
+    });
+
+    const listings: Listing[] = await prisma.listing.findMany({
+      where: {
+        userId: session.user.id,
+      },
+      include: {
+        images: true,
+      },
     });
 
     return {
       props: {
         user,
+        listings: JSON.parse(JSON.stringify(listings)),
       },
     };
   });
 };
 
-const index: NextPageWithLayout<indexProps> = ({ user }) => {
+const index: NextPageWithLayout<indexProps> = ({ user, listings }) => {
   return (
     <>
       <section className="w-full pb-8">
@@ -38,9 +50,9 @@ const index: NextPageWithLayout<indexProps> = ({ user }) => {
         </h2>
       </section>
 
-      <section className="grid grid-cols-12 gap-6">
+      <section className="grid grid-cols-3 gap-6">
         {/* Profile */}
-        <div className="col-span-12 md:col-span-4 sticky">
+        <div className="col-span-3 md:col-span-1">
           <div className="bg-white rounded-lg shadow-md p-6 text-center">
             <Image
               className="mx-auto mb-4 rounded-full object-cover"
@@ -65,13 +77,23 @@ const index: NextPageWithLayout<indexProps> = ({ user }) => {
         </div>
 
         {/* Listings */}
-        <div className="col-span-12 md:col-span-8 h-full">
-          <div className="bg-white rounded-lg">
-            {/* Grid of cards goes here */}
-            <p className="text-gray-500">
-              This is the container for the grid of cards.
-            </p>
-          </div>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 col-span-3 md:col-span-2 w-full">
+          {listings.length > 0 ? (
+            listings.map((listing, index) => (
+              <div key={index}>
+                <ListingCard
+                  description={listing.description || ""}
+                  title={listing.name}
+                  price={listing.price || 0}
+                  listingId={listing.id}
+                  // @ts-expect-error
+                  images={listing.images.map((image) => image.url)}
+                />
+              </div>
+            ))
+          ) : (
+            <p>You have no listings</p>
+          )}
         </div>
       </section>
     </>

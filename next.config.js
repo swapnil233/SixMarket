@@ -3,8 +3,6 @@ const nextConfig = {
   reactStrictMode: true,
 };
 
-module.exports = nextConfig;
-
 // CORS
 module.exports = {
   async headers() {
@@ -56,3 +54,9 @@ module.exports = {
     ],
   },
 };
+
+const withBundleAnalyzer = require("@next/bundle-analyzer")({
+  enabled: process.env.ANALYZE === "true",
+});
+
+module.exports = withBundleAnalyzer(nextConfig);
