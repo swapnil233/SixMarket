@@ -91,7 +91,7 @@ const Home: NextPageWithLayout = () => {
         <p className="text-xl text-slate-600 mb-10">
           See what your neighbours are selling
         </p>
-        <div className="grid lg:grid-cols-3 md:grid-cols-2 sm:grid-cols-1 gap-8">
+        <div className="grid lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 grid-cols-2 gap-6">
           {/* Recently posted listings */}
           {recentListings ? (
             recentListings.map((listing, index) => (
