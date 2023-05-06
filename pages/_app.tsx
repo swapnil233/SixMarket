@@ -7,6 +7,8 @@ import type { Session } from "next-auth";
 import { SessionProvider } from "next-auth/react";
 import type { AppProps } from "next/app";
 import { NextPageWithLayout } from "./page";
+import { DevSupport } from "@react-buddy/ide-toolbox-next";
+import { ComponentPreviews, useInitial } from "@/components/dev";
 
 interface AppPropsWithLayout extends AppProps {
   Component: NextPageWithLayout;
@@ -30,7 +32,14 @@ export default function App({
       >
         <SessionProvider session={session}>
           <RouterTransition />
-          {getLayout(<Component {...pageProps} />)}
+          {getLayout(
+            <DevSupport
+              ComponentPreviews={ComponentPreviews}
+              useInitialHook={useInitial}
+            >
+              <Component {...pageProps} />
+            </DevSupport>
+          )}
           <Notifications />
         </SessionProvider>
       </MantineProvider>
