@@ -6,7 +6,6 @@ import {
   Burger,
   Button,
   Center,
-  Collapse,
   Divider,
   Drawer,
   Group,
@@ -167,6 +166,7 @@ const Navbar: FC<INavbar> = () => {
         withinPortal
       >
         <Menu.Target>
+          {/* User button */}
           <UnstyledButton
             className={cx(classes.user, {
               [classes.userActive]: userMenuOpened,
@@ -376,7 +376,7 @@ const Navbar: FC<INavbar> = () => {
               }
               variant="default"
             >
-              Post an ad
+              Create listing
             </Button>
           </Group>
 
@@ -406,25 +406,12 @@ const Navbar: FC<INavbar> = () => {
                 my="sm"
                 color={theme.colorScheme === "dark" ? "dark.5" : "gray.1"}
               />
-              <Group p={"sm"}>
-                {unreadNotificationsCount! > 0 ? (
-                  <Indicator
-                    inline
-                    label={unreadNotificationsCount}
-                    size={16}
-                    withBorder
-                  >
-                    <Avatar
-                      src={user?.image || ""}
-                      alt={
-                        `${user?.name}'s profile picture` ||
-                        "Default profile picture"
-                      }
-                      radius="xl"
-                      size={32}
-                    />
-                  </Indicator>
-                ) : (
+              <Link
+                href="/profile/"
+                style={{ textDecoration: "none", color: "black" }}
+                onClick={toggleDrawer}
+              >
+                <Group p={"sm"}>
                   <Avatar
                     src={user?.image || ""}
                     alt={
@@ -434,20 +421,22 @@ const Navbar: FC<INavbar> = () => {
                     radius="xl"
                     size={32}
                   />
-                )}
 
-                <div style={{ flex: 1 }}>
-                  <Text size="sm" weight={500}>
-                    {user?.name}
-                  </Text>
+                  <div style={{ flex: 1 }}>
+                    <Text size="sm" weight={500}>
+                      {user?.name}
+                    </Text>
 
-                  <Text color="dimmed" size="xs">
-                    {user?.email}
-                  </Text>
-                </div>
-              </Group>
+                    <Text color="dimmed" size="xs">
+                      {user?.email}
+                    </Text>
+                  </div>
+                </Group>
+              </Link>
               <Menu>
                 <Menu.Label>Profile</Menu.Label>
+
+                {/* Mobile - Profile */}
                 <Link
                   href="/profile/"
                   onClick={toggleDrawer}
@@ -455,17 +444,16 @@ const Navbar: FC<INavbar> = () => {
                 >
                   <Menu.Item
                     className={classes.link}
-                    icon={
-                      <IconUser
-                        color={theme.colors.blue[9]}
-                        size="0.9rem"
-                        stroke={1.5}
-                      />
-                    }
+                    icon={<IconUser size="0.9rem" stroke={1.5} />}
+                    sx={{
+                      backgroundColor: "white",
+                    }}
                   >
                     My profile
                   </Menu.Item>
                 </Link>
+
+                {/* Mobile - My Listings */}
                 <Link
                   href="/profile/my-listings"
                   onClick={toggleDrawer}
@@ -473,17 +461,13 @@ const Navbar: FC<INavbar> = () => {
                 >
                   <Menu.Item
                     className={classes.link}
-                    icon={
-                      <IconTags
-                        size="0.9rem"
-                        color={theme.colors.blue[9]}
-                        stroke={1.5}
-                      />
-                    }
+                    icon={<IconTags size="0.9rem" stroke={1.5} />}
                   >
                     My listings
                   </Menu.Item>
                 </Link>
+
+                {/* Mobile - Favourites */}
                 <Link
                   href="/profile/favourites"
                   onClick={toggleDrawer}
@@ -502,9 +486,11 @@ const Navbar: FC<INavbar> = () => {
                     Favourites
                   </Menu.Item>
                 </Link>
+
+                {/* Mobile - Notifications */}
                 <Link href="/profile/notifications" className="no-underline">
                   <Menu.Item
-                    className="flex"
+                    className={classes.link}
                     icon={
                       <IconNotification
                         size="0.9rem"
@@ -525,32 +511,6 @@ const Navbar: FC<INavbar> = () => {
                   </Menu.Item>
                 </Link>
               </Menu>
-
-              <Divider
-                my="sm"
-                color={theme.colorScheme === "dark" ? "dark.5" : "gray.1"}
-              />
-              <Menu>
-                <Menu.Label>Settings</Menu.Label>
-                <Link
-                  href="/profile/settings"
-                  onClick={toggleDrawer}
-                  className="no-underline"
-                >
-                  <Menu.Item
-                    className={classes.link}
-                    icon={
-                      <IconSettings
-                        size="0.9rem"
-                        color={theme.colors.blue[9]}
-                        stroke={1.5}
-                      />
-                    }
-                  >
-                    Profile settings
-                  </Menu.Item>
-                </Link>
-              </Menu>
             </>
           )}
 
@@ -564,17 +524,13 @@ const Navbar: FC<INavbar> = () => {
             <Link href="/" className={classes.link} onClick={toggleDrawer}>
               Home
             </Link>
-            <UnstyledButton className={classes.link} onClick={toggleLinks}>
-              <Center inline>
-                <Box component="span" mr={5}>
-                  Categories
-                </Box>
-                <IconChevronDown size={16} color={theme.fn.primaryColor()} />
-              </Center>
-            </UnstyledButton>
-            <Collapse onClick={toggleDrawer} in={linksOpened}>
-              {links}
-            </Collapse>
+            <Link
+              href="/categories"
+              className={classes.link}
+              onClick={toggleDrawer}
+            >
+              Categories
+            </Link>
             <Link href="/about" className={classes.link} onClick={toggleDrawer}>
               About
             </Link>
