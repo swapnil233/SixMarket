@@ -1,7 +1,8 @@
 <h1> Marketplace is an open source classfields website.
-<br>
-  
-![prisma-erd](https://user-images.githubusercontent.com/36313876/234670589-11a8721a-1621-4cc0-897b-4ee1291ee2dd.svg)
+<br />
+<br />
+
+![Prisma ERD](https://user-images.githubusercontent.com/36313876/236579032-0bbdeffe-07e5-461c-86b4-f52a4b0570cf.svg)
 
 #### How to run on your machine:
 
@@ -18,6 +19,10 @@
 7. Seed your database with categories and tags by running `npm run seed`
 8. Run `npm run dev` to start the nextjs project on port 3003 (you can change this in `package.json` under the `dev` script)
 
-### TODO
-
-- Replace finding user by emails with the user ID that's now attached in the session
+### Upcoming Features
+- [ ] Map view
+- [ ] Search by query or query + category
+- [ ] Location based results
+- [ ] Pagination
+- [ ] Dark mode
+- [ ] Recommendations algorithm, utilizing something like the Term Frequency-Inverse Document Frequency (TF-IDF) technique with a vector DB + cosine similarity.
