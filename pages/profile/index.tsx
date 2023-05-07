@@ -21,6 +21,7 @@ export const getServerSideProps: GetServerSideProps = async (context: any) => {
       where: { id: session.user.id },
     });
 
+    // Get user's listings
     const listings: Listing[] = await prisma.listing.findMany({
       where: {
         userId: session.user.id,

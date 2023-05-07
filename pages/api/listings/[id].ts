@@ -2,7 +2,7 @@ import prisma from "@/utils/prisma";
 import { NextApiRequest, NextApiResponse } from "next";
 
 async function getListing(id: string) {
-  return await prisma.listing.findUnique({
+  return prisma.listing.findUnique({
     where: {
       id: id,
     },
