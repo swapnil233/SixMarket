@@ -45,7 +45,7 @@ const MyListingsPage: NextPageWithLayout<IMyListingsPageProps> = ({
       <section className="w-full pb-8">
         <h1 className="text-3xl font-normal flex flex-col mb-4">My listings</h1>
         <h2 className="text-base leading-6 text-gray-600">
-          View and manage your listings.
+          You have {listingsWithImages.length} active listings
         </h2>
       </section>
 

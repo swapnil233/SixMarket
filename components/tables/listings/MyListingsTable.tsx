@@ -1,11 +1,12 @@
-import { FC } from "react";
-import { DataTable } from "mantine-datatable";
-import { ActionIcon, Box, Group, Text } from "@mantine/core";
+import { FC, useState, useEffect } from "react";
+import { DataTable, DataTableSortStatus } from "mantine-datatable";
+import { Box, Button, Group, Text } from "@mantine/core";
 import { IconEdit, IconMoodSad } from "@tabler/icons-react";
 import { Listing, Message } from "@prisma/client";
 import { Image as PrismaImage } from ".prisma/client";
 import Image from "next/image";
 import Link from "next/link";
+import sortBy from "lodash/sortBy";
 
 export interface IMyListingsTable {
   listingsWithImages: (Listing & { images: PrismaImage[] } & {
@@ -14,7 +15,12 @@ export interface IMyListingsTable {
 }
 
 const MyListingsTable: FC<IMyListingsTable> = ({ listingsWithImages }) => {
-  const records = listingsWithImages.map((listing) => {
+  const [sortStatus, setSortStatus] = useState<DataTableSortStatus>({
+    columnAccessor: "name",
+    direction: "asc",
+  });
+
+  const listings = listingsWithImages.map((listing) => {
     const thumbnailUrl = listing.images[0].url;
     const title = listing.name;
     const price = listing.price;
@@ -29,8 +35,8 @@ const MyListingsTable: FC<IMyListingsTable> = ({ listingsWithImages }) => {
             borderRadius: 4,
             overflow: "hidden",
             position: "relative",
-            width: 150,
-            height: 60,
+            width: 120,
+            height: 90,
           }}
         >
           <Image
@@ -42,7 +48,11 @@ const MyListingsTable: FC<IMyListingsTable> = ({ listingsWithImages }) => {
           />
         </Box>
       ),
-      title,
+      title: (
+        <Link href={`/listings/${listing.id}`} className="no-underline">
+          <h3 className="text-lg font-medium text-gray-900 ">{title}</h3>
+        </Link>
+      ),
       price: (
         <span>
           {price
@@ -57,6 +67,13 @@ const MyListingsTable: FC<IMyListingsTable> = ({ listingsWithImages }) => {
       messages,
     };
   });
+
+  const [records, setRecords] = useState(sortBy(listings, "price"));
+
+  useEffect(() => {
+    const data = sortBy(listings, sortStatus.columnAccessor) as any;
+    setRecords(sortStatus.direction === "desc" ? data.reverse() : data);
+  }, [sortStatus]);
 
   return (
     <DataTable
@@ -92,24 +109,34 @@ const MyListingsTable: FC<IMyListingsTable> = ({ listingsWithImages }) => {
       columns={[
         { accessor: "thumbnail" },
         { accessor: "title" },
-        { accessor: "price" },
-        { accessor: "views" },
-        { accessor: "messages" },
+        { accessor: "price", sortable: true },
+        { accessor: "views", sortable: true },
+        { accessor: "messages", sortable: true },
         {
           accessor: "actions",
-          title: <Text mr="xs">Edit</Text>,
+          title: <Text mr="xs">Actions</Text>,
           textAlignment: "right",
           render: (listing) => (
             <Group spacing={4} position="right" noWrap>
               <Link href={`/profile/my-listings/${listing.id}`}>
-                <ActionIcon color="blue">
-                  <IconEdit size={16} />
-                </ActionIcon>
+                <Button
+                  variant={"light"}
+                  leftIcon={<IconEdit size={"0.9rem"} />}
+                >
+                  Edit
+                </Button>
+                {/*<ActionIcon color="blue">*/}
+                {/*  <IconEdit size={16} />*/}
+                {/*</ActionIcon>*/}
               </Link>
             </Group>
           ),
         },
       ]}
+      verticalAlignment={"top"}
+      sortStatus={sortStatus}
+      onSortStatusChange={setSortStatus}
+      textSelectionDisabled
     />
   );
 };
