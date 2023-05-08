@@ -8,9 +8,10 @@ import Image from "next/image";
 import Link from "next/link";
 import sortBy from "lodash/sortBy";
 
-export interface IMyListingsTable {
-  listingsWithImages: (Listing & { images: PrismaImage[] } & {
-    messages: Message[];
+interface IMyListingsTable {
+  listingsWithImages: (Pick<Listing, "id" | "name" | "price" | "views"> & {
+    images: PrismaImage[];
+    messages: Pick<Message, "id">[];
   })[];
 }
 

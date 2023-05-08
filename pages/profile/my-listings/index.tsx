@@ -1,34 +1,46 @@
 import PrimaryLayout from "@/components/layout/primary/PrimaryLayout";
 import prisma from "@/utils/prisma";
 import { requireAuthentication } from "@/utils/requireAuthentication";
-import { Listing, Image as PrismaImage, Message } from "@prisma/client";
+import { Listing, Image, Message } from "@prisma/client";
 import { GetServerSideProps } from "next";
 import MyListingsTable from "@/components/tables/listings/MyListingsTable";
 import { NextPageWithLayout } from "@/pages/page";
 
 interface IMyListingsPageProps {
-  listingsWithImages: (Listing & { images: PrismaImage[] } & {
-    messages: Message[];
+  listingsWithImages: (Pick<Listing, "id" | "name" | "price" | "views"> & {
+    images: Image[];
+    messages: Pick<Message, "id">[];
   })[];
 }
 
 export const getServerSideProps: GetServerSideProps = async (context: any) => {
   return requireAuthentication(context, async (session: any) => {
     // Get listings with images, and messages
-    const listingsWithImages: (Listing & { images: PrismaImage[] })[] =
-      await prisma.listing.findMany({
-        where: {
-          userId: session.user.id,
+    const listingsWithImages: (Pick<
+      Listing,
+      "id" | "name" | "price" | "views"
+    > & {
+      images: Image[];
+      messages: Pick<Message, "id">[];
+    })[] = await prisma.listing.findMany({
+      where: {
+        userId: session.user.id,
+      },
+      select: {
+        id: true,
+        name: true,
+        price: true,
+        views: true,
+        images: {
+          take: 1,
         },
-        include: {
-          images: true,
-          messages: {
-            select: {
-              id: true,
-            },
+        messages: {
+          select: {
+            id: true,
           },
         },
-      });
+      },
+    });
 
     return {
       props: {
