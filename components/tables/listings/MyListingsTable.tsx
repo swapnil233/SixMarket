@@ -1,7 +1,7 @@
 import { FC, useState, useEffect } from "react";
 import { DataTable, DataTableSortStatus } from "mantine-datatable";
-import { Box, Button, Group, Text } from "@mantine/core";
-import { IconEdit, IconMoodSad } from "@tabler/icons-react";
+import { Box, Button, Stack } from "@mantine/core";
+import { IconMoodSad } from "@tabler/icons-react";
 import { Listing, Message } from "@prisma/client";
 import { Image as PrismaImage } from ".prisma/client";
 import Image from "next/image";
@@ -50,9 +50,20 @@ const MyListingsTable: FC<IMyListingsTable> = ({ listingsWithImages }) => {
         </Box>
       ),
       title: (
-        <Link href={`/listings/${listing.id}`} className="no-underline">
-          <h3 className="text-lg font-medium text-gray-900 ">{title}</h3>
-        </Link>
+        <Stack>
+          <Link href={`/listings/${listing.id}`} className="no-underline">
+            <h3 className="text-lg font-medium text-gray-900 ">{title}</h3>
+          </Link>
+
+          <div className="flex flex-row">
+            <Link href={`/listings/${listing.id}`}>
+              <Button variant={"subtle"}>View</Button>
+            </Link>
+            <Link href={`/profile/my-listings/${listing.id}`}>
+              <Button variant={"subtle"}>Manage</Button>
+            </Link>
+          </div>
+        </Stack>
       ),
       price: (
         <span>
@@ -74,7 +85,7 @@ const MyListingsTable: FC<IMyListingsTable> = ({ listingsWithImages }) => {
   useEffect(() => {
     const data = sortBy(listings, sortStatus.columnAccessor) as any;
     setRecords(sortStatus.direction === "desc" ? data.reverse() : data);
-  }, [sortStatus]);
+  }, [sortStatus, listings]);
 
   return (
     <DataTable
@@ -113,26 +124,6 @@ const MyListingsTable: FC<IMyListingsTable> = ({ listingsWithImages }) => {
         { accessor: "price", sortable: true },
         { accessor: "views", sortable: true },
         { accessor: "messages", sortable: true },
-        {
-          accessor: "actions",
-          title: <Text mr="xs">Actions</Text>,
-          textAlignment: "right",
-          render: (listing) => (
-            <Group spacing={4} position="right" noWrap>
-              <Link href={`/profile/my-listings/${listing.id}`}>
-                <Button
-                  variant={"light"}
-                  leftIcon={<IconEdit size={"0.9rem"} />}
-                >
-                  Edit
-                </Button>
-                {/*<ActionIcon color="blue">*/}
-                {/*  <IconEdit size={16} />*/}
-                {/*</ActionIcon>*/}
-              </Link>
-            </Group>
-          ),
-        },
       ]}
       verticalAlignment={"top"}
       sortStatus={sortStatus}
