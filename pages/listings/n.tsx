@@ -34,6 +34,9 @@ interface CreateNewAdProps {
 }
 
 export const getServerSideProps: GetServerSideProps = async (context: any) => {
+  // @TODO remove API calls and fetch data directly within getServerSideProps for better performance
+  // https://nextjs.org/docs/pages/building-your-application/data-fetching/get-server-side-props#getserversideprops-or-api-routes
+
   return requireAuthentication(context, async () => {
     const protocol = context.req.headers["x-forwarded-proto"] || "http";
     const host = context.req.headers["host"];
