@@ -77,16 +77,16 @@ const Home: NextPageWithLayout = () => {
             )
           ) : (
             <>
-              <Skeleton w={210} h={190} />
-              <Skeleton w={210} h={190} />
-              <Skeleton w={210} h={190} />
-              <Skeleton w={210} h={190} />
-              <Skeleton w={210} h={190} />
-              <Skeleton w={210} h={190} />
-              <Skeleton w={210} h={190} />
-              <Skeleton w={210} h={190} />
-              <Skeleton w={210} h={190} />
-              <Skeleton w={210} h={190} />
+              <Skeleton w={"100%"} h={190} />
+              <Skeleton w={"100%"} h={190} />
+              <Skeleton w={"100%"} h={190} />
+              <Skeleton w={"100%"} h={190} />
+              <Skeleton w={"100%"} h={190} />
+              <Skeleton w={"100%"} h={190} />
+              <Skeleton w={"100%"} h={190} />
+              <Skeleton w={"100%"} h={190} />
+              <Skeleton w={"100%"} h={190} />
+              <Skeleton w={"100%"} h={190} />
             </>
           )}
         </div>
