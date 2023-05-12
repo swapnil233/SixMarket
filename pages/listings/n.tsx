@@ -23,10 +23,7 @@ import axios, { AxiosResponse } from "axios";
 import { GetServerSideProps } from "next";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
-import {
-  conditionOptions,
-  provinceOptions,
-} from "../../components/data/formData";
+import { conditionOptions, provinceOptions } from "@/components/data/formData";
 import { NextPageWithLayout } from "../page";
 
 interface CreateNewAdProps {
