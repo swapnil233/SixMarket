@@ -59,6 +59,14 @@ const MyListingsPage: NextPageWithLayout<IMyListingsPageProps> = ({
         <title>{`My Listings | Marketplace`}</title>
         <meta name="viewport" content="initial-scale=1, width=device-width" />
         <meta name="description" content="View and edit your listings." />
+
+        <meta property="og:title" content={`My Listings | Marketplace`} />
+        <meta
+          property="og:description"
+          content="View and edit your listings."
+        />
+        <meta property="og:type" content="website" />
+        <meta property="og:site_name" content="Marketplace" />
       </Head>
 
       <section className="w-full pb-8">

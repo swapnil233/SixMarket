@@ -5,6 +5,7 @@ import { User } from "@prisma/client";
 import { GetServerSidePropsContext } from "next";
 import Image from "next/image";
 import { NextPageWithLayout } from "../page";
+import Head from "next/head";
 
 interface PageProps {
   user: User;
@@ -43,6 +44,20 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
 const Page: NextPageWithLayout<PageProps> = ({ user }) => {
   return (
     <>
+      <Head>
+        <title>{`${user.name} | Marketplace`}</title>
+        <meta name="viewport" content="initial-scale=1, width=device-width" />
+        <meta name="description" content={`Public profile of ${user.name}`} />
+        <meta property="og:title" content={`${user.name} | Marketplace`} />
+        <meta
+          property="og:description"
+          content={`Public profile of ${user.name}`}
+        />
+        <meta property="og:image" content={user.image || ""} />
+        <meta property="og:type" content="website" />
+        <meta property="og:site_name" content="Marketplace" />
+      </Head>
+
       <h1 className="text-3xl font-semibold leading-7 text-gray-900 mb-4 pt-4 md:pt-8">
         Profile
       </h1>

@@ -2,20 +2,16 @@ import PrimaryLayout from "@/components/layout/primary/PrimaryLayout";
 import prisma from "@/utils/prisma";
 import { requireAuthentication } from "@/utils/requireAuthentication";
 import { Button } from "@mantine/core";
-import { Listing, User, Image as PrismaImage, Message } from "@prisma/client";
+import { User } from "@prisma/client";
 import { IconEdit } from "@tabler/icons-react";
 import { GetServerSideProps } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { NextPageWithLayout } from "../page";
-import MyListingsTable from "@/components/tables/listings/MyListingsTable";
+import Head from "next/head";
 
 interface IMyProfilePageProps {
   user: User;
-  listingsWithImages: (Listing & { images: PrismaImage[] } & {
-    messages: Message[];
-  })[];
-  messageCount: number;
 }
 
 export const getServerSideProps: GetServerSideProps = async (context: any) => {
@@ -24,36 +20,27 @@ export const getServerSideProps: GetServerSideProps = async (context: any) => {
       where: { id: session.user.id },
     });
 
-    // Get user's listings with images, and messages
-    const listingsWithImages: (Listing & { images: PrismaImage[] })[] =
-      await prisma.listing.findMany({
-        where: {
-          userId: session.user.id,
-        },
-        include: {
-          images: true,
-          messages: {
-            select: {
-              id: true,
-            },
-          },
-        },
-      });
-
     return {
       props: {
         user,
-        listingsWithImages: JSON.parse(JSON.stringify(listingsWithImages)),
       },
     };
   });
 };
-const MyProfilePage: NextPageWithLayout<IMyProfilePageProps> = ({
-  user,
-  listingsWithImages,
-}) => {
+const MyProfilePage: NextPageWithLayout<IMyProfilePageProps> = ({ user }) => {
   return (
     <>
+      <Head>
+        <title>{`Profile | Marketplace`}</title>
+        <meta name="viewport" content="initial-scale=1, width=device-width" />
+        <meta name="description" content="View and edit your profile." />
+        <meta property="og:title" content={`Profile | Marketplace`} />
+        <meta property="og:description" content="View and edit your profile." />
+        <meta property="og:image" content={user.image || ""} />
+        <meta property="og:type" content="website" />
+        <meta property="og:site_name" content="Marketplace" />
+      </Head>
+
       <section className="w-full pb-8">
         <h1 className="text-3xl font-normal flex flex-col mb-4">Profile</h1>
         <h2 className="text-base leading-6 text-gray-600">
@@ -62,7 +49,7 @@ const MyProfilePage: NextPageWithLayout<IMyProfilePageProps> = ({
         </h2>
       </section>
 
-      <section className="grid grid-cols-4 gap-2">
+      <section className="grid grid-cols-1 md:grid-cols-4 gap-2">
         {/* Profile */}
         <div className="col-span-1">
           <div className="bg-white rounded-sm shadow-sm p-2 text-center">
@@ -88,9 +75,10 @@ const MyProfilePage: NextPageWithLayout<IMyProfilePageProps> = ({
           </div>
         </div>
 
-        {/* Listings */}
-        <div className="col-span-3">
-          <MyListingsTable listingsWithImages={listingsWithImages} />
+        <div className="col-span-1">
+          <Button variant="subtle" component={Link} href="/profile/my-listings">
+            Manage my listings
+          </Button>
         </div>
       </section>
     </>

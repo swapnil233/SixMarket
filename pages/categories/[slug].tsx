@@ -5,6 +5,7 @@ import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { IGetCategoryAndAssociatedListingsResponse } from "../api/categories/[slug]";
 import { NextPageWithLayout } from "../page";
+import Head from "next/head";
 
 const Home: NextPageWithLayout = () => {
   const router = useRouter();
@@ -40,6 +41,23 @@ const Home: NextPageWithLayout = () => {
 
   return (
     <>
+      <Head>
+        <title>{`${categoryInfo.name} | Marketplace`}</title>
+        <meta name="viewport" content="initial-scale=1, width=device-width" />
+        <meta
+          name="description"
+          content={`View and filter through the listings and ads within ${categoryInfo.name}.`}
+        />
+
+        <meta property="og:title" content={`Categories | Marketplace`} />
+        <meta
+          property="og:description"
+          content={`View and filter through the listings and ads within ${categoryInfo.name}.`}
+        />
+        <meta property="og:type" content="website" />
+        <meta property="og:site_name" content="Marketplace" />
+      </Head>
+
       {/* Hero */}
       <section className="flex flex-col w-full text-center pb-4">
         {/* Title */}

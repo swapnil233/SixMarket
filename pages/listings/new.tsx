@@ -24,6 +24,7 @@ import axios, { AxiosResponse } from "axios";
 import { useEffect, useState } from "react";
 import { conditionOptions } from "@/components/data/formData";
 import { NextPageWithLayout } from "../page";
+import Head from "next/head";
 
 const NewListing: NextPageWithLayout = () => {
   const [active, setActive] = useState(0);
@@ -104,6 +105,22 @@ const NewListing: NextPageWithLayout = () => {
 
   return (
     <>
+      <Head>
+        <title>{`New Listing | Marketplace`}</title>
+        <meta name="viewport" content="initial-scale=1, width=device-width" />
+        <meta
+          name="description"
+          content="Create a new listing on Marketplace."
+        />
+        <meta property="og:title" content={`Categories | Marketplace`} />
+        <meta
+          property="og:description"
+          content="Create a new listing on Marketplace."
+        />
+        <meta property="og:type" content="website" />
+        <meta property="og:site_name" content="Marketplace" />
+      </Head>
+
       <Stepper
         active={active}
         onStepClick={setActive}

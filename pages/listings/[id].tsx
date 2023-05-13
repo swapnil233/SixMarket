@@ -137,7 +137,15 @@ const IndividualListing: NextPageWithLayout<IndividualListingProps> = ({
       <Head>
         <title>{`${listingInfo?.name} | Marketplace`}</title>
         <meta name="viewport" content="initial-scale=1, width=device-width" />
-        <meta name="description" content={listingInfo?.description!} />
+        <meta name="description" content={listingInfo?.description || ""} />
+        <meta property="og:title" content={`Categories | Marketplace`} />
+        <meta
+          property="og:description"
+          content={`${listingInfo?.description || ""}`}
+        />
+        <meta property="og:image" content={listingInfo.images[0].url} />
+        <meta property="og:type" content="website" />
+        <meta property="og:site_name" content="Marketplace" />
       </Head>
 
       {/* Title, price & fav button */}

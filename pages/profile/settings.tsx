@@ -5,6 +5,7 @@ import { requireAuthentication } from "@/utils/requireAuthentication";
 import { User } from "@prisma/client";
 import { GetServerSideProps } from "next";
 import { NextPageWithLayout } from "../page";
+import Head from "next/head";
 
 interface UserSettingsProps {
   user: User;
@@ -29,6 +30,16 @@ export const getServerSideProps: GetServerSideProps<UserSettingsProps> = async (
 const UserSettings: NextPageWithLayout<UserSettingsProps> = ({ user }) => {
   return (
     <>
+      <Head>
+        <title>{`Account Settings | Marketplace`}</title>
+        <meta name="viewport" content="initial-scale=1, width=device-width" />
+        <meta name="description" content="Edit your account settings." />
+        <meta property="og:title" content={`Settings | Marketplace`} />
+        <meta property="og:description" content="Edit your account settings." />
+        <meta property="og:type" content="website" />
+        <meta property="og:site_name" content="Marketplace" />
+      </Head>
+
       <ProfilePreferencesForm user={user} />
     </>
   );

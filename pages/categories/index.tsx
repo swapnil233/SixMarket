@@ -6,6 +6,7 @@ import { Category } from "@prisma/client";
 import axios, { AxiosResponse } from "axios";
 import { useEffect, useState } from "react";
 import { NextPageWithLayout } from "../page";
+import Head from "next/head";
 
 const Home: NextPageWithLayout = () => {
   const [filterText, setFilterText] = useState("");
@@ -44,6 +45,23 @@ const Home: NextPageWithLayout = () => {
 
   return (
     <>
+      <Head>
+        <title>{`Categories | Marketplace`}</title>
+        <meta name="viewport" content="initial-scale=1, width=device-width" />
+        <meta
+          name="description"
+          content="Browse more than 30 categories of listings and ads within Marketplace."
+        />
+
+        <meta property="og:title" content={`Categories | Marketplace`} />
+        <meta
+          property="og:description"
+          content="Browse more than 30 categories of listings and ads within Marketplace."
+        />
+        <meta property="og:type" content="website" />
+        <meta property="og:site_name" content="Marketplace" />
+      </Head>
+
       {/* Heading & subheading */}
       <section className="text-center pb-4">
         {/* Title */}
