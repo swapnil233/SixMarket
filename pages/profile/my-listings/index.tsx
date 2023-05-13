@@ -5,6 +5,7 @@ import { Listing, Image, Message } from "@prisma/client";
 import { GetServerSideProps } from "next";
 import MyListingsTable from "@/components/tables/listings/MyListingsTable";
 import { NextPageWithLayout } from "@/pages/page";
+import Head from "next/head";
 
 interface IMyListingsPageProps {
   listingsWithImages: (Pick<Listing, "id" | "name" | "price" | "views"> & {
@@ -54,6 +55,12 @@ const MyListingsPage: NextPageWithLayout<IMyListingsPageProps> = ({
 }) => {
   return (
     <>
+      <Head>
+        <title>{`My Listings | Marketplace`}</title>
+        <meta name="viewport" content="initial-scale=1, width=device-width" />
+        <meta name="description" content="View and edit your listings." />
+      </Head>
+
       <section className="w-full pb-8">
         <h1 className="text-3xl font-normal flex flex-col mb-4">My listings</h1>
         <h2 className="text-base leading-6 text-gray-600">
