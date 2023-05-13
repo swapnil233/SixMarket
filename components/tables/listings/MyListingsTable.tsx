@@ -55,12 +55,26 @@ const MyListingsTable: FC<IMyListingsTable> = ({ listingsWithImages }) => {
             <h3 className="text-lg font-medium text-gray-900 ">{title}</h3>
           </Link>
 
-          <div className="flex flex-row">
+          <div className="flex flex-row space-x-2">
             <Link href={`/listings/${listing.id}`}>
-              <Button variant={"subtle"}>View</Button>
+              <Button
+                size="xs"
+                p={"xs"}
+                variant="outline"
+                onClick={(event) => event.stopPropagation()}
+              >
+                View
+              </Button>
             </Link>
             <Link href={`/profile/my-listings/${listing.id}`}>
-              <Button variant={"subtle"}>Manage</Button>
+              <Button
+                size="xs"
+                p={"xs"}
+                variant="outline"
+                onClick={(event) => event.stopPropagation()}
+              >
+                Manage
+              </Button>
             </Link>
           </div>
         </Stack>
@@ -92,6 +106,10 @@ const MyListingsTable: FC<IMyListingsTable> = ({ listingsWithImages }) => {
       records={records}
       minHeight={150}
       highlightOnHover
+      verticalAlignment={"top"}
+      sortStatus={sortStatus}
+      onSortStatusChange={setSortStatus}
+      noRecordsText="You haven't created any listings yet."
       noRecordsIcon={
         <Box
           p={4}
@@ -117,7 +135,6 @@ const MyListingsTable: FC<IMyListingsTable> = ({ listingsWithImages }) => {
           <IconMoodSad size={36} strokeWidth={1.5} />
         </Box>
       }
-      noRecordsText="You haven't created any listings yet."
       columns={[
         { accessor: "thumbnail" },
         { accessor: "title" },
@@ -125,10 +142,6 @@ const MyListingsTable: FC<IMyListingsTable> = ({ listingsWithImages }) => {
         { accessor: "views", sortable: true },
         { accessor: "messages", sortable: true },
       ]}
-      verticalAlignment={"top"}
-      sortStatus={sortStatus}
-      onSortStatusChange={setSortStatus}
-      textSelectionDisabled
     />
   );
 };
