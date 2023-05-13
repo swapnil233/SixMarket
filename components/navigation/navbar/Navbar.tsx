@@ -220,6 +220,7 @@ const Navbar: FC<INavbar> = () => {
                   stroke={1.5}
                 />
               }
+              onClick={(event) => event.stopPropagation()}
             >
               My listings
             </Menu.Item>
@@ -234,6 +235,7 @@ const Navbar: FC<INavbar> = () => {
                   stroke={1.5}
                 />
               }
+              onClick={(event) => event.stopPropagation()}
             >
               Favourites
             </Menu.Item>
@@ -249,6 +251,7 @@ const Navbar: FC<INavbar> = () => {
                   stroke={1.5}
                 />
               }
+              onClick={(event) => event.stopPropagation()}
             >
               Notifications
               <Badge color="red" size="xs" variant="filled" className="ml-2">
@@ -259,18 +262,27 @@ const Navbar: FC<INavbar> = () => {
 
           <Menu.Label>Settings</Menu.Label>
           <Link href="/profile/" className="no-underline">
-            <Menu.Item icon={<IconUser size="0.9rem" stroke={1.5} />}>
+            <Menu.Item
+              icon={<IconUser size="0.9rem" stroke={1.5} />}
+              onClick={(event) => event.stopPropagation()}
+            >
               My profile
             </Menu.Item>
           </Link>
           <Link href="/profile/settings" className="no-underline">
-            <Menu.Item icon={<IconSettings size="0.9rem" stroke={1.5} />}>
+            <Menu.Item
+              icon={<IconSettings size="0.9rem" stroke={1.5} />}
+              onClick={(event) => event.stopPropagation()}
+            >
               Account settings
             </Menu.Item>
           </Link>
           <Menu.Divider />
           <Menu.Item
-            onClick={() => signOut({ callbackUrl: "/" })}
+            onClick={(event) => {
+              event.stopPropagation();
+              signOut({ callbackUrl: "/" });
+            }}
             icon={<IconLogout size="0.9rem" stroke={1.5} />}
           >
             Log out
@@ -299,7 +311,7 @@ const Navbar: FC<INavbar> = () => {
           position="apart"
           sx={{ height: "100%" }}
         >
-          <Link href={"/"}>
+          <Link href={"/"} onClick={(event) => event.stopPropagation()}>
             <Image
               src={"/MarketplaceLogo.svg"}
               height={35}
@@ -448,6 +460,7 @@ const Navbar: FC<INavbar> = () => {
                     sx={{
                       backgroundColor: "white",
                     }}
+                    onClick={(event) => event.stopPropagation()}
                   >
                     My profile
                   </Menu.Item>
@@ -462,6 +475,7 @@ const Navbar: FC<INavbar> = () => {
                   <Menu.Item
                     className={classes.link}
                     icon={<IconTags size="0.9rem" stroke={1.5} />}
+                    onClick={(event) => event.stopPropagation()}
                   >
                     My listings
                   </Menu.Item>
@@ -482,6 +496,7 @@ const Navbar: FC<INavbar> = () => {
                         stroke={1.5}
                       />
                     }
+                    onClick={(event) => event.stopPropagation()}
                   >
                     Favourites
                   </Menu.Item>
@@ -498,6 +513,7 @@ const Navbar: FC<INavbar> = () => {
                         stroke={1.5}
                       />
                     }
+                    onClick={(event) => event.stopPropagation()}
                   >
                     Notifications
                     <Badge
