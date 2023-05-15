@@ -270,7 +270,7 @@ const Navbar: FC<INavbar> = () => {
           </Link>
           <Menu.Divider />
           <Menu.Item
-            onClick={(event) => {
+            onClick={() => {
               signOut({ callbackUrl: "/" });
             }}
             icon={<IconLogout size="0.9rem" stroke={1.5} />}
