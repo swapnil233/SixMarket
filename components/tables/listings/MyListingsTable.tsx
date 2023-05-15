@@ -59,7 +59,6 @@ const MyListingsTable: FC<IMyListingsTable> = ({ listingsWithImages }) => {
             <Link href={`/listings/${listing.id}`}>
               <Button
                 size="xs"
-                p={"xs"}
                 variant="outline"
                 onClick={(event) => event.stopPropagation()}
               >
@@ -69,7 +68,6 @@ const MyListingsTable: FC<IMyListingsTable> = ({ listingsWithImages }) => {
             <Link href={`/profile/my-listings/${listing.id}`}>
               <Button
                 size="xs"
-                p={"xs"}
                 variant="outline"
                 onClick={(event) => event.stopPropagation()}
               >
