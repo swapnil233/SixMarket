@@ -20,6 +20,7 @@
 8. Run `npm run dev` to start the nextjs project on port 3003 (you can change this in `package.json` under the `dev` script)
 
 ### Upcoming Features
+
 - [ ] Map view
 - [ ] Search by query or query + category
 - [ ] Location based results

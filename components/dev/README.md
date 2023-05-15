@@ -17,24 +17,24 @@ import ReactIntlPalette from "@react-buddy/palette-react-intl";
 
 export const PaletteTree = () => (
   <Palette>
-    <AntdPalette/> 
-    <ReactIntlPalette/>
+    <AntdPalette />
+    <ReactIntlPalette />
     <Category name="App templates">
       <Component name="Card">
         <Variant name="Loading">
           <Card title="Card title">
             <Skeleton loading={true} avatar active>
-                Card content
+              Card content
             </Skeleton>
           </Card>
         </Variant>
       </Component>
       <Component name="Form">
-        <Variant proto={FormTemplate}/>
+        <Variant proto={FormTemplate} />
       </Component>
     </Category>
   </Palette>
-)
+);
 ```
 
 React Buddy explicitly registers any previewed component in the `previews.tsx` file so that you can specify required
@@ -42,7 +42,7 @@ props.
 
 ```jsx
 <ComponentPreview path="/Page">
-    <Page title={'Hello'}/>
+  <Page title={"Hello"} />
 </ComponentPreview>
 ```
 
@@ -51,20 +51,20 @@ e.g. implicitly obtain user session:
 
 ```typescript
 export const useInitial: () => InitialHookStatus = () => {
-    const [loading, setLoading] = useState<boolean>(false);
-    const [error, setError] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(false);
+  const [error, setError] = useState<boolean>(false);
 
-    useEffect(() => {
-        setLoading(true);
-        async function login() {
-            const response = await loginRequest(DEV_LOGIN, DEV_PASSWORD);
-            if (response?.status !== 200) {
-                setError(true);
-            }
-            setLoading(false);
-        }
-        login();
-    }, []);
-    return { loading, error };
+  useEffect(() => {
+    setLoading(true);
+    async function login() {
+      const response = await loginRequest(DEV_LOGIN, DEV_PASSWORD);
+      if (response?.status !== 200) {
+        setError(true);
+      }
+      setLoading(false);
+    }
+    login();
+  }, []);
+  return { loading, error };
 };
 ```
