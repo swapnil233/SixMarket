@@ -18,6 +18,8 @@
     "build-storybook": "storybook build"
   },
   "dependencies": {
+    "@aws-sdk/client-s3": "^3.332.0",
+    "@aws-sdk/s3-request-presigner": "^3.332.0",
     "@emotion/react": "^11.11.0",
     "@emotion/server": "^11.10.0",
     "@mantine/carousel": "^6.0.8",
