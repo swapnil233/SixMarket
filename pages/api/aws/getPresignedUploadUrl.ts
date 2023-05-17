@@ -12,7 +12,7 @@ const createPresignedUrlWithClient = async ({
     bucket: string;
     key: string;
 }) => {
-    const accessKeyId = process.env.AWS_ACCESS_KEY!;
+    const accessKeyId = process.env.AWS_ACCESS_KEY_ID!;
     const secretAccessKey = process.env.AWS_SECRET_ACCESS_KEY!;
 
     const client = new S3Client({
