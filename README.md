@@ -1,8 +1,15 @@
-<h1> Marketplace is an open source classfields website.
-<br />
-<br />
+<h1> Marketplace is an open source classfields website. </h1>
 
-![Prisma ERD](https://user-images.githubusercontent.com/36313876/236579032-0bbdeffe-07e5-461c-86b4-f52a4b0570cf.svg)
+<h3>Image previews:</h3>
+
+![marketplace-five-alpha vercel app_profile (1)](https://github.com/swapnil233/marketplace/assets/36313876/3448ce43-504a-4aff-9ac0-653d0bc418c0)
+![marketplace-five-alpha vercel app_profile (2)](https://github.com/swapnil233/marketplace/assets/36313876/4543b7f8-42c1-46cd-9a5f-7eaa1276dc69)
+![marketplace-five-alpha vercel app_ (3)](https://github.com/swapnil233/marketplace/assets/36313876/e7789af7-36f6-4636-9173-e19aa5cd8f05)
+![marketplace-five-alpha vercel app_ (4)](https://github.com/swapnil233/marketplace/assets/36313876/99d77578-8efa-45e3-a31c-734684d6acd1)
+![marketplace-five-alpha vercel app_profile](https://github.com/swapnil233/marketplace/assets/36313876/554dca3c-3ede-494c-a652-7d6c00ea8ecc)
+
+<h3>Entity relationship diagram</h3>
+![ERD](https://github.com/swapnil233/marketplace/assets/36313876/239c6af3-e653-4e5d-b79d-c66278041b17)
 
 #### How to run on your machine:
 
