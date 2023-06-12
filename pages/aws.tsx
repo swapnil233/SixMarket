@@ -36,8 +36,10 @@ const AWSTest: NextPageWithLayout<AWSTestPageProps> = ({ user }) => {
   const handleFormSubmit = async (event: any) => {
     event.preventDefault();
 
+    // Loader
     setUploading(true);
 
+    // Prevent empty file uploads
     if (!value.length) {
       console.log("No file selected");
       return;

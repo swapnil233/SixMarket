@@ -1,3 +1,4 @@
+import { conditionOptions } from "@/components/data/formData";
 import PrimaryLayout from "@/components/layout/primary/PrimaryLayout";
 import {
   Button,
@@ -6,47 +7,22 @@ import {
   NumberInput,
   Radio,
   Select,
-  Stepper,
+  Text,
   TextInput,
   Textarea,
+  rem,
 } from "@mantine/core";
+import { Dropzone, IMAGE_MIME_TYPE } from "@mantine/dropzone";
 import { useForm } from "@mantine/form";
 import { Category, Tag } from "@prisma/client";
-import {
-  IconCash,
-  IconCircleCheck,
-  IconId,
-  IconMail,
-  IconMapPin,
-  IconPhoto,
-} from "@tabler/icons-react";
-import axios, { AxiosResponse } from "axios";
-import { useEffect, useState } from "react";
-import { conditionOptions } from "@/components/data/formData";
-import { NextPageWithLayout } from "../page";
+import { IconPhoto, IconUpload, IconX } from "@tabler/icons-react";
+import axios from "axios";
 import Head from "next/head";
+import { useEffect, useState } from "react";
+import { NextPageWithLayout } from "../page";
 
 const NewListing: NextPageWithLayout = () => {
-  const [active, setActive] = useState(0);
-  const [highestStepVisited, setHighestStepVisited] = useState(active);
   const [isFree, setIsFree] = useState<Boolean>(false);
-
-  const handleStepChange = (nextStep: number) => {
-    const isOutOfBounds = nextStep > 5 || nextStep < 0;
-
-    if (isOutOfBounds) {
-      return;
-    }
-
-    setActive(nextStep);
-    setHighestStepVisited((hSC) => Math.max(hSC, nextStep));
-    window.scrollTo(0, 0);
-  };
-
-  // Allow the user to freely go back and forth between visited steps.
-  const shouldAllowSelectStep = (step: number) =>
-    highestStepVisited >= step && active !== step;
-
   const [tagsSearchValue, onSearchChange] = useState("");
   const [categoryOptions, setCategoryOptions] = useState<
     { value: string; label: string }[]
@@ -55,13 +31,17 @@ const NewListing: NextPageWithLayout = () => {
     { value: string; label: string }[]
   >([]);
 
+  // Get categories and tags from the database.
   useEffect(() => {
     const getCategoriesAndTags = async () => {
-      const categoriesRes: AxiosResponse = await axios.get("/api/categories");
-      const categories: Category[] = await categoriesRes.data;
+      // Make the API calls in parallel.
+      const [categoriesRes, tagsRes] = await Promise.all([
+        axios.get("/api/categories"),
+        axios.get("/api/tags"),
+      ]);
 
-      const tagsRes: AxiosResponse = await axios.get("/api/tags");
-      const tags: Tag[] = await tagsRes.data;
+      const categories: Category[] = categoriesRes.data;
+      const tags: Tag[] = tagsRes.data;
 
       const newCategoryOptions = categories.map((category) => ({
         value: category.id,
@@ -103,6 +83,10 @@ const NewListing: NextPageWithLayout = () => {
     },
   });
 
+  const handleSubmit = async (values: any) => {
+    console.log(values);
+  };
+
   return (
     <>
       <Head>
@@ -121,168 +105,152 @@ const NewListing: NextPageWithLayout = () => {
         <meta property="og:site_name" content="Marketplace" />
       </Head>
 
-      <Stepper
-        active={active}
-        onStepClick={setActive}
-        completedIcon={<IconCircleCheck />}
-        breakpoint="sm"
-      >
-        <Stepper.Step
-          icon={<IconId size="1.1rem" />}
-          label="Step 1"
-          description="Listing Details"
-          allowStepSelect={shouldAllowSelectStep(0)}
+      <form onSubmit={form.onSubmit((values) => console.log(values))}>
+        <Dropzone
+          onDrop={(files) => console.log("accepted files", files)}
+          onReject={(files) => console.log("rejected files", files)}
+          maxSize={3 * 1024 ** 2}
+          accept={IMAGE_MIME_TYPE}
+          {...form.getInputProps("files")}
         >
-          <form onSubmit={form.onSubmit((values) => console.log(values))}>
-            {/* Name */}
-            <TextInput
-              label="Title"
-              mt="md"
-              placeholder="Used Nike shoes"
-              name="title"
-              {...form.getInputProps("name")}
-              required
-              maw={400}
-            />
-            {/* Description */}
-            <Textarea
-              label="Description"
-              placeholder="Slightly used and worn it, perfect for runners!"
-              name="description"
-              {...form.getInputProps("description")}
-              mt="md"
-              minRows={4}
-              required
-            />
-            {/* Category */}
-            <Select
-              label="Category"
-              placeholder="Select"
-              name="category"
-              {...form.getInputProps("categoryId")}
-              maw={400}
-              required
-              searchable
-              nothingFound="No options"
-              mt="md"
-              data={categoryOptions}
-            />
-            {/* Condition */}
-            <Select
-              label="Condition"
-              placeholder="Select"
-              name="condition"
-              {...form.getInputProps("condition")}
-              maw={400}
-              required
-              mt="md"
-              data={conditionOptions}
-            />
-            {/* Price */}
-            <Group align="center" mt="md">
-              <Radio
-                mt={"xs"}
-                value="free"
-                checked={!isFree}
-                onChange={() => setIsFree(false)}
-              />
-              <NumberInput
-                label="Price"
-                {...form.getInputProps("price")}
-                maw={400}
-                name="price"
-                // @ts-ignore
-                disabled={isFree}
-                defaultValue={0}
-                required
-                parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
-                formatter={(value) =>
-                  !Number.isNaN(parseFloat(value))
-                    ? `$ ${value}`.replace(
-                        /\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g,
-                        ","
-                      )
-                    : "$ "
-                }
-              />
-            </Group>
+          <Group
+            position="center"
+            spacing="xl"
+            style={{ minHeight: rem(220), pointerEvents: "none" }}
+          >
+            <Dropzone.Accept>
+              <IconUpload size="3.2rem" stroke={1.5} />
+            </Dropzone.Accept>
+            <Dropzone.Reject>
+              <IconX size="3.2rem" stroke={1.5} />
+            </Dropzone.Reject>
+            <Dropzone.Idle>
+              <IconPhoto size="3.2rem" stroke={1.5} />
+            </Dropzone.Idle>
 
-            {/* Free? */}
-            <Radio
-              mt={"xs"}
-              value="free"
-              label="Free"
-              // @ts-ignore
-              checked={isFree}
-              onChange={() => setIsFree(true)}
-            />
+            <div>
+              <Text size="xl" inline>
+                Drag images here or click to select files
+              </Text>
+              <Text size="sm" color="dimmed" inline mt={7}>
+                Attach as many files as you like, each file should not exceed
+                5mb
+              </Text>
+            </div>
+          </Group>
+        </Dropzone>
+        {/* Name */}
+        <TextInput
+          label="Title"
+          mt="md"
+          placeholder="Used Nike shoes"
+          name="title"
+          {...form.getInputProps("name")}
+          required
+          maw={400}
+        />
+        {/* Description */}
+        <Textarea
+          label="Description"
+          placeholder="Slightly used and worn it, perfect for runners!"
+          name="description"
+          {...form.getInputProps("description")}
+          mt="md"
+          minRows={4}
+          required
+        />
+        {/* Category */}
+        <Select
+          label="Category"
+          placeholder="Select"
+          name="category"
+          {...form.getInputProps("categoryId")}
+          maw={400}
+          required
+          searchable
+          nothingFound="No options"
+          mt="md"
+          data={categoryOptions}
+        />
+        {/* Condition */}
+        <Select
+          label="Condition"
+          placeholder="Select"
+          name="condition"
+          {...form.getInputProps("condition")}
+          maw={400}
+          required
+          mt="md"
+          data={conditionOptions}
+        />
+        {/* Price */}
+        <Group align="center" mt="md">
+          <Radio
+            mt={"xs"}
+            value="free"
+            checked={!isFree}
+            onChange={() => setIsFree(false)}
+          />
+          <NumberInput
+            label="Price"
+            {...form.getInputProps("price")}
+            maw={400}
+            name="price"
+            // @ts-ignore
+            disabled={isFree}
+            defaultValue={0}
+            required
+            parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
+            formatter={(value) =>
+              !Number.isNaN(parseFloat(value))
+                ? `$ ${value}`.replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",")
+                : "$ "
+            }
+          />
+        </Group>
 
-            {/* Can deliver? */}
-            <Radio.Group
-              label="Can you deliver this item?"
-              {...form.getInputProps("canDeliver")}
-              name="canDeliver"
-              required
-              mt={"md"}
-            >
-              <Radio mt={"xs"} value="yes" label="Yes" />
-              <Radio mt={"xs"} value="no" label="No" />
-            </Radio.Group>
-            {/* Tags */}
-            <MultiSelect
-              label="Tags"
-              placeholder="Select maximum 3 tags"
-              {...form.getInputProps("tags")}
-              name="tags"
-              data={tagsOptions}
-              searchable
-              searchValue={tagsSearchValue}
-              maxSelectedValues={3}
-              maxDropdownHeight={160}
-              maw={400}
-              mt="md"
-              onSearchChange={onSearchChange}
-              nothingFound="Nothing found"
-            />
-          </form>
-        </Stepper.Step>
-        <Stepper.Step
-          icon={<IconPhoto size="1.1rem" />}
-          label="Step 2"
-          description="Media"
-          allowStepSelect={shouldAllowSelectStep(1)}
+        {/* Free? */}
+        <Radio
+          mt={"xs"}
+          value="free"
+          label="Free"
+          // @ts-ignore
+          checked={isFree}
+          onChange={() => setIsFree(true)}
         />
-        <Stepper.Step
-          icon={<IconMapPin size="1.1rem" />}
-          label="Step 3"
-          description="Location"
-          allowStepSelect={shouldAllowSelectStep(2)}
-        />
-        <Stepper.Step
-          icon={<IconCash size="1.1rem" />}
-          label="Step 4"
-          description="Price"
-          allowStepSelect={shouldAllowSelectStep(3)}
-        />
-        <Stepper.Step
-          icon={<IconMail size="1.1rem" />}
-          label="Step 5"
-          description="Contact"
-          allowStepSelect={shouldAllowSelectStep(4)}
-        />
-        <Stepper.Completed>
-          Completed, click back button to get to previous step
-        </Stepper.Completed>
-      </Stepper>
 
-      <Group position="apart" mt="xl">
-        <Button variant="default" onClick={() => handleStepChange(active - 1)}>
-          Back
+        {/* Can deliver? */}
+        <Radio.Group
+          label="Can you deliver this item?"
+          {...form.getInputProps("canDeliver")}
+          name="canDeliver"
+          required
+          mt={"md"}
+        >
+          <Radio mt={"xs"} value="yes" label="Yes" />
+          <Radio mt={"xs"} value="no" label="No" />
+        </Radio.Group>
+        {/* Tags */}
+        <MultiSelect
+          label="Tags"
+          placeholder="Select maximum 3 tags"
+          {...form.getInputProps("tags")}
+          name="tags"
+          data={tagsOptions}
+          searchable
+          searchValue={tagsSearchValue}
+          maxSelectedValues={3}
+          maxDropdownHeight={160}
+          maw={400}
+          mt="md"
+          onSearchChange={onSearchChange}
+          nothingFound="Nothing found"
+        />
+
+        <Button type="submit" mt="md" onClick={() => handleSubmit}>
+          Submit
         </Button>
-        <Button onClick={() => handleStepChange(active + 1)}>
-          {active === 5 ? "Submit" : "Next step"}
-        </Button>
-      </Group>
+      </form>
     </>
   );
 };
