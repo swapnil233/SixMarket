@@ -12,14 +12,29 @@ import {
   Textarea,
   rem,
 } from "@mantine/core";
-import { Dropzone, IMAGE_MIME_TYPE } from "@mantine/dropzone";
+import { Dropzone, FileWithPath, IMAGE_MIME_TYPE } from "@mantine/dropzone";
 import { useForm } from "@mantine/form";
-import { Category, Tag } from "@prisma/client";
+import { Category, Condition, Tag } from "@prisma/client";
 import { IconPhoto, IconUpload, IconX } from "@tabler/icons-react";
 import axios from "axios";
 import Head from "next/head";
 import { useEffect, useState } from "react";
 import { NextPageWithLayout } from "../page";
+
+interface IFormValues {
+  files: FileWithPath[];
+  name: string;
+  description: string;
+  condition: Condition;
+  price: number;
+  streetAddress: string;
+  city: string;
+  province: string;
+  postalCode: string;
+  tags: string[];
+  canDeliver: string;
+  categoryId: string;
+}
 
 const NewListing: NextPageWithLayout = () => {
   const [isFree, setIsFree] = useState<Boolean>(false);
@@ -61,14 +76,13 @@ const NewListing: NextPageWithLayout = () => {
     getCategoriesAndTags();
   }, []);
 
-  const form = useForm({
+  const form = useForm<IFormValues>({
     initialValues: {
       files: [],
       name: "Test item",
       description: "lorem ipsum and all that stuff",
       condition: "NEW",
       price: 43,
-      images: [],
       streetAddress: "123 Main Street",
       city: "Toronto",
       province: "Ontario",
@@ -105,10 +119,20 @@ const NewListing: NextPageWithLayout = () => {
         <meta property="og:site_name" content="Marketplace" />
       </Head>
 
+      <section className="w-full pb-8">
+        <h1 className="text-3xl font-normal flex flex-col mb-4">New listing</h1>
+        <h2 className="text-base leading-6 text-gray-600">
+          Complete our simple 3-step process to create a new listing.
+        </h2>
+        <hr className="mt-4 bg-gray-700" />
+      </section>
+
       <form onSubmit={form.onSubmit((values) => console.log(values))}>
         <Dropzone
-          onDrop={(files) => console.log("accepted files", files)}
-          onReject={(files) => console.log("rejected files", files)}
+          onDrop={(images) => {
+            form.setFieldValue("files", images);
+          }}
+          onReject={(images) => console.log("rejected files", images)}
           maxSize={3 * 1024 ** 2}
           accept={IMAGE_MIME_TYPE}
           {...form.getInputProps("files")}
