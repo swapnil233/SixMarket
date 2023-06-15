@@ -3,8 +3,9 @@ import { NextPageWithLayout } from "@/pages/page";
 import prisma from "@/utils/prisma";
 import { requireAuthentication } from "@/utils/requireAuthentication";
 import { Button, FileInput, rem } from "@mantine/core";
+import { notifications } from "@mantine/notifications";
 import { User } from "@prisma/client";
-import { IconUpload } from "@tabler/icons-react";
+import { IconCheck, IconUpload, IconX } from "@tabler/icons-react";
 import axios from "axios";
 import { GetServerSideProps, GetServerSidePropsContext } from "next";
 import { useState } from "react";
@@ -36,12 +37,24 @@ const AWSTest: NextPageWithLayout<AWSTestPageProps> = ({ user }) => {
   const handleFormSubmit = async (event: any) => {
     event.preventDefault();
 
+    // Show notification
+    notifications.show({
+      id: "uploading-image",
+      withCloseButton: false,
+      title: "Uploading picture",
+      message: "Leave the building immediately",
+      // color: 'red',
+      icon: <IconX />,
+      loading: true,
+    });
+
     // Loader
     setUploading(true);
 
     // Prevent empty file uploads
     if (!value.length) {
       console.log("No file selected");
+      notifications.hide("uploading-image");
       return;
     }
 
@@ -65,9 +78,20 @@ const AWSTest: NextPageWithLayout<AWSTestPageProps> = ({ user }) => {
 
     if (!response.ok) {
       console.log("Upload failed", response);
+      notifications.hide("uploading-image");
       setUploading(false);
     } else {
       console.log("Upload successful");
+      notifications.hide("uploading-image");
+      notifications.show({
+        id: "success",
+        withCloseButton: true,
+        title: "Picture uploaded",
+        message: "We've stored the image in our database.",
+        color: "green",
+        icon: <IconCheck />,
+        loading: false,
+      });
       setUploading(false);
     }
   };
