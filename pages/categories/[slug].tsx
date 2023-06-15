@@ -1,11 +1,12 @@
+import HeadingSection from "@/components/layout/heading/HeadingSection";
 import PrimaryLayout from "@/components/layout/primary/PrimaryLayout";
 import { Category, Listing } from "@prisma/client";
 import axios from "axios";
+import Head from "next/head";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { IGetCategoryAndAssociatedListingsResponse } from "../api/categories/[slug]";
 import { NextPageWithLayout } from "../page";
-import Head from "next/head";
 
 const Home: NextPageWithLayout = () => {
   const router = useRouter();
@@ -58,13 +59,10 @@ const Home: NextPageWithLayout = () => {
         <meta property="og:site_name" content="Marketplace" />
       </Head>
 
-      {/* Hero */}
-      <section className="flex flex-col w-full text-center pb-4">
-        {/* Title */}
-        <h1 className="text-5xl lg:text-6xl mb-4 font-normal">
-          {categoryInfo.name}
-        </h1>
-      </section>
+      <HeadingSection
+        title={categoryInfo.name}
+        description={`View and filter through the listings and ads within ${categoryInfo.name}.`}
+      />
     </>
   );
 };

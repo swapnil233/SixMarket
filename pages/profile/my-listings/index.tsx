@@ -1,10 +1,11 @@
+import HeadingSection from "@/components/layout/heading/HeadingSection";
 import PrimaryLayout from "@/components/layout/primary/PrimaryLayout";
-import prisma from "@/utils/prisma";
-import { requireAuthentication } from "@/utils/requireAuthentication";
-import { Listing, Image, Message } from "@prisma/client";
-import { GetServerSideProps } from "next";
 import MyListingsTable from "@/components/tables/listings/MyListingsTable";
 import { NextPageWithLayout } from "@/pages/page";
+import prisma from "@/utils/prisma";
+import { requireAuthentication } from "@/utils/requireAuthentication";
+import { Image, Listing, Message } from "@prisma/client";
+import { GetServerSideProps } from "next";
 import Head from "next/head";
 
 interface IMyListingsPageProps {
@@ -69,12 +70,10 @@ const MyListingsPage: NextPageWithLayout<IMyListingsPageProps> = ({
         <meta property="og:site_name" content="Marketplace" />
       </Head>
 
-      <section className="w-full pb-8">
-        <h1 className="text-3xl font-normal flex flex-col mb-4">My listings</h1>
-        <h2 className="text-base leading-6 text-gray-600">
-          You have {listingsWithImages.length} active listings
-        </h2>
-      </section>
+      <HeadingSection
+        title="My listings"
+        description={`You have ${listingsWithImages.length} active listings`}
+      />
 
       <section>
         {/* Listings */}

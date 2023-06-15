@@ -1,11 +1,12 @@
 // pages/profile/[id].tsx
 
+import HeadingSection from "@/components/layout/heading/HeadingSection";
 import PrimaryLayout from "@/components/layout/primary/PrimaryLayout";
 import { User } from "@prisma/client";
 import { GetServerSidePropsContext } from "next";
+import Head from "next/head";
 import Image from "next/image";
 import { NextPageWithLayout } from "../page";
-import Head from "next/head";
 
 interface PageProps {
   user: User;
@@ -58,13 +59,11 @@ const Page: NextPageWithLayout<PageProps> = ({ user }) => {
         <meta property="og:site_name" content="Marketplace" />
       </Head>
 
-      <h1 className="text-3xl font-semibold leading-7 text-gray-900 mb-4 pt-4 md:pt-8">
-        Profile
-      </h1>
-      <h2 className="text-base leading-6 text-gray-600">
-        This is your public profile. You can edit your profile and listings
-        information.
-      </h2>
+      <HeadingSection
+        title="Profile"
+        description="This is your public profile. You can edit your profile and listings information."
+      />
+
       <div className="grid grid-cols-12 gap-6 pt-10 md:pt-16 pb-10 md:pb-16 h-screen">
         {/* Profile */}
         <div className="col-span-12 md:col-span-4 sticky">

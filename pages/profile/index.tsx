@@ -1,3 +1,4 @@
+import HeadingSection from "@/components/layout/heading/HeadingSection";
 import PrimaryLayout from "@/components/layout/primary/PrimaryLayout";
 import prisma from "@/utils/prisma";
 import { requireAuthentication } from "@/utils/requireAuthentication";
@@ -5,10 +6,10 @@ import { Button } from "@mantine/core";
 import { User } from "@prisma/client";
 import { IconEdit } from "@tabler/icons-react";
 import { GetServerSideProps } from "next";
+import Head from "next/head";
 import Image from "next/image";
 import Link from "next/link";
 import { NextPageWithLayout } from "../page";
-import Head from "next/head";
 
 interface IMyProfilePageProps {
   user: User;
@@ -41,13 +42,10 @@ const MyProfilePage: NextPageWithLayout<IMyProfilePageProps> = ({ user }) => {
         <meta property="og:site_name" content="Marketplace" />
       </Head>
 
-      <section className="w-full pb-8">
-        <h1 className="text-3xl font-normal flex flex-col mb-4">Profile</h1>
-        <h2 className="text-base leading-6 text-gray-600">
-          This is your public profile. You can edit your profile and listings
-          information.
-        </h2>
-      </section>
+      <HeadingSection
+        title="Profile"
+        description="This is your public profile. You can edit your profile and listings information."
+      />
 
       <section className="grid grid-cols-1 md:grid-cols-4 gap-2">
         {/* Profile */}

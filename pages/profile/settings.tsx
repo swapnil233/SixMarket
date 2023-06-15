@@ -1,11 +1,11 @@
-import ProfilePreferencesForm from "@/components/ProfilePreferencesForm";
+import HeadingSection from "@/components/layout/heading/HeadingSection";
 import PrimaryLayout from "@/components/layout/primary/PrimaryLayout";
 import prisma from "@/utils/prisma";
 import { requireAuthentication } from "@/utils/requireAuthentication";
 import { User } from "@prisma/client";
 import { GetServerSideProps } from "next";
-import { NextPageWithLayout } from "../page";
 import Head from "next/head";
+import { NextPageWithLayout } from "../page";
 
 interface UserSettingsProps {
   user: User;
@@ -34,13 +34,16 @@ const UserSettings: NextPageWithLayout<UserSettingsProps> = ({ user }) => {
         <title>{`Account Settings | Marketplace`}</title>
         <meta name="viewport" content="initial-scale=1, width=device-width" />
         <meta name="description" content="Edit your account settings." />
-        <meta property="og:title" content={`Settings | Marketplace`} />
+        <meta property="og:title" content={`Account Settings | Marketplace`} />
         <meta property="og:description" content="Edit your account settings." />
         <meta property="og:type" content="website" />
         <meta property="og:site_name" content="Marketplace" />
       </Head>
 
-      <ProfilePreferencesForm user={user} />
+      <HeadingSection
+        title="Account settings"
+        description="Edit your account settings."
+      />
     </>
   );
 };

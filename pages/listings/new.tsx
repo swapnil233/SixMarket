@@ -1,4 +1,5 @@
 import { conditionOptions } from "@/components/data/formData";
+import HeadingSection from "@/components/layout/heading/HeadingSection";
 import PrimaryLayout from "@/components/layout/primary/PrimaryLayout";
 import {
   Button,
@@ -119,13 +120,10 @@ const NewListing: NextPageWithLayout = () => {
         <meta property="og:site_name" content="Marketplace" />
       </Head>
 
-      <section className="w-full pb-8">
-        <h1 className="text-3xl font-normal flex flex-col mb-4">New listing</h1>
-        <h2 className="text-base leading-6 text-gray-600">
-          Complete our simple 3-step process to create a new listing.
-        </h2>
-        <hr className="mt-4 bg-gray-700" />
-      </section>
+      <HeadingSection
+        title="Create a new listing"
+        description="Complete the steps below to create a new listing."
+      />
 
       <form onSubmit={form.onSubmit((values) => console.log(values))}>
         <Dropzone

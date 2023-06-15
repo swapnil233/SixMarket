@@ -1,3 +1,4 @@
+import HeadingSection from "@/components/layout/heading/HeadingSection";
 import PrimaryLayout from "@/components/layout/primary/PrimaryLayout";
 import { NextPageWithLayout } from "@/pages/page";
 import prisma from "@/utils/prisma";
@@ -98,7 +99,7 @@ const AWSTest: NextPageWithLayout<AWSTestPageProps> = ({ user }) => {
 
   return (
     <>
-      <h1>Upload to AWS S3</h1>
+      <HeadingSection title="AWS Test" description="Testing AWS S3" />
 
       <form onSubmit={handleFormSubmit}>
         <FileInput
