@@ -1,7 +1,8 @@
-import { conditionOptions } from "@/components/data/formData";
+import { conditionOptions, provinceOptions } from "@/components/data/formData";
 import HeadingSection from "@/components/layout/heading/HeadingSection";
 import PrimaryLayout from "@/components/layout/primary/PrimaryLayout";
 import {
+  Box,
   Button,
   Group,
   MultiSelect,
@@ -19,7 +20,7 @@ import { Category, Condition, Tag } from "@prisma/client";
 import { IconPhoto, IconUpload, IconX } from "@tabler/icons-react";
 import axios from "axios";
 import Head from "next/head";
-import { useEffect, useState } from "react";
+import { FormEvent, useEffect, useState } from "react";
 import { NextPageWithLayout } from "../page";
 
 interface IFormValues {
@@ -85,9 +86,9 @@ const NewListing: NextPageWithLayout = () => {
       condition: "NEW",
       price: 43,
       streetAddress: "123 Main Street",
-      city: "Toronto",
-      province: "Ontario",
-      postalCode: "M1L4P2",
+      city: "",
+      province: "",
+      postalCode: "",
       tags: [
         "clgttgp8k0024r9rca5fymz8z",
         "clgttgqb6002ar9rcq6vh0wuf",
@@ -96,10 +97,53 @@ const NewListing: NextPageWithLayout = () => {
       canDeliver: "no",
       categoryId: "clgu9tb1p000wr9tjldwfwm3s",
     },
+
+    // functions will be used to validate values at corresponding key
+    validate: {
+      name: (value) =>
+        value.length < 8 ? "Title must be at least 8 characters" : null,
+      description: (value) =>
+        value.length < 20 ? "Description must be at least 20 characters" : null,
+      condition: (value) =>
+        !value ? "Please indicate the item's condition" : null,
+      price: (value) => (value < 0.01 ? "Please enter a valid price" : null),
+      tags: (value) =>
+        value.length > 3 ? "Can't pick more than 3 tags" : null,
+      streetAddress: (value) =>
+        value.length < 1 ? "Street address is required" : null,
+      city: (value) => (value.length < 1 ? "City is required" : null),
+      province: (value) => (!value ? "Province is required" : null),
+      postalCode: (value) =>
+        !/^[A-Za-z]\d[A-Za-z][ -]?\d[A-Za-z]\d$/.test(value)
+          ? "Postal code must be of the format A1A1A1 or A1A 1A1"
+          : null,
+      categoryId: (value) => (!value ? "Category is required" : null),
+      canDeliver: (value) =>
+        value !== "yes" && value !== "no"
+          ? "Please indicate whether you can deliver the item"
+          : null,
+    },
   });
 
-  const handleSubmit = async (values: any) => {
-    console.log(values);
+  const handleSubmit = async (event: FormEvent, values: any) => {
+    event.preventDefault();
+
+    // Create a new FormData object and append the values to it.
+    const formData = new FormData();
+    formData.append("name", values.name);
+    formData.append("description", values.description);
+    formData.append("condition", values.condition);
+    formData.append("price", values.price);
+    formData.append("streetAddress", values.streetAddress);
+    formData.append("city", values.city);
+    formData.append("province", values.province);
+    formData.append("postalCode", values.postalCode);
+    formData.append("categoryId", values.categoryId);
+    formData.append("canDeliver", values.canDeliver);
+    values.tags.forEach((tag: string) => formData.append("tags", tag));
+    values.files.forEach((file: FileWithPath) =>
+      formData.append("files", file)
+    );
   };
 
   return (
@@ -267,6 +311,60 @@ const NewListing: NextPageWithLayout = () => {
           mt="md"
           onSearchChange={onSearchChange}
           nothingFound="Nothing found"
+        />
+
+        {/* Street address */}
+        <TextInput
+          label="Street Address"
+          placeholder="123 Main St"
+          name="streetAddress"
+          {...form.getInputProps("streetAddress")}
+          required
+          mt="md"
+        />
+        <Box
+          sx={{
+            display: "flex",
+            alignItems: "center",
+            mt: "md",
+            width: "100%",
+          }}
+        >
+          {/* City */}
+          <TextInput
+            label="City"
+            placeholder="Scarborough"
+            name="city"
+            {...form.getInputProps("city")}
+            required
+            mt="md"
+            mr={"md"}
+            maw={400}
+          />
+
+          {/* Province */}
+          <Select
+            label="Province"
+            placeholder="Select"
+            name="province"
+            {...form.getInputProps("province")}
+            maw={400}
+            required
+            mt="md"
+            data={provinceOptions}
+          />
+        </Box>
+        {/* Postal code */}
+        <TextInput
+          label="Postal Code"
+          placeholder="A1A1A1"
+          name="postalCode"
+          {...form.getInputProps("postalCode")}
+          maxLength={6}
+          required
+          mt="md"
+          maw={400}
+          description="6 digit postal code"
         />
 
         <Button type="submit" mt="md" onClick={() => handleSubmit}>
