@@ -4,7 +4,9 @@ import { NextPageWithLayout } from "@/pages/page";
 import prisma from "@/utils/prisma";
 import { requireAuthentication } from "@/utils/requireAuthentication";
 import { Button } from "@mantine/core";
+import { notifications } from "@mantine/notifications";
 import { User } from "@prisma/client";
+import { IconX } from "@tabler/icons-react";
 import axios from "axios";
 
 import { GetServerSideProps, GetServerSidePropsContext } from "next";
@@ -38,11 +40,25 @@ const Transcription: NextPageWithLayout<TranscriptionPageProps> = ({
   const [loading, setLoading] = useState(false);
 
   const handleTranscribeAndSummarize = async () => {
-    setLoading(true);
-    const res = await axios.get("/api/transcribe");
-    setTranscription(res.data.transcription.replace(/\n/g, "<br />"));
-    setSummary(res.data.summary.replace(/\n/g, "<br />"));
-    setLoading(false);
+    try {
+      setLoading(true);
+      const res = await axios.get("/api/transcribe");
+      setTranscription(res.data.transcription.replace(/\n/g, "<br />"));
+      setSummary(res.data.summary.replace(/\n/g, "<br />"));
+      setLoading(false);
+    } catch (error) {
+      setLoading(false);
+
+      notifications.show({
+        id: "error",
+        withCloseButton: true,
+        title: "Transcription and summarization failed",
+        message: "Please try again later",
+        color: "red",
+        icon: <IconX />,
+        loading: false,
+      });
+    }
   };
 
   return (
