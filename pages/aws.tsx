@@ -102,9 +102,9 @@ const AWSTest: NextPageWithLayout<AWSTestPageProps> = ({ user }) => {
       <HeadingSection title="AWS Test" description="Testing AWS S3" />
 
       <form onSubmit={handleFormSubmit}>
-        <FileInput
-          placeholder="Select images"
+        <FileInput<true>
           label="Listing images"
+          description="Select images"
           icon={<IconUpload size={rem(14)} />}
           withAsterisk
           multiple

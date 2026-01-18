@@ -1,9 +1,7 @@
 import { RouterTransition } from "@/components/RouterTransition";
-import { ComponentPreviews, useInitial } from "@/components/dev";
 import "@/styles/globals.css";
 import { MantineProvider } from "@mantine/core";
 import { Notifications } from "@mantine/notifications";
-import { DevSupport } from "@react-buddy/ide-toolbox-next";
 import { Analytics } from "@vercel/analytics/react";
 import type { Session } from "next-auth";
 import { SessionProvider } from "next-auth/react";
@@ -32,14 +30,7 @@ export default function App({
       >
         <SessionProvider session={session}>
           <RouterTransition />
-          {getLayout(
-            <DevSupport
-              ComponentPreviews={ComponentPreviews}
-              useInitialHook={useInitial}
-            >
-              <Component {...pageProps} />
-            </DevSupport>
-          )}
+          {getLayout(<Component {...pageProps} />)}
           <Notifications position="top-right" />
         </SessionProvider>
       </MantineProvider>
