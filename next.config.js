@@ -1,16 +1,12 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
-};
+  output: "standalone",
 
-module.exports = nextConfig;
-
-// CORS
-module.exports = {
+  // CORS headers for API routes
   async headers() {
     return [
       {
-        // matching all API routes
         source: "/api/:path*",
         headers: [
           { key: "Access-Control-Allow-Credentials", value: "true" },
@@ -28,10 +24,8 @@ module.exports = {
       },
     ];
   },
-};
 
-// Images
-module.exports = {
+  // Image optimization configuration
   images: {
     domains: [
       "i.pravatar.cc",
@@ -59,6 +53,22 @@ module.exports = {
         port: "",
         pathname: "/**",
       },
+      // MinIO for local development (host access)
+      {
+        protocol: "http",
+        hostname: "localhost",
+        port: "9000",
+        pathname: "/**",
+      },
+      // MinIO for Docker internal network
+      {
+        protocol: "http",
+        hostname: "minio",
+        port: "9000",
+        pathname: "/**",
+      },
     ],
   },
 };
+
+module.exports = nextConfig;
